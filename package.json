@@ -1,0 +1,58 @@
+{
+  "name": "reactjs-calendar-heatmap",
+  "version": "0.0.1",
+  "description": "React component for d3.js calendar heatmap graph.",
+  "homepage": "https://github.com/g1eb/reactjs-calendar-heatmap#readme",
+  "author": "g1eb <mail@g1eb.com> (https://g1eb.com)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/g1eb/reactjs-calendar-heatmap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/g1eb/reactjs-calendar-heatmap/issues"
+  },
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "build": "webpack",
+    "start": "webpack --watch"
+  },
+  "main": "dist/calendar-heatmap.umd.js",
+  "module": "dist/calendar-heatmap.js",
+  "jsnext:main": "dist/calendar-heatmap.js",
+  "typings": "dist/calendar-heatmap.d.ts",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "peerDependencies": {
+    "d3": "^4.11.0",
+    "moment": "^2.19.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "react",
+    "reactjs",
+    "component",
+    "calendar",
+    "heatmap",
+    "graph",
+    "visualization",
+    "chart",
+    "time",
+    "d3js",
+    "d3"
+  ]
+}
