@@ -1,29 +1,48 @@
+var webpack = require('webpack');
 var path = require('path');
+var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+
 module.exports = {
-  entry: './src/calendar-heatmap.component.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'calendar-heatmap.min.js',
-    library: 'Example',
-    libraryTarget: 'umd2',
-    umdNamedDefine: true,
+
+  entry: {
+    'calendar-heatmap': './src/index.js',
+    'calendar-heatmap.min': './src/index.js'
   },
+
+  externals: {
+    'react': 'React',
+    'react-dom': 'ReactDOM'
+  },
+
+  output: {
+    filename: '[name].js',
+    chunkFilename: '[id].chunk.js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
+    libraryTarget: 'umd',
+    library: 'CalendarHeatmap'
+  },
+
+  plugins: [
+    new UglifyJsPlugin({
+      include: /\.min\.js$/,
+      minimize: true,
+      compress: {
+        warnings: false
+      }
+    })
+  ],
+
   module: {
     rules: [
       {
-        test: /\.js$/,
-        include: path.resolve(__dirname, 'src'),
-        exclude: /(node_modules|bower_components|dist)/,
+        test: /\.js?$/,
+        exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['env']
-          }
+          loader: 'babel-loader'
         }
       }
     ]
-  },
-  externals: {
-    'react': 'React',
   }
+
 };
