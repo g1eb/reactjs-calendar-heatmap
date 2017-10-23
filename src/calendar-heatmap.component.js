@@ -8,17 +8,19 @@ class CalendarHeatmap extends React.Component {
   constructor(props) {
     super(props)
 
-    // Settings
-    this.gutter = 5
-    this.item_gutter = 1
-    this.width = 1000
-    this.height = 200
-    this.item_size = 10
-    this.label_padding = 40
-    this.max_block_height = 20
-    this.transition_duration = 500
-    this.tooltip_width = 250
-    this.tooltip_padding = 15
+    this.settings = {
+      gutter: 5,
+      item_gutter: 1,
+      width: 1000,
+      height: 200,
+      item_size: 10,
+      label_padding: 40,
+      max_block_height: 20,
+      transition_duration: 500,
+      tooltip_width: 250,
+      tooltip_padding: 15,
+    }
+
     this.in_transition = false
     this.history = ['global']
     this.selected = {}
