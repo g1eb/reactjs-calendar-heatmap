@@ -24,12 +24,20 @@ class CalendarHeatmap extends React.Component {
     this.in_transition = false
     this.history = ['global']
     this.selected = {}
+
+    this.calcDimensions = this.calcDimensions.bind(this)
   }
 
   componentDidMount() {
     this.createElements()
     this.parseData()
     this.drawChart()
+
+    window.addEventListener('resize', this.calcDimensions)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.calcDimensions)
   }
 
   createElements() {
