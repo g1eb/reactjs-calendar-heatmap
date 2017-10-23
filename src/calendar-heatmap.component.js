@@ -46,6 +46,25 @@ class CalendarHeatmap extends React.Component {
       .append('div')
       .attr('class', 'heatmap-tooltip')
       .style('opacity', 0)
+
+    this.calcDimensions()
+  }
+
+  // Calculate dimensions based on available width
+  calcDimensions() {
+    var dayIndex = Math.round((moment() - moment().subtract(1, 'year').startOf('week')) / 86400000)
+    var colIndex = Math.trunc(dayIndex / 7)
+    var numWeeks = colIndex + 1
+
+    this.settings.width = container.offsetWidth < 1000 ? 1000 : container.offsetWidth
+    this.settings.item_size = ((this.settings.width - this.settings.label_padding) / numWeeks - this.settings.gutter)
+    this.settings.height = this.settings.label_padding + 7 * (this.settings.item_size + this.settings.gutter)
+    this.attr('width', this.settings.width)
+      .attr('height', this.settings.height)
+
+    if ( !!this.data && !!this.data[0].summary ) {
+      this.drawChart()
+    }
   }
 
   parseData() {
