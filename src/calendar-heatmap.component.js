@@ -29,6 +29,21 @@ class CalendarHeatmap extends React.Component {
   }
 
   createElements() {
+    // Create svg element
+    this.svg = d3.select('#calendar-heatmap')
+      .append('svg')
+      .attr('class', 'svg')
+
+    // Create other svg elements
+    this.items = svg.append('g')
+    this.labels = svg.append('g')
+    this.buttons = svg.append('g')
+
+    // Add tooltip to the same element as main svg
+    this.tooltip = d3.select('#calendar-heatmap')
+      .append('div')
+      .attr('class', 'heatmap-tooltip')
+      .style('opacity', 0)
   }
 
   parseData() {
