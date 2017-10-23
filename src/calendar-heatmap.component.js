@@ -28,4 +28,11 @@ class CalendarHeatmap extends React.Component {
   }
 }
 
+CalendarHeatmap.defaultProps = {
+  data: [],
+  overview: 'year',
+  color: '#ff4500',
+  handler: undefined,
+}
+
 export default CalendarHeatmap
