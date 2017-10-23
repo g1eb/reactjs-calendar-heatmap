@@ -78,6 +78,33 @@ class CalendarHeatmap extends React.Component {
   }
 
   parseData() {
+    if ( !this.props.data ) { return }
+
+    // Get daily summary if that was not provided
+    if ( !this.props.data[0].summary ) {
+      this.props.data.map(function(d) {
+        var summary = d.details.reduce(function(uniques, project) {
+          if (!uniques[project.name]) {
+            uniques[project.name] = {
+              'value': project.value
+            }
+          } else {
+            uniques[project.name].value += project.value
+          }
+          return uniques
+        }, {})
+        var unsorted_summary = Object.keys(summary).map(function(key) {
+          return {
+            'name': key,
+            'value': summary[key].value
+          }
+        })
+        d.summary = unsorted_summary.sort(function(a, b) {
+          return b.value - a.value
+        })
+        return d
+      })
+    }
   }
 
   drawChart() {
