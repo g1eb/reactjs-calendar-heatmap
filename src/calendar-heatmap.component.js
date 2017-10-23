@@ -24,7 +24,9 @@ class CalendarHeatmap extends React.Component {
     this.in_transition = false
     this.history = ['global']
     this.selected = {}
+  }
 
+  componentDidMount() {
     this.createElements()
     this.parseData()
     this.drawChart()
