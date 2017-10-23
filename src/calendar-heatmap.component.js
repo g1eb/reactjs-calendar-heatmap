@@ -108,6 +108,17 @@ class CalendarHeatmap extends React.Component {
   }
 
   drawChart() {
+    if ( this.overview === 'global' ) {
+      this.drawGlobalOverview()
+    } else if ( this.overview === 'year' ) {
+      this.drawYearOverview()
+    } else if ( this.overview === 'month' ) {
+      this.drawMonthOverview()
+    } else if ( this.overview === 'week' ) {
+      this.drawWeekOverview()
+    } else if ( this.overview === 'day' ) {
+      this.drawDayOverview()
+    }
   }
 
   render() {
