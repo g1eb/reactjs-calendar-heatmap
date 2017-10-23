@@ -19,6 +19,22 @@ class CalendarHeatmap extends React.Component {
     this.transition_duration = 500
     this.tooltip_width = 250
     this.tooltip_padding = 15
+    this.in_transition = false
+    this.history = ['global']
+    this.selected = {}
+
+    this.createElements()
+    this.parseData()
+    this.drawChart()
+  }
+
+  createElements() {
+  }
+
+  parseData() {
+  }
+
+  drawChart() {
   }
 
   render() {
