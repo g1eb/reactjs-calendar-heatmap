@@ -20,7 +20,56 @@
 
     <!-- Example Component -->
     <script type="text/babel">
-      ReactDOM.render(<CalendarHeatmap />, document.getElementById('root'))
+
+      // Initialize random data for the demo
+      let now = moment().endOf('day').toDate()
+      let time_ago = moment().startOf('day').subtract(10, 'year').toDate()
+      let data = d3.timeDays(time_ago, now).map(function (dateElement, index) {
+        return {
+          date: dateElement,
+          details: Array.apply(null, new Array(Math.floor(Math.random() * 15))).map(function(e, i, arr) {
+            return {
+              'name': 'Project ' + Math.round(Math.random() * 10),
+              'date': function () {
+                let projectDate = new Date(dateElement.getTime())
+                projectDate.setHours(Math.floor(Math.random() * 24))
+                projectDate.setMinutes(Math.floor(Math.random() * 60))
+                return projectDate
+              }(),
+              'value': 3600 * ((arr.length - i) / 5) + Math.floor(Math.random() * 3600) * Math.round(Math.random() * (index / 365))
+            }
+          }),
+          init: function () {
+            this.total = this.details.reduce(function (prev, e) {
+              return prev + e.value
+            }, 0)
+            return this
+          }
+        }.init()
+      })
+
+      // Set custom color for the calendar heatmap
+      let color = '#cd2327'
+
+      // Set overview type (choices are year, month and day)
+      let overview = 'year'
+
+      // Handler function
+      let print = function (val) {
+        console.log(val)
+      }
+
+      // Render calendar heatmap component
+      ReactDOM.render(
+        <CalendarHeatmap
+          data={data}
+          color={color}
+          overview={overview}
+          handler={print}>
+        </CalendarHeatmap>,
+        document.getElementById('root')
+      )
+
     </script>
   </body>
 </html>
