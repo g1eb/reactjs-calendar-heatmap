@@ -1254,6 +1254,217 @@ class CalendarHeatmap extends React.Component {
     this.drawButton();
   }
 
+
+  /**
+   * Draw day overview
+   */
+  drawDayOverview() {
+    // Add current overview to the history
+    if (this.history[this.history.length - 1] !== this.overview) {
+      this.history.push(this.overview);
+    }
+
+    // Initialize selected date to today if it was not set
+    if (!Object.keys(this.selected).length) {
+      this.selected = this.props.data[this.props.data.length - 1];
+    }
+
+    var project_labels = this.selected.summary.map(function(project) {
+      return project.name;
+    });
+    var projectScale = d3.scaleBand()
+      .rangeRound([this.settings.label_padding, this.settings.height])
+      .domain(project_labels);
+
+    var itemScale = d3.scaleTime()
+      .range([this.settings.label_padding * 2, this.settings.width])
+      .domain([moment(this.selected.date).startOf('day'), moment(this.selected.date).endOf('day')]);
+    this.items.selectAll('.item-block').remove();
+    this.items.selectAll('.item-block')
+      .data(this.selected.details)
+      .enter()
+      .append('rect')
+      .attr('class', 'item item-block')
+      .attr('x', function(d) {
+        return itemScale(moment(d.date));
+      })
+      .attr('y', function(d) {
+        return (projectScale(d.name) + projectScale.bandwidth() / 2) - 15;
+      })
+      .attr('width', function(d) {
+        var end = itemScale(d3.timeSecond.offset(moment(d.date), d.value));
+        return Math.max((end - itemScale(moment(d.date))), 1);
+      })
+      .attr('height', function() {
+        return Math.min(projectScale.bandwidth(), this.settings.max_block_height);
+      })
+      .attr('fill', function() {
+        return this.color || '#ff4500';
+      })
+      .style('opacity', 0)
+      .on('mouseover', function(d) {
+        if (this.in_transition) { return; }
+
+        // Construct tooltip
+        var tooltip_html = '';
+        tooltip_html += '<div class="header"><strong>' + d.name + '</strong><div><br>';
+        tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
+        tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY HH:mm') + '</div>';
+
+        // Calculate tooltip position
+        var x = d.value * 100 / (60 * 60 * 24) + itemScale(moment(d.date));
+        while (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
+          x -= 10;
+        }
+        var y = projectScale(d.name) + projectScale.bandwidth() / 2 + this.settings.tooltip_padding / 2;
+
+        // Show tooltip
+        this.tooltip.html(tooltip_html)
+          .style('left', x + 'px')
+          .style('top', y + 'px')
+          .transition()
+          .duration(this.settings.transition_duration / 2)
+          .ease(d3.easeLinear)
+          .style('opacity', 1);
+      })
+      .on('mouseout', function() {
+        if (this.in_transition) { return; }
+        this.hideTooltip();
+      })
+      .on('click', function(d) {
+        if (!!this.props.handler && typeof this.props.handler == 'function') {
+          this.props.handler(d);
+        }
+      })
+      .transition()
+      .delay(function() {
+        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration;
+      })
+      .duration(function() {
+        return this.settings.transition_duration;
+      })
+      .ease(d3.easeLinear)
+      .style('opacity', 0.5)
+      .call(function(transition, callback) {
+        if (transition.empty()) {
+          callback();
+        }
+        var n = 0;
+        transition
+          .each(function() {++n; })
+          .on('end', function() {
+            if (!--n) {
+              callback.apply(this, arguments);
+            }
+          });
+      }, function() {
+        this.in_transition = false;
+      });
+
+    // Add time labels
+    var timeLabels = d3.timeHours(
+      moment(this.selected.date).startOf('day'),
+      moment(this.selected.date).endOf('day')
+    );
+    var timeScale = d3.scaleTime()
+      .range([this.settings.label_padding * 2, this.settings.width])
+      .domain([0, timeLabels.length]);
+    this.labels.selectAll('.label-time').remove();
+    this.labels.selectAll('.label-time')
+      .data(timeLabels)
+      .enter()
+      .append('text')
+      .attr('class', 'label label-time')
+      .attr('font-size', function() {
+        return Math.floor(this.settings.label_padding / 3) + 'px';
+      })
+      .text(function(d) {
+        return moment(d).format('HH:mm');
+      })
+      .attr('x', function(d, i) {
+        return timeScale(i);
+      })
+      .attr('y', this.settings.label_padding / 2)
+      .on('mouseenter', function(d) {
+        if (this.in_transition) { return; }
+
+        var selected = itemScale(moment(d));
+        this.items.selectAll('.item-block')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', function(d) {
+            var start = itemScale(moment(d.date));
+            var end = itemScale(moment(d.date).add(d.value, 'seconds'));
+            return (selected >= start && selected <= end) ? 1 : 0.1;
+          });
+      })
+      .on('mouseout', function() {
+        if (this.in_transition) { return; }
+
+        this.items.selectAll('.item-block')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', 0.5);
+      });
+
+    // Add project labels
+    this.labels.selectAll('.label-project').remove();
+    this.labels.selectAll('.label-project')
+      .data(project_labels)
+      .enter()
+      .append('text')
+      .attr('class', 'label label-project')
+      .attr('x', this.settings.gutter)
+      .attr('y', function(d) {
+        return projectScale(d) + projectScale.bandwidth() / 2;
+      })
+      .attr('min-height', function() {
+        return projectScale.bandwidth();
+      })
+      .style('text-anchor', 'left')
+      .attr('font-size', function() {
+        return Math.floor(this.settings.label_padding / 3) + 'px';
+      })
+      .text(function(d) {
+        return d;
+      })
+      .each(function() {
+        var obj = d3.select(this),
+          text_length = obj.node().getComputedTextLength(),
+          text = obj.text();
+        while (text_length > (this.settings.label_padding * 1.5) && text.length > 0) {
+          text = text.slice(0, -1);
+          obj.text(text + '...');
+          text_length = obj.node().getComputedTextLength();
+        }
+      })
+      .on('mouseenter', function(project) {
+        if (this.in_transition) { return; }
+
+        this.items.selectAll('.item-block')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', function(d) {
+            return (d.name === project) ? 1 : 0.1;
+          });
+      })
+      .on('mouseout', function() {
+        if (this.in_transition) { return; }
+
+        this.items.selectAll('.item-block')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', 0.5);
+      });
+
+    // Add button to switch back to previous overview
+    this.drawButton();
+  }
+
   render() {
     return (
       <div id="calendar-heatmap"></div>
