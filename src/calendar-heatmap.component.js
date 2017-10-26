@@ -1465,6 +1465,58 @@ class CalendarHeatmap extends React.Component {
     this.drawButton();
   }
 
+
+  /**
+   * Draw the button for navigation purposes
+   */
+  drawButton() {
+    this.buttons.selectAll('.button').remove();
+    var button = this.buttons.append('g')
+      .attr('class', 'button button-back')
+      .style('opacity', 0)
+      .on('click', function() {
+        if (this.in_transition) { return; }
+
+        // Set transition boolean
+        this.in_transition = true;
+
+        // Clean the canvas from whichever overview type was on
+        if (this.overview === 'year') {
+          this.removeYearOverview();
+        } else if (this.overview === 'month') {
+          this.removeMonthOverview();
+        } else if (this.overview === 'week') {
+          this.removeWeekOverview();
+        } else if (this.overview === 'day') {
+          this.removeDayOverview();
+        }
+
+        // Redraw the chart
+        this.history.pop();
+        this.overview = this.history.pop();
+        this.drawChart();
+      });
+    button.append('circle')
+      .attr('cx', this.settings.label_padding / 2.25)
+      .attr('cy', this.settings.label_padding / 2.5)
+      .attr('r', this.settings.item_size / 2);
+    button.append('text')
+      .attr('x', this.settings.label_padding / 2.25)
+      .attr('y', this.settings.label_padding / 2.5)
+      .attr('dy', function() {
+        return Math.floor(this.settings.width / 100) / 3;
+      })
+      .attr('font-size', function() {
+        return Math.floor(this.settings.label_padding / 3) + 'px';
+      })
+      .html('&#x2190;');
+    button.transition()
+      .duration(this.settings.transition_duration)
+      .ease(d3.easeLinear)
+      .style('opacity', 1);
+  }
+
+
   render() {
     return (
       <div id="calendar-heatmap"></div>
