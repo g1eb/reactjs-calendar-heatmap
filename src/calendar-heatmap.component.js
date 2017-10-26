@@ -994,6 +994,266 @@ class CalendarHeatmap extends React.Component {
     this.drawButton();
   }
 
+
+  /**
+   * Draw week overview
+   */
+  drawWeekOverview() {
+    // Add current overview to the history
+    if (this.history[this.history.length - 1] !== this.overview) {
+      this.history.push(this.overview);
+    }
+
+    // Define beginning and end of the week
+    var start_of_week = moment(this.selected.date).startOf('week');
+    var end_of_week = moment(this.selected.date).endOf('week');
+
+    // Filter data down to the selected week
+    var week_data = this.props.data.filter(function(d) {
+      return start_of_week <= moment(d.date) && moment(d.date) < end_of_week;
+    });
+    var max_value = d3.max(week_data, function(d) {
+      return d3.max(d.summary, function(d) {
+        return d.value;
+      });
+    });
+
+    // Define day labels and axis
+    var day_labels = d3.timeDays(moment().startOf('week'), moment().endOf('week'));
+    var dayScale = d3.scaleBand()
+      .rangeRound([this.settings.label_padding, this.settings.height])
+      .domain(day_labels.map(function(d) {
+        return moment(d).weekday();
+      }));
+
+    // Define week labels and axis
+    var week_labels = [start_of_week];
+    var weekScale = d3.scaleBand()
+      .rangeRound([this.settings.label_padding, this.settings.width])
+      .padding([0.01])
+      .domain(week_labels.map(function(weekday) {
+        return weekday.week();
+      }));
+
+    // Add week data items to the overview
+    this.items.selectAll('.item-block-week').remove();
+    var item_block = this.items.selectAll('.item-block-week')
+      .data(week_data)
+      .enter()
+      .append('g')
+      .attr('class', 'item item-block-week')
+      .attr('width', function() {
+        return (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
+      })
+      .attr('height', function() {
+        return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
+      })
+      .attr('transform', function(d) {
+        return 'translate(' + weekScale(moment(d.date).week()) + ',' + ((dayScale(moment(d.date).weekday()) + dayScale.bandwidth() / 1.75) - 15) + ')';
+      })
+      .attr('total', function(d) {
+        return d.total;
+      })
+      .attr('date', function(d) {
+        return d.date;
+      })
+      .attr('offset', 0)
+      .on('click', function(d) {
+        if (this.in_transition) { return; }
+
+        // Don't transition if there is no data to show
+        if (d.total === 0) { return; }
+
+        this.in_transition = true;
+
+        // Set selected date to the one clicked on
+        this.selected = d;
+
+        // Hide tooltip
+        this.hideTooltip();
+
+        // Remove all week overview related items and labels
+        this.removeWeekOverview();
+
+        // Redraw the chart
+        this.overview = 'day';
+        this.drawChart();
+      });
+
+    var item_width = (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
+    var itemScale = d3.scaleLinear()
+      .rangeRound([0, item_width]);
+
+    item_block.selectAll('.item-block-rect')
+      .data(function(d) {
+        return d.summary;
+      })
+      .enter()
+      .append('rect')
+      .attr('class', 'item item-block-rect')
+      .attr('x', function(d) {
+        var total = parseInt(d3.select(this.parentNode).attr('total'));
+        var offset = parseInt(d3.select(this.parentNode).attr('offset'));
+        itemScale.domain([0, total]);
+        d3.select(this.parentNode).attr('offset', offset + itemScale(d.value));
+        return offset;
+      })
+      .attr('width', function(d) {
+        var total = parseInt(d3.select(this.parentNode).attr('total'));
+        itemScale.domain([0, total]);
+        return Math.max((itemScale(d.value) - this.settings.item_gutter), 1)
+      })
+      .attr('height', function() {
+        return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
+      })
+      .attr('fill', function(d) {
+        var color = d3.scaleLinear()
+          .range(['#ffffff', this.color || '#ff4500'])
+          .domain([-0.15 * max_value, max_value]);
+        return color(d.value) || '#ff4500';
+      })
+      .style('opacity', 0)
+      .on('mouseover', function(d) {
+        if (this.in_transition) { return; }
+
+        // Get date from the parent node
+        var date = new Date(d3.select(this.parentNode).attr('date'));
+
+        // Construct tooltip
+        var tooltip_html = '';
+        tooltip_html += '<div class="header"><strong>' + d.name + '</strong></div><br>';
+        tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
+        tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
+
+        // Calculate tooltip position
+        var total = parseInt(d3.select(this.parentNode).attr('total'));
+        itemScale.domain([0, total]);
+        var x = parseInt(d3.select(this).attr('x')) + itemScale(d.value) / 4 + this.settings.tooltip_width / 4;
+        while (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
+          x -= 10;
+        }
+        var y = dayScale(moment(date).weekday()) + this.settings.tooltip_padding * 1.5;
+
+        // Show tooltip
+        this.tooltip.html(tooltip_html)
+          .style('left', x + 'px')
+          .style('top', y + 'px')
+          .transition()
+          .duration(this.settings.transition_duration / 2)
+          .ease(d3.easeLinear)
+          .style('opacity', 1);
+      })
+      .on('mouseout', function() {
+        if (this.in_transition) { return; }
+        this.hideTooltip();
+      })
+      .transition()
+      .delay(function() {
+        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration;
+      })
+      .duration(function() {
+        return this.settings.transition_duration;
+      })
+      .ease(d3.easeLinear)
+      .style('opacity', 1)
+      .call(function(transition, callback) {
+        if (transition.empty()) {
+          callback();
+        }
+        var n = 0;
+        transition
+          .each(function() {++n; })
+          .on('end', function() {
+            if (!--n) {
+              callback.apply(this, arguments);
+            }
+          });
+      }, function() {
+        this.in_transition = false;
+      });
+
+    // Add week labels
+    this.labels.selectAll('.label-week').remove();
+    this.labels.selectAll('.label-week')
+      .data(week_labels)
+      .enter()
+      .append('text')
+      .attr('class', 'label label-week')
+      .attr('font-size', function() {
+        return Math.floor(this.settings.label_padding / 3) + 'px';
+      })
+      .text(function(d) {
+        return 'Week ' + d.week();
+      })
+      .attr('x', function(d) {
+        return weekScale(d.week());
+      })
+      .attr('y', this.settings.label_padding / 2)
+      .on('mouseenter', function(weekday) {
+        if (this.in_transition) { return; }
+
+        this.items.selectAll('.item-block-week')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', function(d) {
+            return (moment(d.date).week() === weekday.week()) ? 1 : 0.1;
+          });
+      })
+      .on('mouseout', function() {
+        if (this.in_transition) { return; }
+
+        this.items.selectAll('.item-block-week')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', 1);
+      });
+
+    // Add day labels
+    this.labels.selectAll('.label-day').remove();
+    this.labels.selectAll('.label-day')
+      .data(day_labels)
+      .enter()
+      .append('text')
+      .attr('class', 'label label-day')
+      .attr('x', this.settings.label_padding / 3)
+      .attr('y', function(d, i) {
+        return dayScale(i) + dayScale.bandwidth() / 1.75;
+      })
+      .style('text-anchor', 'left')
+      .attr('font-size', function() {
+        return Math.floor(this.settings.label_padding / 3) + 'px';
+      })
+      .text(function(d) {
+        return moment(d).format('dddd')[0];
+      })
+      .on('mouseenter', function(d) {
+        if (this.in_transition) { return; }
+
+        var selected_day = moment(d);
+        this.items.selectAll('.item-block-week')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', function(d) {
+            return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1;
+          });
+      })
+      .on('mouseout', function() {
+        if (this.in_transition) { return; }
+
+        this.items.selectAll('.item-block-week')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', 1);
+      });
+
+    // Add button to switch back to previous overview
+    this.drawButton();
+  }
+
   render() {
     return (
       <div id="calendar-heatmap"></div>
