@@ -1629,6 +1629,27 @@ class CalendarHeatmap extends React.Component {
   }
 
 
+  /**
+   * Helper function to convert seconds to a human readable format
+   * @param seconds Integer
+   */
+  formatTime(seconds) {
+    var hours = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+    var time = '';
+    if (hours > 0) {
+      time += hours === 1 ? '1 hour ' : hours + ' hours ';
+    }
+    if (minutes > 0) {
+      time += minutes === 1 ? '1 minute' : minutes + ' minutes';
+    }
+    if (hours === 0 && minutes === 0) {
+      time = Math.round(seconds) + ' seconds';
+    }
+    return time;
+  }
+
+
   render() {
     return (
       <div id="calendar-heatmap"></div>
