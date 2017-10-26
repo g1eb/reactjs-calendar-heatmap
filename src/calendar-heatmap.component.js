@@ -72,7 +72,7 @@ class CalendarHeatmap extends React.Component {
     this.attr('width', this.settings.width)
       .attr('height', this.settings.height)
 
-    if ( !!this.data && !!this.data[0].summary ) {
+    if ( !!this.props.data && !!this.props.data[0].summary ) {
       this.drawChart()
     }
   }
