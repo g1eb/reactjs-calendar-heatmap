@@ -387,6 +387,326 @@ class CalendarHeatmap extends React.Component {
       })
   }
 
+
+  /**
+   * Draw year overview
+   */
+  drawYearOverview() {
+    // Add current overview to the history
+    if (this.history[this.history.length - 1] !== this.overview) {
+      this.history.push(this.overview);
+    }
+
+    // Define start and end date of the selected year
+    var start_of_year = moment(this.selected.date).startOf('year');
+    var end_of_year = moment(this.selected.date).endOf('year');
+
+    // Filter data down to the selected year
+    var year_data = this.props.data.filter(function(d) {
+      return start_of_year <= moment(d.date) && moment(d.date) < end_of_year;
+    });
+
+    // Calculate max value of the year data
+    var max_value = d3.max(year_data, function(d) {
+      return d.total;
+    });
+
+    var color = d3.scaleLinear()
+      .range(['#ffffff', this.color || '#ff4500'])
+      .domain([-0.15 * max_value, max_value]);
+
+    var calcItemX = function(d) {
+      var date = moment(d.date);
+      var dayIndex = Math.round((date - moment(start_of_year).startOf('week')) / 86400000);
+      var colIndex = Math.trunc(dayIndex / 7);
+      return colIndex * (this.settings.item_size + this.settings.gutter) + this.settings.label_padding;
+    };
+    var calcItemY = function(d) {
+      return this.settings.label_padding + moment(d.date).weekday() * (this.settings.item_size + this.settings.gutter);
+    };
+    var calcItemSize = function(d) {
+      if (max_value <= 0) { return this.settings.item_size; }
+      return this.settings.item_size * 0.75 + (this.settings.item_size * d.total / max_value) * 0.25;
+    };
+
+    this.items.selectAll('.item-circle').remove();
+    this.items.selectAll('.item-circle')
+      .data(year_data)
+      .enter()
+      .append('rect')
+      .attr('class', 'item item-circle')
+      .style('opacity', 0)
+      .attr('x', function(d) {
+        return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+      })
+      .attr('y', function(d) {
+        return calcItemY(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+      })
+      .attr('rx', function(d) {
+        return calcItemSize(d);
+      })
+      .attr('ry', function(d) {
+        return calcItemSize(d);
+      })
+      .attr('width', function(d) {
+        return calcItemSize(d);
+      })
+      .attr('height', function(d) {
+        return calcItemSize(d);
+      })
+      .attr('fill', function(d) {
+        return (d.total > 0) ? color(d.total) : 'transparent';
+      })
+      .on('click', function(d) {
+        if (this.in_transition) { return; }
+
+        // Don't transition if there is no data to show
+        if (d.total === 0) { return; }
+
+        this.in_transition = true;
+
+        // Set selected date to the one clicked on
+        this.selected = d;
+
+        // Hide tooltip
+        this.hideTooltip();
+
+        // Remove all year overview related items and labels
+        this.removeYearOverview();
+
+        // Redraw the chart
+        this.overview = 'day';
+        this.drawChart();
+      })
+      .on('mouseover', function(d) {
+        if (this.in_transition) { return; }
+
+        // Pulsating animation
+        var circle = d3.select(this);
+        (function repeat() {
+          circle = circle.transition()
+            .duration(this.settings.transition_duration)
+            .ease(d3.easeLinear)
+            .attr('x', function(d) {
+              return calcItemX(d) - (this.settings.item_size * 1.1 - this.settings.item_size) / 2;
+            })
+            .attr('y', function(d) {
+              return calcItemY(d) - (this.settings.item_size * 1.1 - this.settings.item_size) / 2;
+            })
+            .attr('width', this.settings.item_size * 1.1)
+            .attr('height', this.settings.item_size * 1.1)
+            .transition()
+            .duration(this.settings.transition_duration)
+            .ease(d3.easeLinear)
+            .attr('x', function(d) {
+              return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+            })
+            .attr('y', function(d) {
+              return calcItemY(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+            })
+            .attr('width', function(d) {
+              return calcItemSize(d);
+            })
+            .attr('height', function(d) {
+              return calcItemSize(d);
+            })
+            .on('end', repeat);
+        })();
+
+        // Construct tooltip
+        var tooltip_html = '';
+        tooltip_html += '<div class="header"><strong>' + (d.total ? this.formatTime(d.total) : 'No time') + ' tracked</strong></div>';
+        tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY') + '</div><br>';
+
+        // Add summary to the tooltip
+        for (var i = 0; i < d.summary.length; i++) {
+          tooltip_html += '<div><span><strong>' + d.summary[i].name + '</strong></span>';
+          tooltip_html += '<span>' + this.formatTime(d.summary[i].value) + '</span></div>';
+        };
+
+        // Calculate tooltip position
+        var x = calcItemX(d) + this.settings.item_size;
+        if (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
+          x -= this.settings.tooltip_width + this.settings.tooltip_padding * 2;
+        }
+        var y = calcItemY(d) + this.settings.item_size;
+
+        // Show tooltip
+        this.tooltip.html(tooltip_html)
+          .style('left', x + 'px')
+          .style('top', y + 'px')
+          .transition()
+          .duration(this.settings.transition_duration / 2)
+          .ease(d3.easeLinear)
+          .style('opacity', 1);
+      })
+      .on('mouseout', function() {
+        if (this.in_transition) { return; }
+
+        // Set circle radius back to what it's supposed to be
+        d3.select(this).transition()
+          .duration(this.settings.transition_duration / 2)
+          .ease(d3.easeLinear)
+          .attr('x', function(d) {
+            return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+          })
+          .attr('y', function(d) {
+            return calcItemY(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+          })
+          .attr('width', function(d) {
+            return calcItemSize(d);
+          })
+          .attr('height', function(d) {
+            return calcItemSize(d);
+          });
+
+        // Hide tooltip
+        this.hideTooltip();
+      })
+      .transition()
+      .delay(function() {
+        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration;
+      })
+      .duration(function() {
+        return this.settings.transition_duration;
+      })
+      .ease(d3.easeLinear)
+      .style('opacity', 1)
+      .call(function(transition, callback) {
+        if (transition.empty()) {
+          callback();
+        }
+        var n = 0;
+        transition
+          .each(function() {++n; })
+          .on('end', function() {
+            if (!--n) {
+              callback.apply(this, arguments);
+            }
+          });
+      }, function() {
+        this.in_transition = false;
+      });
+
+    // Add month labels
+    var month_labels = d3.timeMonths(start_of_year, end_of_year);
+    var monthScale = d3.scaleLinear()
+      .range([0, this.settings.width])
+      .domain([0, month_labels.length]);
+    this.labels.selectAll('.label-month').remove();
+    this.labels.selectAll('.label-month')
+      .data(month_labels)
+      .enter()
+      .append('text')
+      .attr('class', 'label label-month')
+      .attr('font-size', function() {
+        return Math.floor(this.settings.label_padding / 3) + 'px';
+      })
+      .text(function(d) {
+        return d.toLocaleDateString('en-us', { month: 'short' });
+      })
+      .attr('x', function(d, i) {
+        return monthScale(i) + (monthScale(i) - monthScale(i - 1)) / 2;
+      })
+      .attr('y', this.settings.label_padding / 2)
+      .on('mouseenter', function(d) {
+        if (this.in_transition) { return; }
+
+        var selected_month = moment(d);
+        this.items.selectAll('.item-circle')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', function(d) {
+            return moment(d.date).isSame(selected_month, 'month') ? 1 : 0.1;
+          });
+      })
+      .on('mouseout', function() {
+        if (this.in_transition) { return; }
+
+        this.items.selectAll('.item-circle')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', 1);
+      })
+      .on('click', function(d) {
+        if (this.in_transition) { return; }
+
+        // Check month data
+        var month_data = this.props.data.filter(function(e) {
+          return moment(d).startOf('month') <= moment(e.date) && moment(e.date) < moment(d).endOf('month');
+        });
+
+        // Don't transition if there is no data to show
+        if (!month_data.length) { return; }
+
+        // Set selected month to the one clicked on
+        this.selected = { date: d };
+
+        this.in_transition = true;
+
+        // Hide tooltip
+        this.hideTooltip();
+
+        // Remove all year overview related items and labels
+        this.removeYearOverview();
+
+        // Redraw the chart
+        this.overview = 'month';
+        this.drawChart();
+      });
+
+    // Add day labels
+    var day_labels = d3.timeDays(moment().startOf('week'), moment().endOf('week'));
+    var dayScale = d3.scaleBand()
+      .rangeRound([this.settings.label_padding, this.settings.height])
+      .domain(day_labels.map(function(d) {
+        return moment(d).weekday();
+      }));
+    this.labels.selectAll('.label-day').remove();
+    this.labels.selectAll('.label-day')
+      .data(day_labels)
+      .enter()
+      .append('text')
+      .attr('class', 'label label-day')
+      .attr('x', this.settings.label_padding / 3)
+      .attr('y', function(d, i) {
+        return dayScale(i) + dayScale.bandwidth() / 1.75;
+      })
+      .style('text-anchor', 'left')
+      .attr('font-size', function() {
+        return Math.floor(this.settings.label_padding / 3) + 'px';
+      })
+      .text(function(d) {
+        return moment(d).format('dddd')[0];
+      })
+      .on('mouseenter', function(d) {
+        if (this.in_transition) { return; }
+
+        var selected_day = moment(d);
+        this.items.selectAll('.item-circle')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', function(d) {
+            return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1;
+          });
+      })
+      .on('mouseout', function() {
+        if (this.in_transition) { return; }
+
+        this.items.selectAll('.item-circle')
+          .transition()
+          .duration(this.settings.transition_duration)
+          .ease(d3.easeLinear)
+          .style('opacity', 1);
+      });
+
+    // Add button to switch back to previous overview
+    this.drawButton();
+  }
+
   render() {
     return (
       <div id="calendar-heatmap"></div>
