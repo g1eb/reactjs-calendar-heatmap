@@ -209,7 +209,7 @@ class CalendarHeatmap extends React.Component {
       })
       .attr('fill', function(d) {
         var color = d3.scaleLinear()
-          .range(['#ffffff', this.color || '#ff4500'])
+          .range(['#ffffff', this.props.color])
           .domain([-0.15 * max_value, max_value])
         return color(d.total) || '#ff4500'
       })
@@ -412,7 +412,7 @@ class CalendarHeatmap extends React.Component {
     });
 
     var color = d3.scaleLinear()
-      .range(['#ffffff', this.color || '#ff4500'])
+      .range(['#ffffff', this.props.color])
       .domain([-0.15 * max_value, max_value]);
 
     var calcItemX = function(d) {
@@ -824,7 +824,7 @@ class CalendarHeatmap extends React.Component {
       })
       .attr('fill', function(d) {
         var color = d3.scaleLinear()
-          .range(['#ffffff', this.color || '#ff4500'])
+          .range(['#ffffff', this.props.color])
           .domain([-0.15 * max_value, max_value]);
         return color(d.value) || '#ff4500';
       })
@@ -1108,7 +1108,7 @@ class CalendarHeatmap extends React.Component {
       })
       .attr('fill', function(d) {
         var color = d3.scaleLinear()
-          .range(['#ffffff', this.color || '#ff4500'])
+          .range(['#ffffff', this.props.color])
           .domain([-0.15 * max_value, max_value]);
         return color(d.value) || '#ff4500';
       })
@@ -1299,7 +1299,7 @@ class CalendarHeatmap extends React.Component {
         return Math.min(projectScale.bandwidth(), this.settings.max_block_height);
       })
       .attr('fill', function() {
-        return this.color || '#ff4500';
+        return this.props.color;
       })
       .style('opacity', 0)
       .on('mouseover', function(d) {
