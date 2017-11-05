@@ -47,9 +47,9 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'svg')
 
     // Create other svg elements
-    this.items = svg.append('g')
-    this.labels = svg.append('g')
-    this.buttons = svg.append('g')
+    this.items = this.svg.append('g')
+    this.labels = this.svg.append('g')
+    this.buttons = this.svg.append('g')
 
     // Add tooltip to the same element as main svg
     this.tooltip = d3.select('#calendar-heatmap')
@@ -69,7 +69,7 @@ class CalendarHeatmap extends React.Component {
     this.settings.width = container.offsetWidth < 1000 ? 1000 : container.offsetWidth
     this.settings.item_size = ((this.settings.width - this.settings.label_padding) / numWeeks - this.settings.gutter)
     this.settings.height = this.settings.label_padding + 7 * (this.settings.item_size + this.settings.gutter)
-    this.attr('width', this.settings.width)
+    this.svg.attr('width', this.settings.width)
       .attr('height', this.settings.height)
 
     if ( !!this.props.data && !!this.props.data[0].summary ) {
