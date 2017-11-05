@@ -66,7 +66,7 @@ class CalendarHeatmap extends React.Component {
     var colIndex = Math.trunc(dayIndex / 7)
     var numWeeks = colIndex + 1
 
-    this.settings.width = container.offsetWidth < 1000 ? 1000 : container.offsetWidth
+    this.settings.width = this.container.offsetWidth < 1000 ? 1000 : this.container.offsetWidth
     this.settings.item_size = ((this.settings.width - this.settings.label_padding) / numWeeks - this.settings.gutter)
     this.settings.height = this.settings.label_padding + 7 * (this.settings.item_size + this.settings.gutter)
     this.svg.attr('width', this.settings.width)
@@ -1652,7 +1652,7 @@ class CalendarHeatmap extends React.Component {
 
   render() {
     return (
-      <div id="calendar-heatmap"></div>
+      <div id="calendar-heatmap" ref={elem => {this.container = elem}}></div>
     )
   }
 }
