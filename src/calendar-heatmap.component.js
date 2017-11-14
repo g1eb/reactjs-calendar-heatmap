@@ -22,6 +22,7 @@ class CalendarHeatmap extends React.Component {
     }
 
     this.in_transition = false
+    this.overview = this.props.overview
     this.history = ['global']
     this.selected = {}
 
