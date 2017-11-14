@@ -483,7 +483,7 @@ class CalendarHeatmap extends React.Component {
         if (this.in_transition) { return; }
 
         // Pulsating animation
-        var circle = d3.select(this);
+        var circle = d3.select(d3.event.currentTarget);
         let repeat = () => {
           circle = circle.transition()
             .duration(this.settings.transition_duration)
@@ -545,8 +545,8 @@ class CalendarHeatmap extends React.Component {
       .on('mouseout', () => {
         if (this.in_transition) { return; }
 
-        // Set circle radius back to what it's supposed to be
-        d3.select(this).transition()
+        // Set circle radius back to what its supposed to be
+        d3.select(d3.event.currentTarget).transition()
           .duration(this.settings.transition_duration / 2)
           .ease(d3.easeLinear)
           .attr('x', d => {
@@ -1130,7 +1130,7 @@ class CalendarHeatmap extends React.Component {
         // Calculate tooltip position
         var total = parseInt(d3.select(this.parentNode).attr('total'));
         itemScale.domain([0, total]);
-        var x = parseInt(d3.select(this).attr('x')) + itemScale(d.value) / 4 + this.settings.tooltip_width / 4;
+        var x = parseInt(d3.select(d3.event.currentTarget).attr('x')) + itemScale(d.value) / 4 + this.settings.tooltip_width / 4;
         while (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
           x -= 10;
         }
