@@ -328,7 +328,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add month data items to the overview
       this.items.selectAll('.item-block-year').remove();
-      var item_block = this.items.selectAll('.item-block-year').data(year_data).enter().append('rect').attr('class', 'item item-block-year').attr('width', function () {
+      var item_block = this.items.selectAll('.item-block-year').data(year_data).enter().append('rect').attr('class', 'item item-block-year').style('cursor', 'pointer').attr('width', function () {
         return (_this2.settings.width - _this2.settings.label_padding) / year_labels.length - _this2.settings.gutter * 5;
       }).attr('height', function () {
         return _this2.settings.height - _this2.settings.label_padding;
@@ -446,7 +446,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add year labels
       this.labels.selectAll('.label-year').remove();
-      this.labels.selectAll('.label-year').data(year_labels).enter().append('text').attr('class', 'label label-year').attr('font-size', function () {
+      this.labels.selectAll('.label-year').data(year_labels).enter().append('text').attr('class', 'label label-year').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
         return Math.floor(_this2.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return d.year();
@@ -536,7 +536,7 @@ var CalendarHeatmap = function (_React$Component) {
       };
 
       this.items.selectAll('.item-circle').remove();
-      this.items.selectAll('.item-circle').data(year_data).enter().append('rect').attr('class', 'item item-circle').style('opacity', 0).attr('x', function (d) {
+      this.items.selectAll('.item-circle').data(year_data).enter().append('rect').attr('class', 'item item-circle').style('cursor', 'pointer').style('opacity', 0).attr('x', function (d) {
         return calcItemX(d) + (_this3.settings.item_size - calcItemSize(d)) / 2;
       }).attr('y', function (d) {
         return calcItemY(d) + (_this3.settings.item_size - calcItemSize(d)) / 2;
@@ -660,7 +660,7 @@ var CalendarHeatmap = function (_React$Component) {
       var month_labels = d3.timeMonths(start_of_year, end_of_year);
       var monthScale = d3.scaleLinear().range([0, this.settings.width]).domain([0, month_labels.length]);
       this.labels.selectAll('.label-month').remove();
-      this.labels.selectAll('.label-month').data(month_labels).enter().append('text').attr('class', 'label label-month').attr('font-size', function () {
+      this.labels.selectAll('.label-month').data(month_labels).enter().append('text').attr('class', 'label label-month').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
         return Math.floor(_this3.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return d.toLocaleDateString('en-us', { month: 'short' });
@@ -718,7 +718,7 @@ var CalendarHeatmap = function (_React$Component) {
         return (0, _moment2.default)(d).weekday();
       }));
       this.labels.selectAll('.label-day').remove();
-      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
+      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
         return dayScale(i) + dayScale.bandwidth() / 1.75;
       }).style('text-anchor', 'left').attr('font-size', function () {
         return Math.floor(_this3.settings.label_padding / 3) + 'px';
@@ -790,7 +790,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add month data items to the overview
       this.items.selectAll('.item-block-month').remove();
-      var item_block = this.items.selectAll('.item-block-month').data(month_data).enter().append('g').attr('class', 'item item-block-month').attr('width', function () {
+      var item_block = this.items.selectAll('.item-block-month').data(month_data).enter().append('g').attr('class', 'item item-block-month').style('cursor', 'pointer').attr('width', function () {
         return (_this4.settings.width - _this4.settings.label_padding) / week_labels.length - _this4.settings.gutter * 5;
       }).attr('height', function () {
         return Math.min(dayScale.bandwidth(), _this4.settings.max_block_height);
@@ -831,7 +831,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       item_block.selectAll('.item-block-rect').data(function (d) {
         return d.summary;
-      }).enter().append('rect').attr('class', 'item item-block-rect').attr('x', function (d) {
+      }).enter().append('rect').attr('class', 'item item-block-rect').style('cursor', 'pointer').attr('x', function (d) {
         var total = parseInt(d3.select(_this4.parentNode).attr('total'));
         var offset = parseInt(d3.select(_this4.parentNode).attr('offset'));
         itemScale.domain([0, total]);
@@ -896,7 +896,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add week labels
       this.labels.selectAll('.label-week').remove();
-      this.labels.selectAll('.label-week').data(week_labels).enter().append('text').attr('class', 'label label-week').attr('font-size', function () {
+      this.labels.selectAll('.label-week').data(week_labels).enter().append('text').attr('class', 'label label-week').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
         return Math.floor(_this4.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return 'Week ' + d.week();
@@ -949,7 +949,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add day labels
       this.labels.selectAll('.label-day').remove();
-      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
+      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
         return dayScale(i) + dayScale.bandwidth() / 1.75;
       }).style('text-anchor', 'left').attr('font-size', function () {
         return Math.floor(_this4.settings.label_padding / 3) + 'px';
@@ -1018,7 +1018,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add week data items to the overview
       this.items.selectAll('.item-block-week').remove();
-      var item_block = this.items.selectAll('.item-block-week').data(week_data).enter().append('g').attr('class', 'item item-block-week').attr('width', function () {
+      var item_block = this.items.selectAll('.item-block-week').data(week_data).enter().append('g').attr('class', 'item item-block-week').style('cursor', 'pointer').attr('width', function () {
         return (_this5.settings.width - _this5.settings.label_padding) / week_labels.length - _this5.settings.gutter * 5;
       }).attr('height', function () {
         return Math.min(dayScale.bandwidth(), _this5.settings.max_block_height);
@@ -1059,7 +1059,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       item_block.selectAll('.item-block-rect').data(function (d) {
         return d.summary;
-      }).enter().append('rect').attr('class', 'item item-block-rect').attr('x', function (d) {
+      }).enter().append('rect').attr('class', 'item item-block-rect').style('cursor', 'pointer').attr('x', function (d) {
         var total = parseInt(d3.select(_this5.parentNode).attr('total'));
         var offset = parseInt(d3.select(_this5.parentNode).attr('offset'));
         itemScale.domain([0, total]);
@@ -1126,7 +1126,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add week labels
       this.labels.selectAll('.label-week').remove();
-      this.labels.selectAll('.label-week').data(week_labels).enter().append('text').attr('class', 'label label-week').attr('font-size', function () {
+      this.labels.selectAll('.label-week').data(week_labels).enter().append('text').attr('class', 'label label-week').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
         return Math.floor(_this5.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return 'Week ' + d.week();
@@ -1150,7 +1150,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add day labels
       this.labels.selectAll('.label-day').remove();
-      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
+      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
         return dayScale(i) + dayScale.bandwidth() / 1.75;
       }).style('text-anchor', 'left').attr('font-size', function () {
         return Math.floor(_this5.settings.label_padding / 3) + 'px';
@@ -1203,7 +1203,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       var itemScale = d3.scaleTime().range([this.settings.label_padding * 2, this.settings.width]).domain([(0, _moment2.default)(this.selected.date).startOf('day'), (0, _moment2.default)(this.selected.date).endOf('day')]);
       this.items.selectAll('.item-block').remove();
-      this.items.selectAll('.item-block').data(this.selected.details).enter().append('rect').attr('class', 'item item-block').attr('x', function (d) {
+      this.items.selectAll('.item-block').data(this.selected.details).enter().append('rect').attr('class', 'item item-block').style('cursor', 'pointer').attr('x', function (d) {
         return itemScale((0, _moment2.default)(d.date));
       }).attr('y', function (d) {
         return projectScale(d.name) + projectScale.bandwidth() / 2 - 15;
@@ -1267,7 +1267,7 @@ var CalendarHeatmap = function (_React$Component) {
       var timeLabels = d3.timeHours((0, _moment2.default)(this.selected.date).startOf('day'), (0, _moment2.default)(this.selected.date).endOf('day'));
       var timeScale = d3.scaleTime().range([this.settings.label_padding * 2, this.settings.width]).domain([0, timeLabels.length]);
       this.labels.selectAll('.label-time').remove();
-      this.labels.selectAll('.label-time').data(timeLabels).enter().append('text').attr('class', 'label label-time').attr('font-size', function () {
+      this.labels.selectAll('.label-time').data(timeLabels).enter().append('text').attr('class', 'label label-time').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
         return Math.floor(_this6.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return (0, _moment2.default)(d).format('HH:mm');
@@ -1294,7 +1294,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add project labels
       this.labels.selectAll('.label-project').remove();
-      this.labels.selectAll('.label-project').data(project_labels).enter().append('text').attr('class', 'label label-project').attr('x', this.settings.gutter).attr('y', function (d) {
+      this.labels.selectAll('.label-project').data(project_labels).enter().append('text').attr('class', 'label label-project').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('x', this.settings.gutter).attr('y', function (d) {
         return projectScale(d) + projectScale.bandwidth() / 2;
       }).attr('min-height', function () {
         return projectScale.bandwidth();
@@ -1341,7 +1341,7 @@ var CalendarHeatmap = function (_React$Component) {
       var _this7 = this;
 
       this.buttons.selectAll('.button').remove();
-      var button = this.buttons.append('g').attr('class', 'button button-back').style('opacity', 0).on('click', function () {
+      var button = this.buttons.append('g').attr('class', 'button button-back').style('cursor', 'pointer').attr('fill', 'transparent').style('opacity', 0).style('stroke-width', 2).style('stroke', 'rgb(170, 170, 170)').on('click', function () {
         if (_this7.in_transition) {
           return;
         }
@@ -1366,7 +1366,7 @@ var CalendarHeatmap = function (_React$Component) {
         _this7.drawChart();
       });
       button.append('circle').attr('cx', this.settings.label_padding / 2.25).attr('cy', this.settings.label_padding / 2.5).attr('r', this.settings.item_size / 2);
-      button.append('text').attr('x', this.settings.label_padding / 2.25).attr('y', this.settings.label_padding / 2.5).attr('dy', function () {
+      button.append('text').attr('x', this.settings.label_padding / 3.25).attr('y', this.settings.label_padding / 2.5).attr('dy', function () {
         return Math.floor(_this7.settings.width / 100) / 3;
       }).attr('font-size', function () {
         return Math.floor(_this7.settings.label_padding / 3) + 'px';
@@ -1496,7 +1496,11 @@ var CalendarHeatmap = function (_React$Component) {
     value: function render() {
       var _this11 = this;
 
-      return _react2.default.createElement('div', { id: 'calendar-heatmap', ref: function ref(elem) {
+      var style = {
+        userSelect: 'none'
+      };
+
+      return _react2.default.createElement('div', { id: 'calendar-heatmap', style: style, ref: function ref(elem) {
           _this11.container = elem;
         } });
     }
