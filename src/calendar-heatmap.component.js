@@ -1509,7 +1509,11 @@ class CalendarHeatmap extends React.Component {
     this.buttons.selectAll('.button').remove();
     var button = this.buttons.append('g')
       .attr('class', 'button button-back')
+      .style('cursor', 'pointer')
+      .attr('fill', 'transparent')
       .style('opacity', 0)
+      .style('stroke-width', 2)
+      .style('stroke', 'rgb(170, 170, 170)')
       .on('click', () => {
         if (this.in_transition) { return; }
 
@@ -1537,7 +1541,7 @@ class CalendarHeatmap extends React.Component {
       .attr('cy', this.settings.label_padding / 2.5)
       .attr('r', this.settings.item_size / 2);
     button.append('text')
-      .attr('x', this.settings.label_padding / 2.25)
+      .attr('x', this.settings.label_padding / 3.25)
       .attr('y', this.settings.label_padding / 2.5)
       .attr('dy', () => {
         return Math.floor(this.settings.width / 100) / 3;
