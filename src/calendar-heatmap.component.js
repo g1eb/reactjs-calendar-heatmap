@@ -140,6 +140,31 @@ class CalendarHeatmap extends React.Component {
     // Define array of years and total values
     var year_data = d3.timeYears(start, end).map(d => {
       var date = moment(d)
+      let getSummary = () => {
+        var summary = this.props.data.reduce((summary, d) => {
+          if (moment(d.date).year() === date.year()) {
+            for (var i = 0; i < d.summary.length; i++) {
+              if (!summary[d.summary[i].name]) {
+                summary[d.summary[i].name] = {
+                  'value': d.summary[i].value,
+                }
+              } else {
+                summary[d.summary[i].name].value += d.summary[i].value
+              }
+            }
+          }
+          return summary
+        }, {})
+        var unsorted_summary = Object.keys(summary).map(key => {
+          return {
+            'name': key,
+            'value': summary[key].value
+          }
+        })
+        return unsorted_summary.sort((a, b) => {
+          return b.value - a.value
+        })
+      }
       return {
         'date': date,
         'total': this.props.data.reduce((prev, current) => {
@@ -148,31 +173,7 @@ class CalendarHeatmap extends React.Component {
           }
           return prev
         }, 0),
-        'summary': function() {
-          var summary = this.props.data.reduce((summary, d) => {
-            if (moment(d.date).year() === date.year()) {
-              for (var i = 0; i < d.summary.length; i++) {
-                if (!summary[d.summary[i].name]) {
-                  summary[d.summary[i].name] = {
-                    'value': d.summary[i].value,
-                  }
-                } else {
-                  summary[d.summary[i].name].value += d.summary[i].value
-                }
-              }
-            }
-            return summary
-          }, {})
-          var unsorted_summary = Object.keys(summary).map(key => {
-            return {
-              'name': key,
-              'value': summary[key].value
-            }
-          })
-          return unsorted_summary.sort((a, b) => {
-            return b.value - a.value
-          })
-        }(),
+        'summary': getSummary(),
       }
     })
 
