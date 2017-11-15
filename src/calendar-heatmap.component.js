@@ -1660,8 +1660,12 @@ class CalendarHeatmap extends React.Component {
 
 
   render() {
+    let style = {
+      userSelect: 'none',
+    }
+
     return (
-      <div id="calendar-heatmap" ref={elem => {this.container = elem}}></div>
+      <div id="calendar-heatmap" style={style} ref={elem => {this.container = elem}}></div>
     )
   }
 }
