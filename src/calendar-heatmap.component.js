@@ -199,6 +199,7 @@ class CalendarHeatmap extends React.Component {
       .enter()
       .append('rect')
       .attr('class', 'item item-block-year')
+      .style('cursor', 'pointer')
       .attr('width', () => {
         return (this.settings.width - this.settings.label_padding) / year_labels.length - this.settings.gutter * 5
       })
@@ -436,6 +437,7 @@ class CalendarHeatmap extends React.Component {
       .enter()
       .append('rect')
       .attr('class', 'item item-circle')
+      .style('cursor', 'pointer')
       .style('opacity', 0)
       .attr('x', d => {
         return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2;
@@ -760,6 +762,7 @@ class CalendarHeatmap extends React.Component {
       .enter()
       .append('g')
       .attr('class', 'item item-block-month')
+      .style('cursor', 'pointer')
       .attr('width', () => {
         return (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
       })
@@ -809,6 +812,7 @@ class CalendarHeatmap extends React.Component {
       .enter()
       .append('rect')
       .attr('class', 'item item-block-rect')
+      .style('cursor', 'pointer')
       .attr('x', d => {
         var total = parseInt(d3.select(this.parentNode).attr('total'));
         var offset = parseInt(d3.select(this.parentNode).attr('offset'));
@@ -1044,6 +1048,7 @@ class CalendarHeatmap extends React.Component {
       .enter()
       .append('g')
       .attr('class', 'item item-block-week')
+      .style('cursor', 'pointer')
       .attr('width', () => {
         return (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
       })
@@ -1093,6 +1098,7 @@ class CalendarHeatmap extends React.Component {
       .enter()
       .append('rect')
       .attr('class', 'item item-block-rect')
+      .style('cursor', 'pointer')
       .attr('x', d => {
         var total = parseInt(d3.select(this.parentNode).attr('total'));
         var offset = parseInt(d3.select(this.parentNode).attr('offset'));
@@ -1287,6 +1293,7 @@ class CalendarHeatmap extends React.Component {
       .enter()
       .append('rect')
       .attr('class', 'item item-block')
+      .style('cursor', 'pointer')
       .attr('x', d => {
         return itemScale(moment(d.date));
       })
