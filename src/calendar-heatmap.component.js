@@ -279,20 +279,27 @@ class CalendarHeatmap extends React.Component {
 
         // Add summary to the tooltip
         if (d.summary.length <= 5) {
-          for (var i = 0; i < d.summary.length; i++) {
-            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[i].name + '</strong></span>'
-            tooltip_html += '<span>' + this.formatTime(d.summary[i].value) + '</span></div>'
+          let counter = 0
+          while ( counter < d.summary.length ) {
+            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[counter].name + '</strong></span>'
+            tooltip_html += '<span>' + this.formatTime(d.summary[counter].value) + '</span></div>'
+            counter++
           }
         } else {
-          for (var i = 0; i < 5; i++) {
-            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[i].name + '</strong></span>'
-            tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + this.formatTime(d.summary[i].value) + '</span></div>'
+          let counter = 0
+          while ( counter < 5 ) {
+            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[counter].name + '</strong></span>'
+            tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + this.formatTime(d.summary[counter].value) + '</span></div>'
+            counter++
           }
+
           tooltip_html += '<br />'
 
-          var other_projects_sum = 0
-          for (var i = 5; i < d.summary.length; i++) {
-            other_projects_sum = +d.summary[i].value
+          counter = 5
+          let other_projects_sum = 0
+          while ( counter < d.summary.length ) {
+            other_projects_sum = +d.summary[counter].value
+            counter++
           }
           tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>Other:</strong></span>'
           tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + this.formatTime(other_projects_sum) + '</span></div>'
@@ -410,42 +417,44 @@ class CalendarHeatmap extends React.Component {
   drawYearOverview() {
     // Add current overview to the history
     if (this.history[this.history.length - 1] !== this.overview) {
-      this.history.push(this.overview);
+      this.history.push(this.overview)
     }
 
     // Define start and end date of the selected year
-    var start_of_year = moment(this.selected.date).startOf('year');
-    var end_of_year = moment(this.selected.date).endOf('year');
+    var start_of_year = moment(this.selected.date).startOf('year')
+    var end_of_year = moment(this.selected.date).endOf('year')
 
     // Filter data down to the selected year
     var year_data = this.props.data.filter(d => {
-      return start_of_year <= moment(d.date) && moment(d.date) < end_of_year;
-    });
+      return start_of_year <= moment(d.date) && moment(d.date) < end_of_year
+    })
 
     // Calculate max value of the year data
-    var max_value = d3.max(year_data, d => {
-      return d.total;
-    });
+    var max_value = d3.max(year_data, d => d.total)
 
     var color = d3.scaleLinear()
       .range(['#ffffff', this.props.color])
-      .domain([-0.15 * max_value, max_value]);
+      .domain([-0.15 * max_value, max_value])
 
     var calcItemX = (d) => {
-      var date = moment(d.date);
-      var dayIndex = Math.round((date - moment(start_of_year).startOf('week')) / 86400000);
-      var colIndex = Math.trunc(dayIndex / 7);
-      return colIndex * (this.settings.item_size + this.settings.gutter) + this.settings.label_padding;
-    };
-    var calcItemY = d => {
-      return this.settings.label_padding + moment(d.date).weekday() * (this.settings.item_size + this.settings.gutter);
-    };
-    var calcItemSize = d => {
-      if (max_value <= 0) { return this.settings.item_size; }
-      return this.settings.item_size * 0.75 + (this.settings.item_size * d.total / max_value) * 0.25;
-    };
+      var date = moment(d.date)
+      var dayIndex = Math.round((date - moment(start_of_year).startOf('week')) / 86400000)
+      var colIndex = Math.trunc(dayIndex / 7)
+      return colIndex * (this.settings.item_size + this.settings.gutter) + this.settings.label_padding
+    }
 
-    this.items.selectAll('.item-circle').remove();
+    var calcItemY = d => {
+      return this.settings.label_padding + moment(d.date).weekday() * (this.settings.item_size + this.settings.gutter)
+    }
+
+    var calcItemSize = d => {
+      if ( max_value <= 0 ) {
+        return this.settings.item_size
+      }
+      return this.settings.item_size * 0.75 + (this.settings.item_size * d.total / max_value) * 0.25
+    }
+
+    this.items.selectAll('.item-circle').remove()
     this.items.selectAll('.item-circle')
       .data(year_data)
       .enter()
@@ -454,61 +463,61 @@ class CalendarHeatmap extends React.Component {
       .style('cursor', 'pointer')
       .style('opacity', 0)
       .attr('x', d => {
-        return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+        return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2
       })
       .attr('y', d => {
-        return calcItemY(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+        return calcItemY(d) + (this.settings.item_size - calcItemSize(d)) / 2
       })
       .attr('rx', d => {
-        return calcItemSize(d);
+        return calcItemSize(d)
       })
       .attr('ry', d => {
-        return calcItemSize(d);
+        return calcItemSize(d)
       })
       .attr('width', d => {
-        return calcItemSize(d);
+        return calcItemSize(d)
       })
       .attr('height', d => {
-        return calcItemSize(d);
+        return calcItemSize(d)
       })
       .attr('fill', d => {
-        return (d.total > 0) ? color(d.total) : 'transparent';
+        return (d.total > 0) ? color(d.total) : 'transparent'
       })
       .on('click', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Don't transition if there is no data to show
-        if (d.total === 0) { return; }
+        if (d.total === 0) { return }
 
-        this.in_transition = true;
+        this.in_transition = true
 
         // Set selected date to the one clicked on
-        this.selected = d;
+        this.selected = d
 
         // Hide tooltip
-        this.hideTooltip();
+        this.hideTooltip()
 
         // Remove all year overview related items and labels
-        this.removeYearOverview();
+        this.removeYearOverview()
 
         // Redraw the chart
-        this.overview = 'day';
-        this.drawChart();
+        this.overview = 'day'
+        this.drawChart()
       })
       .on('mouseover', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Pulsating animation
-        var circle = d3.select(d3.event.currentTarget);
+        var circle = d3.select(d3.event.currentTarget)
         let repeat = () => {
           circle = circle.transition()
             .duration(this.settings.transition_duration)
             .ease(d3.easeLinear)
             .attr('x', d => {
-              return calcItemX(d) - (this.settings.item_size * 1.1 - this.settings.item_size) / 2;
+              return calcItemX(d) - (this.settings.item_size * 1.1 - this.settings.item_size) / 2
             })
             .attr('y', d => {
-              return calcItemY(d) - (this.settings.item_size * 1.1 - this.settings.item_size) / 2;
+              return calcItemY(d) - (this.settings.item_size * 1.1 - this.settings.item_size) / 2
             })
             .attr('width', this.settings.item_size * 1.1)
             .attr('height', this.settings.item_size * 1.1)
@@ -516,38 +525,40 @@ class CalendarHeatmap extends React.Component {
             .duration(this.settings.transition_duration)
             .ease(d3.easeLinear)
             .attr('x', d => {
-              return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+              return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2
             })
             .attr('y', d => {
-              return calcItemY(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+              return calcItemY(d) + (this.settings.item_size - calcItemSize(d)) / 2
             })
             .attr('width', d => {
-              return calcItemSize(d);
+              return calcItemSize(d)
             })
             .attr('height', d => {
-              return calcItemSize(d);
+              return calcItemSize(d)
             })
-            .on('end', repeat);
+            .on('end', repeat)
         }
-        repeat();
+        repeat()
 
         // Construct tooltip
-        var tooltip_html = '';
-        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (d.total ? this.formatTime(d.total) : 'No time') + ' tracked</strong></div>';
-        tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY') + '</div><br>';
+        var tooltip_html = ''
+        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (d.total ? this.formatTime(d.total) : 'No time') + ' tracked</strong></div>'
+        tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY') + '</div><br>'
 
         // Add summary to the tooltip
-        for (var i = 0; i < d.summary.length; i++) {
-          tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[i].name + '</strong></span>';
-          tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + this.formatTime(d.summary[i].value) + '</span></div>';
-        };
+        let counter = 0
+        while ( counter < d.summary.length ) {
+          tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[counter].name + '</strong></span>'
+          tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + this.formatTime(d.summary[counter].value) + '</span></div>'
+          counter++
+        }
 
         // Calculate tooltip position
-        var x = calcItemX(d) + this.settings.item_size;
+        var x = calcItemX(d) + this.settings.item_size
         if (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
-          x -= this.settings.tooltip_width + this.settings.tooltip_padding * 2;
+          x -= this.settings.tooltip_width + this.settings.tooltip_padding * 2
         }
-        var y = calcItemY(d) + this.settings.item_size;
+        var y = calcItemY(d) + this.settings.item_size
 
         // Show tooltip
         this.tooltip.html(tooltip_html)
@@ -556,62 +567,62 @@ class CalendarHeatmap extends React.Component {
           .transition()
           .duration(this.settings.transition_duration / 2)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
+          .style('opacity', 1)
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Set circle radius back to what its supposed to be
         d3.select(d3.event.currentTarget).transition()
           .duration(this.settings.transition_duration / 2)
           .ease(d3.easeLinear)
           .attr('x', d => {
-            return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+            return calcItemX(d) + (this.settings.item_size - calcItemSize(d)) / 2
           })
           .attr('y', d => {
-            return calcItemY(d) + (this.settings.item_size - calcItemSize(d)) / 2;
+            return calcItemY(d) + (this.settings.item_size - calcItemSize(d)) / 2
           })
           .attr('width', d => {
-            return calcItemSize(d);
+            return calcItemSize(d)
           })
           .attr('height', d => {
-            return calcItemSize(d);
-          });
+            return calcItemSize(d)
+          })
 
         // Hide tooltip
-        this.hideTooltip();
+        this.hideTooltip()
       })
       .transition()
       .delay(() => {
-        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration;
+        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration
       })
       .duration(() => {
-        return this.settings.transition_duration;
+        return this.settings.transition_duration
       })
       .ease(d3.easeLinear)
       .style('opacity', 1)
       .call((transition, callback) => {
         if (transition.empty()) {
-          callback();
+          callback()
         }
-        var n = 0;
+        var n = 0
         transition
-          .each(() => {++n; })
+          .each(() => ++n)
           .on('end', function() {
             if (!--n) {
-              callback.apply(this, arguments);
+              callback.apply(this, arguments)
             }
-          });
+          })
       }, () => {
-        this.in_transition = false;
-      });
+        this.in_transition = false
+      })
 
     // Add month labels
-    var month_labels = d3.timeMonths(start_of_year, end_of_year);
+    var month_labels = d3.timeMonths(start_of_year, end_of_year)
     var monthScale = d3.scaleLinear()
       .range([0, this.settings.width])
-      .domain([0, month_labels.length]);
-    this.labels.selectAll('.label-month').remove();
+      .domain([0, month_labels.length])
+    this.labels.selectAll('.label-month').remove()
     this.labels.selectAll('.label-month')
       .data(month_labels)
       .enter()
@@ -620,71 +631,71 @@ class CalendarHeatmap extends React.Component {
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return Math.floor(this.settings.label_padding / 3) + 'px'
       })
       .text(d => {
-        return d.toLocaleDateString('en-us', { month: 'short' });
+        return d.toLocaleDateString('en-us', { month: 'short' })
       })
       .attr('x', (d, i) => {
-        return monthScale(i) + (monthScale(i) - monthScale(i - 1)) / 2;
+        return monthScale(i) + (monthScale(i) - monthScale(i - 1)) / 2
       })
       .attr('y', this.settings.label_padding / 2)
       .on('mouseenter', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
-        var selected_month = moment(d);
+        var selected_month = moment(d)
         this.items.selectAll('.item-circle')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
           .style('opacity', d => {
-            return moment(d.date).isSame(selected_month, 'month') ? 1 : 0.1;
-          });
+            return moment(d.date).isSame(selected_month, 'month') ? 1 : 0.1
+          })
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-circle')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
+          .style('opacity', 1)
       })
       .on('click', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Check month data
         var month_data = this.props.data.filter(e => {
-          return moment(d).startOf('month') <= moment(e.date) && moment(e.date) < moment(d).endOf('month');
-        });
+          return moment(d).startOf('month') <= moment(e.date) && moment(e.date) < moment(d).endOf('month')
+        })
 
         // Don't transition if there is no data to show
-        if (!month_data.length) { return; }
+        if (!month_data.length) { return }
 
         // Set selected month to the one clicked on
-        this.selected = { date: d };
+        this.selected = { date: d }
 
-        this.in_transition = true;
+        this.in_transition = true
 
         // Hide tooltip
-        this.hideTooltip();
+        this.hideTooltip()
 
         // Remove all year overview related items and labels
-        this.removeYearOverview();
+        this.removeYearOverview()
 
         // Redraw the chart
-        this.overview = 'month';
-        this.drawChart();
-      });
+        this.overview = 'month'
+        this.drawChart()
+      })
 
     // Add day labels
-    var day_labels = d3.timeDays(moment().startOf('week'), moment().endOf('week'));
+    var day_labels = d3.timeDays(moment().startOf('week'), moment().endOf('week'))
     var dayScale = d3.scaleBand()
       .rangeRound([this.settings.label_padding, this.settings.height])
       .domain(day_labels.map(d => {
-        return moment(d).weekday();
-      }));
-    this.labels.selectAll('.label-day').remove();
+        return moment(d).weekday()
+      }))
+    this.labels.selectAll('.label-day').remove()
     this.labels.selectAll('.label-day')
       .data(day_labels)
       .enter()
@@ -694,39 +705,39 @@ class CalendarHeatmap extends React.Component {
       .style('fill', 'rgb(170, 170, 170)')
       .attr('x', this.settings.label_padding / 3)
       .attr('y', (d, i) => {
-        return dayScale(i) + dayScale.bandwidth() / 1.75;
+        return dayScale(i) + dayScale.bandwidth() / 1.75
       })
       .style('text-anchor', 'left')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return Math.floor(this.settings.label_padding / 3) + 'px'
       })
       .text(d => {
-        return moment(d).format('dddd')[0];
+        return moment(d).format('dddd')[0]
       })
       .on('mouseenter', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
-        var selected_day = moment(d);
+        var selected_day = moment(d)
         this.items.selectAll('.item-circle')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
           .style('opacity', d => {
-            return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1;
-          });
+            return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1
+          })
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-circle')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
-      });
+          .style('opacity', 1)
+      })
 
     // Add button to switch back to previous overview
-    this.drawButton();
+    this.drawButton()
   }
 
 
@@ -736,45 +747,45 @@ class CalendarHeatmap extends React.Component {
   drawMonthOverview() {
     // Add current overview to the history
     if (this.history[this.history.length - 1] !== this.overview) {
-      this.history.push(this.overview);
+      this.history.push(this.overview)
     }
 
     // Define beginning and end of the month
-    var start_of_month = moment(this.selected.date).startOf('month');
-    var end_of_month = moment(this.selected.date).endOf('month');
+    var start_of_month = moment(this.selected.date).startOf('month')
+    var end_of_month = moment(this.selected.date).endOf('month')
 
     // Filter data down to the selected month
     var month_data = this.props.data.filter(d => {
-      return start_of_month <= moment(d.date) && moment(d.date) < end_of_month;
-    });
+      return start_of_month <= moment(d.date) && moment(d.date) < end_of_month
+    })
     var max_value = d3.max(month_data, d => {
       return d3.max(d.summary, d => {
-        return d.value;
-      });
-    });
+        return d.value
+      })
+    })
 
     // Define day labels and axis
-    var day_labels = d3.timeDays(moment().startOf('week'), moment().endOf('week'));
+    var day_labels = d3.timeDays(moment().startOf('week'), moment().endOf('week'))
     var dayScale = d3.scaleBand()
       .rangeRound([this.settings.label_padding, this.settings.height])
       .domain(day_labels.map(d => {
-        return moment(d).weekday();
-      }));
+        return moment(d).weekday()
+      }))
 
     // Define week labels and axis
-    var week_labels = [start_of_month.clone()];
+    var week_labels = [start_of_month.clone()]
     while (start_of_month.week() !== end_of_month.week()) {
-      week_labels.push(start_of_month.add(1, 'week').clone());
+      week_labels.push(start_of_month.add(1, 'week').clone())
     }
     var weekScale = d3.scaleBand()
       .rangeRound([this.settings.label_padding, this.settings.width])
       .padding([0.05])
       .domain(week_labels.map(weekday => {
-        return weekday.week();
-      }));
+        return weekday.week()
+      }))
 
     // Add month data items to the overview
-    this.items.selectAll('.item-block-month').remove();
+    this.items.selectAll('.item-block-month').remove()
     var item_block = this.items.selectAll('.item-block-month')
       .data(month_data)
       .enter()
@@ -782,97 +793,95 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'item item-block-month')
       .style('cursor', 'pointer')
       .attr('width', () => {
-        return (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
+        return (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5
       })
       .attr('height', () => {
-        return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
+        return Math.min(dayScale.bandwidth(), this.settings.max_block_height)
       })
       .attr('transform', d => {
-        return 'translate(' + weekScale(moment(d.date).week()) + ',' + ((dayScale(moment(d.date).weekday()) + dayScale.bandwidth() / 1.75) - 15) + ')';
+        return 'translate(' + weekScale(moment(d.date).week()) + ',' + ((dayScale(moment(d.date).weekday()) + dayScale.bandwidth() / 1.75) - 15) + ')'
       })
       .attr('total', d => {
-        return d.total;
+        return d.total
       })
       .attr('date', d => {
-        return d.date;
+        return d.date
       })
       .attr('offset', 0)
       .on('click', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Don't transition if there is no data to show
-        if (d.total === 0) { return; }
+        if (d.total === 0) { return }
 
-        this.in_transition = true;
+        this.in_transition = true
 
         // Set selected date to the one clicked on
-        this.selected = d;
+        this.selected = d
 
         // Hide tooltip
-        this.hideTooltip();
+        this.hideTooltip()
 
         // Remove all month overview related items and labels
-        this.removeMonthOverview();
+        this.removeMonthOverview()
 
         // Redraw the chart
-        this.overview = 'day';
-        this.drawChart();
-      });
+        this.overview = 'day'
+        this.drawChart()
+      })
 
-    var item_width = (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
+    var item_width = (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5
     var itemScale = d3.scaleLinear()
-      .rangeRound([0, item_width]);
+      .rangeRound([0, item_width])
 
     var item_gutter = this.settings.item_gutter
     item_block.selectAll('.item-block-rect')
-      .data(d => {
-        return d.summary;
-      })
+      .data(d => d.summary)
       .enter()
       .append('rect')
       .attr('class', 'item item-block-rect')
       .style('cursor', 'pointer')
       .attr('x', function(d) {
-        var total = parseInt(d3.select(this.parentNode).attr('total'));
-        var offset = parseInt(d3.select(this.parentNode).attr('offset'));
-        itemScale.domain([0, total]);
-        d3.select(this.parentNode).attr('offset', offset + itemScale(d.value));
-        return offset;
+        var total = parseInt(d3.select(this.parentNode).attr('total'))
+        var offset = parseInt(d3.select(this.parentNode).attr('offset'))
+        itemScale.domain([0, total])
+        d3.select(this.parentNode).attr('offset', offset + itemScale(d.value))
+        return offset
       })
       .attr('width', function(d) {
-        var total = parseInt(d3.select(this.parentNode).attr('total'));
-        itemScale.domain([0, total]);
+        var total = parseInt(d3.select(this.parentNode).attr('total'))
+        itemScale.domain([0, total])
         return Math.max((itemScale(d.value) - item_gutter), 1)
       })
       .attr('height', () => {
-        return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
+        return Math.min(dayScale.bandwidth(), this.settings.max_block_height)
       })
       .attr('fill', d => {
         var color = d3.scaleLinear()
           .range(['#ffffff', this.props.color])
-          .domain([-0.15 * max_value, max_value]);
-        return color(d.value) || '#ff4500';
+          .domain([-0.15 * max_value, max_value])
+        return color(d.value) || '#ff4500'
       })
       .style('opacity', 0)
       .on('mouseover', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Get date from the parent node
         var parentNode = d3.select(d3.event.currentTarget.parentNode)
-        var date = new Date(parentNode.attr('date'));
+        var date = new Date(parentNode.attr('date'))
 
         // Construct tooltip
-        var tooltip_html = '';
-        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong></div><br>';
-        tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
-        tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
+        var tooltip_html = ''
+        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong></div><br>'
+        tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>'
+        tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>'
 
         // Calculate tooltip position
-        var x = weekScale(moment(date).week()) + this.settings.tooltip_padding;
+        var x = weekScale(moment(date).week()) + this.settings.tooltip_padding
         while (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
-          x -= 10;
+          x -= 10
         }
-        var y = dayScale(moment(date).weekday()) + this.settings.tooltip_padding * 2;
+        var y = dayScale(moment(date).weekday()) + this.settings.tooltip_padding * 2
 
         // Show tooltip
         this.tooltip.html(tooltip_html)
@@ -881,39 +890,39 @@ class CalendarHeatmap extends React.Component {
           .transition()
           .duration(this.settings.transition_duration / 2)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
+          .style('opacity', 1)
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
-        this.hideTooltip();
+        if (this.in_transition) { return }
+        this.hideTooltip()
       })
       .transition()
       .delay(() => {
-        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration;
+        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration
       })
       .duration(() => {
-        return this.settings.transition_duration;
+        return this.settings.transition_duration
       })
       .ease(d3.easeLinear)
       .style('opacity', 1)
       .call((transition, callback) => {
         if (transition.empty()) {
-          callback();
+          callback()
         }
-        var n = 0;
+        var n = 0
         transition
-          .each(() => {++n; })
+          .each(() => ++n)
           .on('end', function() {
             if (!--n) {
-              callback.apply(this, arguments);
+              callback.apply(this, arguments)
             }
-          });
+          })
       }, () => {
-        this.in_transition = false;
-      });
+        this.in_transition = false
+      })
 
     // Add week labels
-    this.labels.selectAll('.label-week').remove();
+    this.labels.selectAll('.label-week').remove()
     this.labels.selectAll('.label-week')
       .data(week_labels)
       .enter()
@@ -922,64 +931,64 @@ class CalendarHeatmap extends React.Component {
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return Math.floor(this.settings.label_padding / 3) + 'px'
       })
       .text(d => {
-        return 'Week ' + d.week();
+        return 'Week ' + d.week()
       })
       .attr('x', d => {
-        return weekScale(d.week());
+        return weekScale(d.week())
       })
       .attr('y', this.settings.label_padding / 2)
       .on('mouseenter', weekday => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-month')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
           .style('opacity', d => {
-            return (moment(d.date).week() === weekday.week()) ? 1 : 0.1;
-          });
+            return (moment(d.date).week() === weekday.week()) ? 1 : 0.1
+          })
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-month')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
+          .style('opacity', 1)
       })
       .on('click', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Check week data
         var week_data = this.props.data.filter(e => {
-          return d.startOf('week') <= moment(e.date) && moment(e.date) < d.endOf('week');
-        });
+          return d.startOf('week') <= moment(e.date) && moment(e.date) < d.endOf('week')
+        })
 
         // Don't transition if there is no data to show
-        if (!week_data.length) { return; }
+        if (!week_data.length) { return }
 
-        this.in_transition = true;
+        this.in_transition = true
 
         // Set selected month to the one clicked on
-        this.selected = { date: d };
+        this.selected = { date: d }
 
         // Hide tooltip
-        this.hideTooltip();
+        this.hideTooltip()
 
         // Remove all year overview related items and labels
-        this.removeMonthOverview();
+        this.removeMonthOverview()
 
         // Redraw the chart
-        this.overview = 'week';
-        this.drawChart();
-      });
+        this.overview = 'week'
+        this.drawChart()
+      })
 
     // Add day labels
-    this.labels.selectAll('.label-day').remove();
+    this.labels.selectAll('.label-day').remove()
     this.labels.selectAll('.label-day')
       .data(day_labels)
       .enter()
@@ -989,39 +998,39 @@ class CalendarHeatmap extends React.Component {
       .style('fill', 'rgb(170, 170, 170)')
       .attr('x', this.settings.label_padding / 3)
       .attr('y', (d, i) => {
-        return dayScale(i) + dayScale.bandwidth() / 1.75;
+        return dayScale(i) + dayScale.bandwidth() / 1.75
       })
       .style('text-anchor', 'left')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return Math.floor(this.settings.label_padding / 3) + 'px'
       })
       .text(d => {
-        return moment(d).format('dddd')[0];
+        return moment(d).format('dddd')[0]
       })
       .on('mouseenter', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
-        var selected_day = moment(d);
+        var selected_day = moment(d)
         this.items.selectAll('.item-block-month')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
           .style('opacity', d => {
-            return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1;
-          });
+            return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1
+          })
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-month')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
-      });
+          .style('opacity', 1)
+      })
 
     // Add button to switch back to previous overview
-    this.drawButton();
+    this.drawButton()
   }
 
 
@@ -1031,42 +1040,42 @@ class CalendarHeatmap extends React.Component {
   drawWeekOverview() {
     // Add current overview to the history
     if (this.history[this.history.length - 1] !== this.overview) {
-      this.history.push(this.overview);
+      this.history.push(this.overview)
     }
 
     // Define beginning and end of the week
-    var start_of_week = moment(this.selected.date).startOf('week');
-    var end_of_week = moment(this.selected.date).endOf('week');
+    var start_of_week = moment(this.selected.date).startOf('week')
+    var end_of_week = moment(this.selected.date).endOf('week')
 
     // Filter data down to the selected week
     var week_data = this.props.data.filter(d => {
-      return start_of_week <= moment(d.date) && moment(d.date) < end_of_week;
-    });
+      return start_of_week <= moment(d.date) && moment(d.date) < end_of_week
+    })
     var max_value = d3.max(week_data, d => {
       return d3.max(d.summary, d => {
-        return d.value;
-      });
-    });
+        return d.value
+      })
+    })
 
     // Define day labels and axis
-    var day_labels = d3.timeDays(moment().startOf('week'), moment().endOf('week'));
+    var day_labels = d3.timeDays(moment().startOf('week'), moment().endOf('week'))
     var dayScale = d3.scaleBand()
       .rangeRound([this.settings.label_padding, this.settings.height])
       .domain(day_labels.map(d => {
-        return moment(d).weekday();
-      }));
+        return moment(d).weekday()
+      }))
 
     // Define week labels and axis
-    var week_labels = [start_of_week];
+    var week_labels = [start_of_week]
     var weekScale = d3.scaleBand()
       .rangeRound([this.settings.label_padding, this.settings.width])
       .padding([0.01])
       .domain(week_labels.map(weekday => {
-        return weekday.week();
-      }));
+        return weekday.week()
+      }))
 
     // Add week data items to the overview
-    this.items.selectAll('.item-block-week').remove();
+    this.items.selectAll('.item-block-week').remove()
     var item_block = this.items.selectAll('.item-block-week')
       .data(week_data)
       .enter()
@@ -1074,99 +1083,97 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'item item-block-week')
       .style('cursor', 'pointer')
       .attr('width', () => {
-        return (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
+        return (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5
       })
       .attr('height', () => {
-        return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
+        return Math.min(dayScale.bandwidth(), this.settings.max_block_height)
       })
       .attr('transform', d => {
-        return 'translate(' + weekScale(moment(d.date).week()) + ',' + ((dayScale(moment(d.date).weekday()) + dayScale.bandwidth() / 1.75) - 15) + ')';
+        return 'translate(' + weekScale(moment(d.date).week()) + ',' + ((dayScale(moment(d.date).weekday()) + dayScale.bandwidth() / 1.75) - 15) + ')'
       })
       .attr('total', d =>{
-        return d.total;
+        return d.total
       })
       .attr('date', d => {
-        return d.date;
+        return d.date
       })
       .attr('offset', 0)
       .on('click', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Don't transition if there is no data to show
-        if (d.total === 0) { return; }
+        if (d.total === 0) { return }
 
-        this.in_transition = true;
+        this.in_transition = true
 
         // Set selected date to the one clicked on
-        this.selected = d;
+        this.selected = d
 
         // Hide tooltip
-        this.hideTooltip();
+        this.hideTooltip()
 
         // Remove all week overview related items and labels
-        this.removeWeekOverview();
+        this.removeWeekOverview()
 
         // Redraw the chart
-        this.overview = 'day';
-        this.drawChart();
-      });
+        this.overview = 'day'
+        this.drawChart()
+      })
 
-    var item_width = (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
+    var item_width = (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5
     var itemScale = d3.scaleLinear()
-      .rangeRound([0, item_width]);
+      .rangeRound([0, item_width])
 
     var item_gutter = this.settings.item_gutter
     item_block.selectAll('.item-block-rect')
-      .data(d => {
-        return d.summary;
-      })
+      .data(d => d.summary)
       .enter()
       .append('rect')
       .attr('class', 'item item-block-rect')
       .style('cursor', 'pointer')
       .attr('x', function(d) {
-        var total = parseInt(d3.select(this.parentNode).attr('total'));
-        var offset = parseInt(d3.select(this.parentNode).attr('offset'));
-        itemScale.domain([0, total]);
-        d3.select(this.parentNode).attr('offset', offset + itemScale(d.value));
-        return offset;
+        var total = parseInt(d3.select(this.parentNode).attr('total'))
+        var offset = parseInt(d3.select(this.parentNode).attr('offset'))
+        itemScale.domain([0, total])
+        d3.select(this.parentNode).attr('offset', offset + itemScale(d.value))
+        return offset
       })
       .attr('width', function(d) {
-        var total = parseInt(d3.select(this.parentNode).attr('total'));
-        itemScale.domain([0, total]);
+        var total = parseInt(d3.select(this.parentNode).attr('total'))
+        itemScale.domain([0, total])
         return Math.max((itemScale(d.value) - item_gutter), 1)
       })
       .attr('height', () => {
-        return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
+        return Math.min(dayScale.bandwidth(), this.settings.max_block_height)
       })
       .attr('fill', d => {
         var color = d3.scaleLinear()
           .range(['#ffffff', this.props.color])
-          .domain([-0.15 * max_value, max_value]);
-        return color(d.value) || '#ff4500';
+          .domain([-0.15 * max_value, max_value])
+        return color(d.value) || '#ff4500'
       })
       .style('opacity', 0)
       .on('mouseover', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Get date from the parent node
         var parentNode = d3.select(d3.event.currentTarget.parentNode)
-        var date = new Date(parentNode.attr('date'));
+        var date = new Date(parentNode.attr('date'))
 
         // Construct tooltip
-        var tooltip_html = '';
-        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong></div><br>';
-        tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
-        tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
+        var tooltip_html = ''
+        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong></div><br>'
+        tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>'
+        tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>'
 
         // Calculate tooltip position
-        var total = parseInt(parentNode.attr('total'));
-        itemScale.domain([0, total]);
-        var x = parseInt(d3.select(d3.event.currentTarget).attr('x')) + itemScale(d.value) / 4 + this.settings.tooltip_width / 4;
+        var total = parseInt(parentNode.attr('total'))
+        itemScale.domain([0, total])
+        var x = parseInt(d3.select(d3.event.currentTarget).attr('x')) + itemScale(d.value) / 4 + this.settings.tooltip_width / 4
         while (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
-          x -= 10;
+          x -= 10
         }
-        var y = dayScale(moment(date).weekday()) + this.settings.tooltip_padding * 1.5;
+        var y = dayScale(moment(date).weekday()) + this.settings.tooltip_padding * 1.5
 
         // Show tooltip
         this.tooltip.html(tooltip_html)
@@ -1175,39 +1182,39 @@ class CalendarHeatmap extends React.Component {
           .transition()
           .duration(this.settings.transition_duration / 2)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
+          .style('opacity', 1)
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
-        this.hideTooltip();
+        if (this.in_transition) { return }
+        this.hideTooltip()
       })
       .transition()
       .delay(() => {
-        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration;
+        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration
       })
       .duration(() => {
-        return this.settings.transition_duration;
+        return this.settings.transition_duration
       })
       .ease(d3.easeLinear)
       .style('opacity', 1)
       .call((transition, callback) => {
         if (transition.empty()) {
-          callback();
+          callback()
         }
-        var n = 0;
+        var n = 0
         transition
-          .each(() => {++n; })
+          .each(() => ++n)
           .on('end', function() {
             if (!--n) {
-              callback.apply(this, arguments);
+              callback.apply(this, arguments)
             }
-          });
+          })
       }, () => {
-        this.in_transition = false;
-      });
+        this.in_transition = false
+      })
 
     // Add week labels
-    this.labels.selectAll('.label-week').remove();
+    this.labels.selectAll('.label-week').remove()
     this.labels.selectAll('.label-week')
       .data(week_labels)
       .enter()
@@ -1216,38 +1223,38 @@ class CalendarHeatmap extends React.Component {
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return Math.floor(this.settings.label_padding / 3) + 'px'
       })
       .text(d => {
-        return 'Week ' + d.week();
+        return 'Week ' + d.week()
       })
       .attr('x', d => {
-        return weekScale(d.week());
+        return weekScale(d.week())
       })
       .attr('y', this.settings.label_padding / 2)
       .on('mouseenter', weekday => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-week')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
           .style('opacity', d => {
-            return (moment(d.date).week() === weekday.week()) ? 1 : 0.1;
-          });
+            return (moment(d.date).week() === weekday.week()) ? 1 : 0.1
+          })
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-week')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
-      });
+          .style('opacity', 1)
+      })
 
     // Add day labels
-    this.labels.selectAll('.label-day').remove();
+    this.labels.selectAll('.label-day').remove()
     this.labels.selectAll('.label-day')
       .data(day_labels)
       .enter()
@@ -1257,39 +1264,39 @@ class CalendarHeatmap extends React.Component {
       .style('fill', 'rgb(170, 170, 170)')
       .attr('x', this.settings.label_padding / 3)
       .attr('y', (d, i) => {
-        return dayScale(i) + dayScale.bandwidth() / 1.75;
+        return dayScale(i) + dayScale.bandwidth() / 1.75
       })
       .style('text-anchor', 'left')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return Math.floor(this.settings.label_padding / 3) + 'px'
       })
       .text(d => {
-        return moment(d).format('dddd')[0];
+        return moment(d).format('dddd')[0]
       })
       .on('mouseenter', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
-        var selected_day = moment(d);
+        var selected_day = moment(d)
         this.items.selectAll('.item-block-week')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
           .style('opacity', d => {
-            return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1;
-          });
+            return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1
+          })
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-week')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
-      });
+          .style('opacity', 1)
+      })
 
     // Add button to switch back to previous overview
-    this.drawButton();
+    this.drawButton()
   }
 
 
@@ -1299,25 +1306,25 @@ class CalendarHeatmap extends React.Component {
   drawDayOverview() {
     // Add current overview to the history
     if (this.history[this.history.length - 1] !== this.overview) {
-      this.history.push(this.overview);
+      this.history.push(this.overview)
     }
 
     // Initialize selected date to today if it was not set
     if (!Object.keys(this.selected).length) {
-      this.selected = this.props.data[this.props.data.length - 1];
+      this.selected = this.props.data[this.props.data.length - 1]
     }
 
     var project_labels = this.selected.summary.map(project => {
-      return project.name;
-    });
+      return project.name
+    })
     var projectScale = d3.scaleBand()
       .rangeRound([this.settings.label_padding, this.settings.height])
-      .domain(project_labels);
+      .domain(project_labels)
 
     var itemScale = d3.scaleTime()
       .range([this.settings.label_padding * 2, this.settings.width])
-      .domain([moment(this.selected.date).startOf('day'), moment(this.selected.date).endOf('day')]);
-    this.items.selectAll('.item-block').remove();
+      .domain([moment(this.selected.date).startOf('day'), moment(this.selected.date).endOf('day')])
+    this.items.selectAll('.item-block').remove()
     this.items.selectAll('.item-block')
       .data(this.selected.details)
       .enter()
@@ -1325,37 +1332,37 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'item item-block')
       .style('cursor', 'pointer')
       .attr('x', d => {
-        return itemScale(moment(d.date));
+        return itemScale(moment(d.date))
       })
       .attr('y', d => {
-        return (projectScale(d.name) + projectScale.bandwidth() / 2) - 15;
+        return (projectScale(d.name) + projectScale.bandwidth() / 2) - 15
       })
       .attr('width', d => {
-        var end = itemScale(d3.timeSecond.offset(moment(d.date), d.value));
-        return Math.max((end - itemScale(moment(d.date))), 1);
+        var end = itemScale(d3.timeSecond.offset(moment(d.date), d.value))
+        return Math.max((end - itemScale(moment(d.date))), 1)
       })
       .attr('height', () => {
-        return Math.min(projectScale.bandwidth(), this.settings.max_block_height);
+        return Math.min(projectScale.bandwidth(), this.settings.max_block_height)
       })
       .attr('fill', () => {
-        return this.props.color;
+        return this.props.color
       })
       .style('opacity', 0)
       .on('mouseover', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Construct tooltip
-        var tooltip_html = '';
-        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong><div><br>';
-        tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
-        tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY HH:mm') + '</div>';
+        var tooltip_html = ''
+        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong><div><br>'
+        tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>'
+        tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY HH:mm') + '</div>'
 
         // Calculate tooltip position
-        var x = d.value * 100 / (60 * 60 * 24) + itemScale(moment(d.date));
+        var x = d.value * 100 / (60 * 60 * 24) + itemScale(moment(d.date))
         while (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
-          x -= 10;
+          x -= 10
         }
-        var y = projectScale(d.name) + projectScale.bandwidth() / 2 + this.settings.tooltip_padding / 2;
+        var y = projectScale(d.name) + projectScale.bandwidth() / 2 + this.settings.tooltip_padding / 2
 
         // Show tooltip
         this.tooltip.html(tooltip_html)
@@ -1364,51 +1371,51 @@ class CalendarHeatmap extends React.Component {
           .transition()
           .duration(this.settings.transition_duration / 2)
           .ease(d3.easeLinear)
-          .style('opacity', 1);
+          .style('opacity', 1)
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
-        this.hideTooltip();
+        if (this.in_transition) { return }
+        this.hideTooltip()
       })
       .on('click', d => {
         if (!!this.props.handler && typeof this.props.handler == 'function') {
-          this.props.handler(d);
+          this.props.handler(d)
         }
       })
       .transition()
       .delay(() => {
-        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration;
+        return (Math.cos(Math.PI * Math.random()) + 1) * this.settings.transition_duration
       })
       .duration(() => {
-        return this.settings.transition_duration;
+        return this.settings.transition_duration
       })
       .ease(d3.easeLinear)
       .style('opacity', 0.5)
       .call((transition, callback) => {
         if (transition.empty()) {
-          callback();
+          callback()
         }
-        var n = 0;
+        var n = 0
         transition
-          .each(() => {++n; })
+          .each(() => ++n)
           .on('end', function() {
             if (!--n) {
-              callback.apply(this, arguments);
+              callback.apply(this, arguments)
             }
-          });
+          })
       }, () => {
-        this.in_transition = false;
-      });
+        this.in_transition = false
+      })
 
     // Add time labels
     var timeLabels = d3.timeHours(
       moment(this.selected.date).startOf('day'),
       moment(this.selected.date).endOf('day')
-    );
+    )
     var timeScale = d3.scaleTime()
       .range([this.settings.label_padding * 2, this.settings.width])
-      .domain([0, timeLabels.length]);
-    this.labels.selectAll('.label-time').remove();
+      .domain([0, timeLabels.length])
+    this.labels.selectAll('.label-time').remove()
     this.labels.selectAll('.label-time')
       .data(timeLabels)
       .enter()
@@ -1417,42 +1424,42 @@ class CalendarHeatmap extends React.Component {
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return Math.floor(this.settings.label_padding / 3) + 'px'
       })
       .text(d => {
-        return moment(d).format('HH:mm');
+        return moment(d).format('HH:mm')
       })
       .attr('x', (d, i) => {
-        return timeScale(i);
+        return timeScale(i)
       })
       .attr('y', this.settings.label_padding / 2)
       .on('mouseenter', d => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
-        var selected = itemScale(moment(d));
+        var selected = itemScale(moment(d))
         this.items.selectAll('.item-block')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
           .style('opacity', d => {
-            var start = itemScale(moment(d.date));
-            var end = itemScale(moment(d.date).add(d.value, 'seconds'));
-            return (selected >= start && selected <= end) ? 1 : 0.1;
-          });
+            var start = itemScale(moment(d.date))
+            var end = itemScale(moment(d.date).add(d.value, 'seconds'))
+            return (selected >= start && selected <= end) ? 1 : 0.1
+          })
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-block')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
-          .style('opacity', 0.5);
-      });
+          .style('opacity', 0.5)
+      })
 
     // Add project labels
     var label_padding = this.settings.label_padding
-    this.labels.selectAll('.label-project').remove();
+    this.labels.selectAll('.label-project').remove()
     this.labels.selectAll('.label-project')
       .data(project_labels)
       .enter()
@@ -1462,51 +1469,49 @@ class CalendarHeatmap extends React.Component {
       .style('fill', 'rgb(170, 170, 170)')
       .attr('x', this.settings.gutter)
       .attr('y', d => {
-        return projectScale(d) + projectScale.bandwidth() / 2;
+        return projectScale(d) + projectScale.bandwidth() / 2
       })
       .attr('min-height', () => {
-        return projectScale.bandwidth();
+        return projectScale.bandwidth()
       })
       .style('text-anchor', 'left')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return Math.floor(this.settings.label_padding / 3) + 'px'
       })
-      .text(d => {
-        return d;
-      })
+      .text(d => d)
       .each(function() {
         var obj = d3.select(this),
           text_length = obj.node().getComputedTextLength(),
-          text = obj.text();
+          text = obj.text()
         while (text_length > (label_padding * 1.5) && text.length > 0) {
-          text = text.slice(0, -1);
-          obj.text(text + '...');
-          text_length = obj.node().getComputedTextLength();
+          text = text.slice(0, -1)
+          obj.text(text + '...')
+          text_length = obj.node().getComputedTextLength()
         }
       })
       .on('mouseenter', project => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-block')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
           .style('opacity', d => {
-            return (d.name === project) ? 1 : 0.1;
-          });
+            return (d.name === project) ? 1 : 0.1
+          })
       })
       .on('mouseout', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         this.items.selectAll('.item-block')
           .transition()
           .duration(this.settings.transition_duration)
           .ease(d3.easeLinear)
-          .style('opacity', 0.5);
-      });
+          .style('opacity', 0.5)
+      })
 
     // Add button to switch back to previous overview
-    this.drawButton();
+    this.drawButton()
   }
 
 
@@ -1514,7 +1519,7 @@ class CalendarHeatmap extends React.Component {
    * Draw the button for navigation purposes
    */
   drawButton() {
-    this.buttons.selectAll('.button').remove();
+    this.buttons.selectAll('.button').remove()
     var button = this.buttons.append('g')
       .attr('class', 'button button-back')
       .style('cursor', 'pointer')
@@ -1523,45 +1528,45 @@ class CalendarHeatmap extends React.Component {
       .style('stroke-width', 2)
       .style('stroke', 'rgb(170, 170, 170)')
       .on('click', () => {
-        if (this.in_transition) { return; }
+        if (this.in_transition) { return }
 
         // Set transition boolean
-        this.in_transition = true;
+        this.in_transition = true
 
         // Clean the canvas from whichever overview type was on
         if (this.overview === 'year') {
-          this.removeYearOverview();
+          this.removeYearOverview()
         } else if (this.overview === 'month') {
-          this.removeMonthOverview();
+          this.removeMonthOverview()
         } else if (this.overview === 'week') {
-          this.removeWeekOverview();
+          this.removeWeekOverview()
         } else if (this.overview === 'day') {
-          this.removeDayOverview();
+          this.removeDayOverview()
         }
 
         // Redraw the chart
-        this.history.pop();
-        this.overview = this.history.pop();
-        this.drawChart();
-      });
+        this.history.pop()
+        this.overview = this.history.pop()
+        this.drawChart()
+      })
     button.append('circle')
       .attr('cx', this.settings.label_padding / 2.25)
       .attr('cy', this.settings.label_padding / 2.5)
-      .attr('r', this.settings.item_size / 2);
+      .attr('r', this.settings.item_size / 2)
     button.append('text')
       .attr('x', this.settings.label_padding / 3.25)
       .attr('y', this.settings.label_padding / 2.5)
       .attr('dy', () => {
-        return Math.floor(this.settings.width / 100) / 3;
+        return Math.floor(this.settings.width / 100) / 3
       })
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return Math.floor(this.settings.label_padding / 3) + 'px'
       })
-      .html('&#x2190;');
+      .html('&#x2190')
     button.transition()
       .duration(this.settings.transition_duration)
       .ease(d3.easeLinear)
-      .style('opacity', 1);
+      .style('opacity', 1)
   }
 
 
@@ -1574,8 +1579,8 @@ class CalendarHeatmap extends React.Component {
       .duration(this.settings.transition_duration)
       .ease(d3.easeLinear)
       .style('opacity', 0)
-      .remove();
-    this.labels.selectAll('.label-year').remove();
+      .remove()
+    this.labels.selectAll('.label-year').remove()
   }
 
 
@@ -1588,10 +1593,10 @@ class CalendarHeatmap extends React.Component {
       .duration(this.settings.transition_duration)
       .ease(d3.easeLinear)
       .style('opacity', 0)
-      .remove();
-    this.labels.selectAll('.label-day').remove();
-    this.labels.selectAll('.label-month').remove();
-    this.hideBackButton();
+      .remove()
+    this.labels.selectAll('.label-day').remove()
+    this.labels.selectAll('.label-month').remove()
+    this.hideBackButton()
   }
 
 
@@ -1605,12 +1610,12 @@ class CalendarHeatmap extends React.Component {
       .ease(d3.easeLinear)
       .style('opacity', 0)
       .attr('x', (d, i) => {
-        return (i % 2 === 0) ? -this.settings.width / 3 : this.settings.width / 3;
+        return (i % 2 === 0) ? -this.settings.width / 3 : this.settings.width / 3
       })
-      .remove();
-    this.labels.selectAll('.label-day').remove();
-    this.labels.selectAll('.label-week').remove();
-    this.hideBackButton();
+      .remove()
+    this.labels.selectAll('.label-day').remove()
+    this.labels.selectAll('.label-week').remove()
+    this.hideBackButton()
   }
 
 
@@ -1624,12 +1629,12 @@ class CalendarHeatmap extends React.Component {
       .ease(d3.easeLinear)
       .style('opacity', 0)
       .attr('x', (d, i) => {
-        return (i % 2 === 0) ? -this.settings.width / 3 : this.settings.width / 3;
+        return (i % 2 === 0) ? -this.settings.width / 3 : this.settings.width / 3
       })
-      .remove();
-    this.labels.selectAll('.label-day').remove();
-    this.labels.selectAll('.label-week').remove();
-    this.hideBackButton();
+      .remove()
+    this.labels.selectAll('.label-day').remove()
+    this.labels.selectAll('.label-week').remove()
+    this.hideBackButton()
   }
 
 
@@ -1643,12 +1648,12 @@ class CalendarHeatmap extends React.Component {
       .ease(d3.easeLinear)
       .style('opacity', 0)
       .attr('x', (d, i) => {
-        return (i % 2 === 0) ? -this.settings.width / 3 : this.settings.width / 3;
+        return (i % 2 === 0) ? -this.settings.width / 3 : this.settings.width / 3
       })
-      .remove();
-    this.labels.selectAll('.label-time').remove();
-    this.labels.selectAll('.label-project').remove();
-    this.hideBackButton();
+      .remove()
+    this.labels.selectAll('.label-time').remove()
+    this.labels.selectAll('.label-project').remove()
+    this.hideBackButton()
   }
 
 
@@ -1660,7 +1665,7 @@ class CalendarHeatmap extends React.Component {
     this.tooltip.transition()
       .duration(this.settings.transition_duration / 2)
       .ease(d3.easeLinear)
-      .style('opacity', 0);
+      .style('opacity', 0)
   }
 
 
@@ -1673,7 +1678,7 @@ class CalendarHeatmap extends React.Component {
       .duration(this.settings.transition_duration)
       .ease(d3.easeLinear)
       .style('opacity', 0)
-      .remove();
+      .remove()
   }
 
 
@@ -1682,19 +1687,19 @@ class CalendarHeatmap extends React.Component {
    * @param seconds Integer
    */
   formatTime(seconds) {
-    var hours = Math.floor(seconds / 3600);
-    var minutes = Math.floor((seconds - (hours * 3600)) / 60);
-    var time = '';
+    var hours = Math.floor(seconds / 3600)
+    var minutes = Math.floor((seconds - (hours * 3600)) / 60)
+    var time = ''
     if (hours > 0) {
-      time += hours === 1 ? '1 hour ' : hours + ' hours ';
+      time += hours === 1 ? '1 hour ' : hours + ' hours '
     }
     if (minutes > 0) {
-      time += minutes === 1 ? '1 minute' : minutes + ' minutes';
+      time += minutes === 1 ? '1 minute' : minutes + ' minutes'
     }
     if (hours === 0 && minutes === 0) {
-      time = Math.round(seconds) + ' seconds';
+      time = Math.round(seconds) + ' seconds'
     }
-    return time;
+    return time
   }
 
 
