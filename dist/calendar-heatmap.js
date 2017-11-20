@@ -184,7 +184,7 @@ var CalendarHeatmap = function (_React$Component) {
       this.buttons = this.svg.append('g');
 
       // Add tooltip to the same element as main svg
-      this.tooltip = d3.select('#calendar-heatmap').append('div').attr('class', 'heatmap-tooltip').style('opacity', 0);
+      this.tooltip = d3.select('#calendar-heatmap').append('div').attr('class', 'heatmap-tooltip').style('opacity', 0).style('pointer-events', 'none').style('position', 'absolute').style('z-index', 9999).style('width', '250px').style('max-width', '250px').style('overflow', 'hidden').style('padding', '15px').style('font-size', '12px').style('line-height', '14px').style('color', 'rgb(51, 51, 51)').style('background', 'rgba(255, 255, 255, 0.75)');
 
       this.calcDimensions();
     }
@@ -277,6 +277,31 @@ var CalendarHeatmap = function (_React$Component) {
       // Define array of years and total values
       var year_data = d3.timeYears(start, end).map(function (d) {
         var date = (0, _moment2.default)(d);
+        var getSummary = function getSummary() {
+          var summary = _this2.props.data.reduce(function (summary, d) {
+            if ((0, _moment2.default)(d.date).year() === date.year()) {
+              d.summary.map(function (item) {
+                if (!summary[item.name]) {
+                  summary[item.name] = {
+                    'value': item.value
+                  };
+                } else {
+                  summary[item.name].value += item.value;
+                }
+              });
+            }
+            return summary;
+          }, {});
+          var unsorted_summary = Object.keys(summary).map(function (key) {
+            return {
+              'name': key,
+              'value': summary[key].value
+            };
+          });
+          return unsorted_summary.sort(function (a, b) {
+            return b.value - a.value;
+          });
+        };
         return {
           'date': date,
           'total': _this2.props.data.reduce(function (prev, current) {
@@ -285,31 +310,7 @@ var CalendarHeatmap = function (_React$Component) {
             }
             return prev;
           }, 0),
-          'summary': function () {
-            var summary = this.props.data.reduce(function (summary, d) {
-              if ((0, _moment2.default)(d.date).year() === date.year()) {
-                for (var i = 0; i < d.summary.length; i++) {
-                  if (!summary[d.summary[i].name]) {
-                    summary[d.summary[i].name] = {
-                      'value': d.summary[i].value
-                    };
-                  } else {
-                    summary[d.summary[i].name].value += d.summary[i].value;
-                  }
-                }
-              }
-              return summary;
-            }, {});
-            var unsorted_summary = Object.keys(summary).map(function (key) {
-              return {
-                'name': key,
-                'value': summary[key].value
-              };
-            });
-            return unsorted_summary.sort(function (a, b) {
-              return b.value - a.value;
-            });
-          }()
+          'summary': getSummary()
         };
       });
 
@@ -364,50 +365,57 @@ var CalendarHeatmap = function (_React$Component) {
 
         // Construct tooltip
         var tooltip_html = '';
-        tooltip_html += '<div><span><strong>Total time tracked:</strong></span>';
+        tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>Total time tracked:</strong></span>';
 
         var sec = parseInt(d.total, 10);
         var days = Math.floor(sec / 86400);
         if (days > 0) {
-          tooltip_html += '<span>' + (days === 1 ? '1 day' : days + ' days') + '</span></div>';
+          tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (days === 1 ? '1 day' : days + ' days') + '</span></div>';
         }
         var hours = Math.floor((sec - days * 86400) / 3600);
         if (hours > 0) {
           if (days > 0) {
-            tooltip_html += '<div><span></span><span>' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>';
+            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>';
           } else {
-            tooltip_html += '<span>' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>';
+            tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>';
           }
         }
         var minutes = Math.floor((sec - days * 86400 - hours * 3600) / 60);
         if (minutes > 0) {
           if (days > 0 || hours > 0) {
-            tooltip_html += '<div><span></span><span>' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>';
+            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>';
           } else {
-            tooltip_html += '<span>' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>';
+            tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>';
           }
         }
         tooltip_html += '<br />';
 
         // Add summary to the tooltip
         if (d.summary.length <= 5) {
-          for (var i = 0; i < d.summary.length; i++) {
-            tooltip_html += '<div><span><strong>' + d.summary[i].name + '</strong></span>';
-            tooltip_html += '<span>' + _this2.formatTime(d.summary[i].value) + '</span></div>';
+          var counter = 0;
+          while (counter < d.summary.length) {
+            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[counter].name + '</strong></span>';
+            tooltip_html += '<span>' + _this2.formatTime(d.summary[counter].value) + '</span></div>';
+            counter++;
           }
         } else {
-          for (var i = 0; i < 5; i++) {
-            tooltip_html += '<div><span><strong>' + d.summary[i].name + '</strong></span>';
-            tooltip_html += '<span>' + _this2.formatTime(d.summary[i].value) + '</span></div>';
+          var _counter = 0;
+          while (_counter < 5) {
+            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[_counter].name + '</strong></span>';
+            tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + _this2.formatTime(d.summary[_counter].value) + '</span></div>';
+            _counter++;
           }
+
           tooltip_html += '<br />';
 
+          _counter = 5;
           var other_projects_sum = 0;
-          for (var i = 5; i < d.summary.length; i++) {
-            other_projects_sum = +d.summary[i].value;
+          while (_counter < d.summary.length) {
+            other_projects_sum = +d.summary[_counter].value;
+            _counter++;
           }
-          tooltip_html += '<div><span><strong>Other:</strong></span>';
-          tooltip_html += '<span>' + _this2.formatTime(other_projects_sum) + '</span></div>';
+          tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>Other:</strong></span>';
+          tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + _this2.formatTime(other_projects_sum) + '</span></div>';
         }
 
         // Calculate tooltip position
@@ -446,7 +454,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add year labels
       this.labels.selectAll('.label-year').remove();
-      this.labels.selectAll('.label-year').data(year_labels).enter().append('text').attr('class', 'label label-year').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
+      this.labels.selectAll('.label-year').data(year_labels).enter().append('text').attr('class', 'label label-year').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('font-size', function () {
         return Math.floor(_this2.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return d.year();
@@ -525,9 +533,11 @@ var CalendarHeatmap = function (_React$Component) {
         var colIndex = Math.trunc(dayIndex / 7);
         return colIndex * (_this3.settings.item_size + _this3.settings.gutter) + _this3.settings.label_padding;
       };
+
       var calcItemY = function calcItemY(d) {
         return _this3.settings.label_padding + (0, _moment2.default)(d.date).weekday() * (_this3.settings.item_size + _this3.settings.gutter);
       };
+
       var calcItemSize = function calcItemSize(d) {
         if (max_value <= 0) {
           return _this3.settings.item_size;
@@ -600,14 +610,16 @@ var CalendarHeatmap = function (_React$Component) {
 
         // Construct tooltip
         var tooltip_html = '';
-        tooltip_html += '<div class="header"><strong>' + (d.total ? _this3.formatTime(d.total) : 'No time') + ' tracked</strong></div>';
+        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (d.total ? _this3.formatTime(d.total) : 'No time') + ' tracked</strong></div>';
         tooltip_html += '<div>on ' + (0, _moment2.default)(d.date).format('dddd, MMM Do YYYY') + '</div><br>';
 
         // Add summary to the tooltip
-        for (var i = 0; i < d.summary.length; i++) {
-          tooltip_html += '<div><span><strong>' + d.summary[i].name + '</strong></span>';
-          tooltip_html += '<span>' + _this3.formatTime(d.summary[i].value) + '</span></div>';
-        };
+        var counter = 0;
+        while (counter < d.summary.length) {
+          tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[counter].name + '</strong></span>';
+          tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + _this3.formatTime(d.summary[counter].value) + '</span></div>';
+          counter++;
+        }
 
         // Calculate tooltip position
         var x = calcItemX(d) + _this3.settings.item_size;
@@ -646,7 +658,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
         var n = 0;
         transition.each(function () {
-          ++n;
+          return ++n;
         }).on('end', function () {
           if (! --n) {
             callback.apply(this, arguments);
@@ -660,7 +672,7 @@ var CalendarHeatmap = function (_React$Component) {
       var month_labels = d3.timeMonths(start_of_year, end_of_year);
       var monthScale = d3.scaleLinear().range([0, this.settings.width]).domain([0, month_labels.length]);
       this.labels.selectAll('.label-month').remove();
-      this.labels.selectAll('.label-month').data(month_labels).enter().append('text').attr('class', 'label label-month').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
+      this.labels.selectAll('.label-month').data(month_labels).enter().append('text').attr('class', 'label label-month').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('font-size', function () {
         return Math.floor(_this3.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return d.toLocaleDateString('en-us', { month: 'short' });
@@ -718,7 +730,7 @@ var CalendarHeatmap = function (_React$Component) {
         return (0, _moment2.default)(d).weekday();
       }));
       this.labels.selectAll('.label-day').remove();
-      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
+      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
         return dayScale(i) + dayScale.bandwidth() / 1.75;
       }).style('text-anchor', 'left').attr('font-size', function () {
         return Math.floor(_this3.settings.label_padding / 3) + 'px';
@@ -829,18 +841,19 @@ var CalendarHeatmap = function (_React$Component) {
       var item_width = (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
       var itemScale = d3.scaleLinear().rangeRound([0, item_width]);
 
+      var item_gutter = this.settings.item_gutter;
       item_block.selectAll('.item-block-rect').data(function (d) {
         return d.summary;
       }).enter().append('rect').attr('class', 'item item-block-rect').style('cursor', 'pointer').attr('x', function (d) {
-        var total = parseInt(d3.select(_this4.parentNode).attr('total'));
-        var offset = parseInt(d3.select(_this4.parentNode).attr('offset'));
+        var total = parseInt(d3.select(this.parentNode).attr('total'));
+        var offset = parseInt(d3.select(this.parentNode).attr('offset'));
         itemScale.domain([0, total]);
-        d3.select(_this4.parentNode).attr('offset', offset + itemScale(d.value));
+        d3.select(this.parentNode).attr('offset', offset + itemScale(d.value));
         return offset;
       }).attr('width', function (d) {
-        var total = parseInt(d3.select(_this4.parentNode).attr('total'));
+        var total = parseInt(d3.select(this.parentNode).attr('total'));
         itemScale.domain([0, total]);
-        return Math.max(itemScale(d.value) - _this4.settings.item_gutter, 1);
+        return Math.max(itemScale(d.value) - item_gutter, 1);
       }).attr('height', function () {
         return Math.min(dayScale.bandwidth(), _this4.settings.max_block_height);
       }).attr('fill', function (d) {
@@ -852,11 +865,12 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         // Get date from the parent node
-        var date = new Date(d3.select(_this4.parentNode).attr('date'));
+        var parentNode = d3.select(d3.event.currentTarget.parentNode);
+        var date = new Date(parentNode.attr('date'));
 
         // Construct tooltip
         var tooltip_html = '';
-        tooltip_html += '<div class="header"><strong>' + d.name + '</strong></div><br>';
+        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong></div><br>';
         tooltip_html += '<div><strong>' + (d.value ? _this4.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
         tooltip_html += '<div>on ' + (0, _moment2.default)(date).format('dddd, MMM Do YYYY') + '</div>';
 
@@ -884,7 +898,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
         var n = 0;
         transition.each(function () {
-          ++n;
+          return ++n;
         }).on('end', function () {
           if (! --n) {
             callback.apply(this, arguments);
@@ -896,7 +910,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add week labels
       this.labels.selectAll('.label-week').remove();
-      this.labels.selectAll('.label-week').data(week_labels).enter().append('text').attr('class', 'label label-week').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
+      this.labels.selectAll('.label-week').data(week_labels).enter().append('text').attr('class', 'label label-week').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('font-size', function () {
         return Math.floor(_this4.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return 'Week ' + d.week();
@@ -934,10 +948,10 @@ var CalendarHeatmap = function (_React$Component) {
         _this4.in_transition = true;
 
         // Set selected month to the one clicked on
-        _this4.selected = { date: d };
+        _this4.selected = { date: d
 
-        // Hide tooltip
-        _this4.hideTooltip();
+          // Hide tooltip
+        };_this4.hideTooltip();
 
         // Remove all year overview related items and labels
         _this4.removeMonthOverview();
@@ -949,7 +963,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add day labels
       this.labels.selectAll('.label-day').remove();
-      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
+      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
         return dayScale(i) + dayScale.bandwidth() / 1.75;
       }).style('text-anchor', 'left').attr('font-size', function () {
         return Math.floor(_this4.settings.label_padding / 3) + 'px';
@@ -1057,18 +1071,19 @@ var CalendarHeatmap = function (_React$Component) {
       var item_width = (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
       var itemScale = d3.scaleLinear().rangeRound([0, item_width]);
 
+      var item_gutter = this.settings.item_gutter;
       item_block.selectAll('.item-block-rect').data(function (d) {
         return d.summary;
       }).enter().append('rect').attr('class', 'item item-block-rect').style('cursor', 'pointer').attr('x', function (d) {
-        var total = parseInt(d3.select(_this5.parentNode).attr('total'));
-        var offset = parseInt(d3.select(_this5.parentNode).attr('offset'));
+        var total = parseInt(d3.select(this.parentNode).attr('total'));
+        var offset = parseInt(d3.select(this.parentNode).attr('offset'));
         itemScale.domain([0, total]);
-        d3.select(_this5.parentNode).attr('offset', offset + itemScale(d.value));
+        d3.select(this.parentNode).attr('offset', offset + itemScale(d.value));
         return offset;
       }).attr('width', function (d) {
-        var total = parseInt(d3.select(_this5.parentNode).attr('total'));
+        var total = parseInt(d3.select(this.parentNode).attr('total'));
         itemScale.domain([0, total]);
-        return Math.max(itemScale(d.value) - _this5.settings.item_gutter, 1);
+        return Math.max(itemScale(d.value) - item_gutter, 1);
       }).attr('height', function () {
         return Math.min(dayScale.bandwidth(), _this5.settings.max_block_height);
       }).attr('fill', function (d) {
@@ -1080,16 +1095,17 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         // Get date from the parent node
-        var date = new Date(d3.select(_this5.parentNode).attr('date'));
+        var parentNode = d3.select(d3.event.currentTarget.parentNode);
+        var date = new Date(parentNode.attr('date'));
 
         // Construct tooltip
         var tooltip_html = '';
-        tooltip_html += '<div class="header"><strong>' + d.name + '</strong></div><br>';
+        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong></div><br>';
         tooltip_html += '<div><strong>' + (d.value ? _this5.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
         tooltip_html += '<div>on ' + (0, _moment2.default)(date).format('dddd, MMM Do YYYY') + '</div>';
 
         // Calculate tooltip position
-        var total = parseInt(d3.select(_this5.parentNode).attr('total'));
+        var total = parseInt(parentNode.attr('total'));
         itemScale.domain([0, total]);
         var x = parseInt(d3.select(d3.event.currentTarget).attr('x')) + itemScale(d.value) / 4 + _this5.settings.tooltip_width / 4;
         while (_this5.settings.width - x < _this5.settings.tooltip_width + _this5.settings.tooltip_padding * 3) {
@@ -1114,7 +1130,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
         var n = 0;
         transition.each(function () {
-          ++n;
+          return ++n;
         }).on('end', function () {
           if (! --n) {
             callback.apply(this, arguments);
@@ -1126,7 +1142,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add week labels
       this.labels.selectAll('.label-week').remove();
-      this.labels.selectAll('.label-week').data(week_labels).enter().append('text').attr('class', 'label label-week').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
+      this.labels.selectAll('.label-week').data(week_labels).enter().append('text').attr('class', 'label label-week').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('font-size', function () {
         return Math.floor(_this5.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return 'Week ' + d.week();
@@ -1150,7 +1166,7 @@ var CalendarHeatmap = function (_React$Component) {
 
       // Add day labels
       this.labels.selectAll('.label-day').remove();
-      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
+      this.labels.selectAll('.label-day').data(day_labels).enter().append('text').attr('class', 'label label-day').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('x', this.settings.label_padding / 3).attr('y', function (d, i) {
         return dayScale(i) + dayScale.bandwidth() / 1.75;
       }).style('text-anchor', 'left').attr('font-size', function () {
         return Math.floor(_this5.settings.label_padding / 3) + 'px';
@@ -1221,7 +1237,7 @@ var CalendarHeatmap = function (_React$Component) {
 
         // Construct tooltip
         var tooltip_html = '';
-        tooltip_html += '<div class="header"><strong>' + d.name + '</strong><div><br>';
+        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong><div><br>';
         tooltip_html += '<div><strong>' + (d.value ? _this6.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
         tooltip_html += '<div>on ' + (0, _moment2.default)(d.date).format('dddd, MMM Do YYYY HH:mm') + '</div>';
 
@@ -1253,7 +1269,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
         var n = 0;
         transition.each(function () {
-          ++n;
+          return ++n;
         }).on('end', function () {
           if (! --n) {
             callback.apply(this, arguments);
@@ -1267,7 +1283,7 @@ var CalendarHeatmap = function (_React$Component) {
       var timeLabels = d3.timeHours((0, _moment2.default)(this.selected.date).startOf('day'), (0, _moment2.default)(this.selected.date).endOf('day'));
       var timeScale = d3.scaleTime().range([this.settings.label_padding * 2, this.settings.width]).domain([0, timeLabels.length]);
       this.labels.selectAll('.label-time').remove();
-      this.labels.selectAll('.label-time').data(timeLabels).enter().append('text').attr('class', 'label label-time').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('font-size', function () {
+      this.labels.selectAll('.label-time').data(timeLabels).enter().append('text').attr('class', 'label label-time').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('font-size', function () {
         return Math.floor(_this6.settings.label_padding / 3) + 'px';
       }).text(function (d) {
         return (0, _moment2.default)(d).format('HH:mm');
@@ -1293,8 +1309,9 @@ var CalendarHeatmap = function (_React$Component) {
       });
 
       // Add project labels
+      var label_padding = this.settings.label_padding;
       this.labels.selectAll('.label-project').remove();
-      this.labels.selectAll('.label-project').data(project_labels).enter().append('text').attr('class', 'label label-project').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').style('font-family', 'Helvetica, arial, "Open Sans", sans-serif').attr('x', this.settings.gutter).attr('y', function (d) {
+      this.labels.selectAll('.label-project').data(project_labels).enter().append('text').attr('class', 'label label-project').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('x', this.settings.gutter).attr('y', function (d) {
         return projectScale(d) + projectScale.bandwidth() / 2;
       }).attr('min-height', function () {
         return projectScale.bandwidth();
@@ -1303,10 +1320,10 @@ var CalendarHeatmap = function (_React$Component) {
       }).text(function (d) {
         return d;
       }).each(function () {
-        var obj = d3.select(_this6),
+        var obj = d3.select(this),
             text_length = obj.node().getComputedTextLength(),
             text = obj.text();
-        while (text_length > _this6.settings.label_padding * 1.5 && text.length > 0) {
+        while (text_length > label_padding * 1.5 && text.length > 0) {
           text = text.slice(0, -1);
           obj.text(text + '...');
           text_length = obj.node().getComputedTextLength();
@@ -1370,7 +1387,7 @@ var CalendarHeatmap = function (_React$Component) {
         return Math.floor(_this7.settings.width / 100) / 3;
       }).attr('font-size', function () {
         return Math.floor(_this7.settings.label_padding / 3) + 'px';
-      }).html('&#x2190;');
+      }).html('&#x2190');
       button.transition().duration(this.settings.transition_duration).ease(d3.easeLinear).style('opacity', 1);
     }
 
@@ -1497,7 +1514,8 @@ var CalendarHeatmap = function (_React$Component) {
       var _this11 = this;
 
       var style = {
-        userSelect: 'none'
+        userSelect: 'none',
+        fontFamily: 'Helvetica, Arial, sans-serif'
       };
 
       return _react2.default.createElement('div', { id: 'calendar-heatmap', style: style, ref: function ref(elem) {
