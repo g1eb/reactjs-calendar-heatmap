@@ -823,6 +823,7 @@ class CalendarHeatmap extends React.Component {
     var itemScale = d3.scaleLinear()
       .rangeRound([0, item_width]);
 
+    var item_gutter = this.settings.item_gutter
     item_block.selectAll('.item-block-rect')
       .data(d => {
         return d.summary;
@@ -831,17 +832,17 @@ class CalendarHeatmap extends React.Component {
       .append('rect')
       .attr('class', 'item item-block-rect')
       .style('cursor', 'pointer')
-      .attr('x', d => {
+      .attr('x', function(d) {
         var total = parseInt(d3.select(this.parentNode).attr('total'));
         var offset = parseInt(d3.select(this.parentNode).attr('offset'));
         itemScale.domain([0, total]);
         d3.select(this.parentNode).attr('offset', offset + itemScale(d.value));
         return offset;
       })
-      .attr('width', d =>{
+      .attr('width', function(d) {
         var total = parseInt(d3.select(this.parentNode).attr('total'));
         itemScale.domain([0, total]);
-        return Math.max((itemScale(d.value) - this.settings.item_gutter), 1)
+        return Math.max((itemScale(d.value) - item_gutter), 1)
       })
       .attr('height', () => {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
@@ -857,7 +858,8 @@ class CalendarHeatmap extends React.Component {
         if (this.in_transition) { return; }
 
         // Get date from the parent node
-        var date = new Date(d3.select(this.parentNode).attr('date'));
+        var parentNode = d3.select(d3.event.currentTarget.parentNode)
+        var date = new Date(parentNode.attr('date'));
 
         // Construct tooltip
         var tooltip_html = '';
@@ -1113,6 +1115,7 @@ class CalendarHeatmap extends React.Component {
     var itemScale = d3.scaleLinear()
       .rangeRound([0, item_width]);
 
+    var item_gutter = this.settings.item_gutter
     item_block.selectAll('.item-block-rect')
       .data(d => {
         return d.summary;
@@ -1121,17 +1124,17 @@ class CalendarHeatmap extends React.Component {
       .append('rect')
       .attr('class', 'item item-block-rect')
       .style('cursor', 'pointer')
-      .attr('x', d => {
+      .attr('x', function(d) {
         var total = parseInt(d3.select(this.parentNode).attr('total'));
         var offset = parseInt(d3.select(this.parentNode).attr('offset'));
         itemScale.domain([0, total]);
         d3.select(this.parentNode).attr('offset', offset + itemScale(d.value));
         return offset;
       })
-      .attr('width', d => {
+      .attr('width', function(d) {
         var total = parseInt(d3.select(this.parentNode).attr('total'));
         itemScale.domain([0, total]);
-        return Math.max((itemScale(d.value) - this.settings.item_gutter), 1)
+        return Math.max((itemScale(d.value) - item_gutter), 1)
       })
       .attr('height', () => {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
@@ -1147,7 +1150,8 @@ class CalendarHeatmap extends React.Component {
         if (this.in_transition) { return; }
 
         // Get date from the parent node
-        var date = new Date(d3.select(this.parentNode).attr('date'));
+        var parentNode = d3.select(d3.event.currentTarget.parentNode)
+        var date = new Date(parentNode.attr('date'));
 
         // Construct tooltip
         var tooltip_html = '';
@@ -1156,7 +1160,7 @@ class CalendarHeatmap extends React.Component {
         tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
 
         // Calculate tooltip position
-        var total = parseInt(d3.select(this.parentNode).attr('total'));
+        var total = parseInt(parentNode.attr('total'));
         itemScale.domain([0, total]);
         var x = parseInt(d3.select(d3.event.currentTarget).attr('x')) + itemScale(d.value) / 4 + this.settings.tooltip_width / 4;
         while (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
