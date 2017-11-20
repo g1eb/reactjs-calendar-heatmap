@@ -154,15 +154,15 @@ class CalendarHeatmap extends React.Component {
       let getSummary = () => {
         var summary = this.props.data.reduce((summary, d) => {
           if (moment(d.date).year() === date.year()) {
-            for (var i = 0; i < d.summary.length; i++) {
-              if (!summary[d.summary[i].name]) {
-                summary[d.summary[i].name] = {
-                  'value': d.summary[i].value,
+            d.summary.map(item => {
+              if (!summary[item.name]) {
+                summary[item.name] = {
+                  'value': item.value,
                 }
               } else {
-                summary[d.summary[i].name].value += d.summary[i].value
+                summary[item.name].value += item.value
               }
-            }
+            })
           }
           return summary
         }, {})
