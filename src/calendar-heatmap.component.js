@@ -57,6 +57,17 @@ class CalendarHeatmap extends React.Component {
       .append('div')
       .attr('class', 'heatmap-tooltip')
       .style('opacity', 0)
+      .style('pointer-events', 'none')
+      .style('position', 'absolute')
+      .style('z-index', 9999)
+      .style('width', '250px')
+      .style('max-width', '250px')
+      .style('overflow', 'hidden')
+      .style('padding', '15px')
+      .style('font-size', '12px')
+      .style('line-height', '14px')
+      .style('color', 'rgb(51, 51, 51)')
+      .style('background', 'rgba(255, 255, 255, 0.75)')
 
     this.calcDimensions()
   }
