@@ -341,7 +341,6 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'label label-year')
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
-      .style('font-family', 'Helvetica, arial, "Open Sans", sans-serif')
       .attr('font-size', () => {
         return Math.floor(this.settings.label_padding / 3) + 'px'
       })
@@ -609,7 +608,6 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'label label-month')
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
-      .style('font-family', 'Helvetica, arial, "Open Sans", sans-serif')
       .attr('font-size', () => {
         return Math.floor(this.settings.label_padding / 3) + 'px';
       })
@@ -683,7 +681,6 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'label label-day')
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
-      .style('font-family', 'Helvetica, arial, "Open Sans", sans-serif')
       .attr('x', this.settings.label_padding / 3)
       .attr('y', (d, i) => {
         return dayScale(i) + dayScale.bandwidth() / 1.75;
@@ -911,7 +908,6 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'label label-week')
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
-      .style('font-family', 'Helvetica, arial, "Open Sans", sans-serif')
       .attr('font-size', () => {
         return Math.floor(this.settings.label_padding / 3) + 'px';
       })
@@ -978,7 +974,6 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'label label-day')
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
-      .style('font-family', 'Helvetica, arial, "Open Sans", sans-serif')
       .attr('x', this.settings.label_padding / 3)
       .attr('y', (d, i) => {
         return dayScale(i) + dayScale.bandwidth() / 1.75;
@@ -1205,7 +1200,6 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'label label-week')
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
-      .style('font-family', 'Helvetica, arial, "Open Sans", sans-serif')
       .attr('font-size', () => {
         return Math.floor(this.settings.label_padding / 3) + 'px';
       })
@@ -1246,7 +1240,6 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'label label-day')
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
-      .style('font-family', 'Helvetica, arial, "Open Sans", sans-serif')
       .attr('x', this.settings.label_padding / 3)
       .attr('y', (d, i) => {
         return dayScale(i) + dayScale.bandwidth() / 1.75;
@@ -1408,7 +1401,6 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'label label-time')
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
-      .style('font-family', 'Helvetica, arial, "Open Sans", sans-serif')
       .attr('font-size', () => {
         return Math.floor(this.settings.label_padding / 3) + 'px';
       })
@@ -1452,7 +1444,6 @@ class CalendarHeatmap extends React.Component {
       .attr('class', 'label label-project')
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
-      .style('font-family', 'Helvetica, arial, "Open Sans", sans-serif')
       .attr('x', this.settings.gutter)
       .attr('y', d => {
         return projectScale(d) + projectScale.bandwidth() / 2;
@@ -1694,6 +1685,7 @@ class CalendarHeatmap extends React.Component {
   render() {
     let style = {
       userSelect: 'none',
+      fontFamily: 'Helvetica, Arial, sans-serif',
     }
 
     return (
