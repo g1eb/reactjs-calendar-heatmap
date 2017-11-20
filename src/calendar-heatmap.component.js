@@ -1451,6 +1451,7 @@ class CalendarHeatmap extends React.Component {
       });
 
     // Add project labels
+    var label_padding = this.settings.label_padding
     this.labels.selectAll('.label-project').remove();
     this.labels.selectAll('.label-project')
       .data(project_labels)
@@ -1473,11 +1474,11 @@ class CalendarHeatmap extends React.Component {
       .text(d => {
         return d;
       })
-      .each(() => {
+      .each(function() {
         var obj = d3.select(this),
           text_length = obj.node().getComputedTextLength(),
           text = obj.text();
-        while (text_length > (this.settings.label_padding * 1.5) && text.length > 0) {
+        while (text_length > (label_padding * 1.5) && text.length > 0) {
           text = text.slice(0, -1);
           obj.text(text + '...');
           text_length = obj.node().getComputedTextLength();
