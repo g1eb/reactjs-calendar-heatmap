@@ -16,10 +16,9 @@
     "build": "webpack",
     "start": "webpack --watch"
   },
-  "main": "dist/calendar-heatmap.umd.js",
-  "module": "dist/calendar-heatmap.js",
-  "jsnext:main": "dist/calendar-heatmap.js",
-  "typings": "dist/calendar-heatmap.d.ts",
+  "main": "dist/calendar-heatmap.min.js",
+  "module": "dist/calendar-heatmap.min.js",
+  "jsnext:main": "dist/calendar-heatmap.min.js",
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
