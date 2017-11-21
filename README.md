@@ -41,7 +41,7 @@ npm install reactjs-calendar-heatmap
 import CalendarHeatmap from 'reactjs-calendar-heatmap'
 ```
 
-3) Use `CalendarHeatmap` in your component
+3) Render `CalendarHeatmap` component
 
 ```
 <CalendarHeatmap
