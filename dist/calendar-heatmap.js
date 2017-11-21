@@ -1,10 +1,10 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("React"), require("moment"), require("d3"));
+		module.exports = factory(require("react"), require("moment"), require("d3"));
 	else if(typeof define === 'function' && define.amd)
-		define(["React", "moment", "d3"], factory);
+		define(["react", "moment", "d3"], factory);
 	else if(typeof exports === 'object')
-		exports["CalendarHeatmap"] = factory(require("React"), require("moment"), require("d3"));
+		exports["CalendarHeatmap"] = factory(require("react"), require("moment"), require("d3"));
 	else
 		root["CalendarHeatmap"] = factory(root["React"], root["moment"], root["d3"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
