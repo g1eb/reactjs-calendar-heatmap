@@ -1,9 +1,9 @@
-import { Component } from 'react'
+import * as React from 'react'
 
 import moment from 'moment'
 import * as d3 from 'd3'
 
-class CalendarHeatmap extends Component {
+class CalendarHeatmap extends React.Component {
 
   constructor(props) {
     super(props)
