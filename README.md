@@ -128,5 +128,6 @@ Or as an Angular component (version 2.x), see [angular2-calendar-heatmap](https:
 
 ## Dependencies
 
+* [react.js](https://reactjs.org/)
 * [moment.js](https://momentjs.com/)
 * [d3.js](https://d3js.org/)
