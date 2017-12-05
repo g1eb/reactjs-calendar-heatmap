@@ -16,13 +16,6 @@ module.exports = {
       amd: 'react',
       umd: 'react'
     },
-    'react-dom': {
-      root: 'ReactDOM',
-      commonjs2: 'react-dom',
-      commonjs: 'react-dom',
-      amd: 'react-dom',
-      umd: 'react-dom'
-    },
     'moment': 'moment',
     'd3': 'd3'
   },
