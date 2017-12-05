@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var path = require('path');
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 
 module.exports = {
 
@@ -38,7 +37,7 @@ module.exports = {
   },
 
   plugins: [
-    new UglifyJsPlugin({
+    new webpack.optimize.UglifyJsPlugin({
       include: /\.min\.js$/,
       minimize: true,
       compress: {
