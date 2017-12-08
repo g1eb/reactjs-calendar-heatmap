@@ -254,27 +254,27 @@ class CalendarHeatmap extends React.Component {
 
         // Construct tooltip
         let tooltip_html = ''
-        tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>Total time tracked:</strong></span>'
+        tooltip_html += '<div><span><strong>Total time tracked:</strong></span>'
 
         let sec = parseInt(d.total, 10)
         let days = Math.floor(sec / 86400)
         if (days > 0) {
-          tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (days === 1 ? '1 day' : days + ' days') + '</span></div>'
+          tooltip_html += '<span>' + (days === 1 ? '1 day' : days + ' days') + '</span></div>'
         }
         let hours = Math.floor((sec - (days * 86400)) / 3600)
         if (hours > 0) {
           if (days > 0) {
-            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>'
+            tooltip_html += '<div><span></span><span>' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>'
           } else {
-            tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>'
+            tooltip_html += '<span>' + (hours === 1 ? '1 hour' : hours + ' hours') + '</span></div>'
           }
         }
         let minutes = Math.floor((sec - (days * 86400) - (hours * 3600)) / 60)
         if (minutes > 0) {
           if (days > 0 || hours > 0) {
-            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>'
+            tooltip_html += '<div><span></span><span>' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>'
           } else {
-            tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>'
+            tooltip_html += '<span>' + (minutes === 1 ? '1 minute' : minutes + ' minutes') + '</span></div>'
           }
         }
         tooltip_html += '<br />'
@@ -283,15 +283,15 @@ class CalendarHeatmap extends React.Component {
         if (d.summary.length <= 5) {
           let counter = 0
           while ( counter < d.summary.length ) {
-            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[counter].name + '</strong></span>'
+            tooltip_html += '<div><span><strong>' + d.summary[counter].name + '</strong></span>'
             tooltip_html += '<span>' + this.formatTime(d.summary[counter].value) + '</span></div>'
             counter++
           }
         } else {
           let counter = 0
           while ( counter < 5 ) {
-            tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[counter].name + '</strong></span>'
-            tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + this.formatTime(d.summary[counter].value) + '</span></div>'
+            tooltip_html += '<div><span><strong>' + d.summary[counter].name + '</strong></span>'
+            tooltip_html += '<span>' + this.formatTime(d.summary[counter].value) + '</span></div>'
             counter++
           }
 
@@ -303,8 +303,8 @@ class CalendarHeatmap extends React.Component {
             other_projects_sum = +d.summary[counter].value
             counter++
           }
-          tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>Other:</strong></span>'
-          tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + this.formatTime(other_projects_sum) + '</span></div>'
+          tooltip_html += '<div><span><strong>Other:</strong></span>'
+          tooltip_html += '<span>' + this.formatTime(other_projects_sum) + '</span></div>'
         }
 
         // Calculate tooltip position
@@ -544,14 +544,14 @@ class CalendarHeatmap extends React.Component {
 
         // Construct tooltip
         let tooltip_html = ''
-        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + (d.total ? this.formatTime(d.total) : 'No time') + ' tracked</strong></div>'
+        tooltip_html += `<div class="${styles.header}"><strong>${d.total ? this.formatTime(d.total) : 'No time'} tracked</strong></div>`
         tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY') + '</div><br>'
 
         // Add summary to the tooltip
         let counter = 0
         while ( counter < d.summary.length ) {
-          tooltip_html += '<div><span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong>' + d.summary[counter].name + '</strong></span>'
-          tooltip_html += '<span style="display: inline-block; width: 50%; padding-right: 10px; box-sizing: border-box; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + this.formatTime(d.summary[counter].value) + '</span></div>'
+          tooltip_html += '<div><span><strong>' + d.summary[counter].name + '</strong></span>'
+          tooltip_html += '<span>' + this.formatTime(d.summary[counter].value) + '</span></div>'
           counter++
         }
 
@@ -874,7 +874,7 @@ class CalendarHeatmap extends React.Component {
 
         // Construct tooltip
         let tooltip_html = ''
-        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong></div><br>'
+        tooltip_html += `<div class="${styles.header}"><strong>${d.name}</strong></div><br>`
         tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>'
         tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>'
 
@@ -1164,7 +1164,7 @@ class CalendarHeatmap extends React.Component {
 
         // Construct tooltip
         let tooltip_html = ''
-        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong></div><br>'
+        tooltip_html += `<div class="${styles.header}"><strong>${d.name}</strong></div><br>`
         tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>'
         tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>'
 
@@ -1355,7 +1355,7 @@ class CalendarHeatmap extends React.Component {
 
         // Construct tooltip
         let tooltip_html = ''
-        tooltip_html += '<div class="header"><strong style="display: inline-block; width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + d.name + '</strong><div><br>'
+        tooltip_html += `<div class="${styles.header}"><strong>${d.name}</strong><div><br>`
         tooltip_html += '<div><strong>' + (d.value ? this.formatTime(d.value) : 'No time') + ' tracked</strong></div>'
         tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY HH:mm') + '</div>'
 
