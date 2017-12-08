@@ -3,6 +3,8 @@ import * as React from 'react'
 import moment from 'moment'
 import * as d3 from 'd3'
 
+import styles from './calendar-heatmap.css'
+
 class CalendarHeatmap extends React.Component {
 
   constructor(props) {
@@ -1703,13 +1705,11 @@ class CalendarHeatmap extends React.Component {
 
 
   render() {
-    let style = {
-      userSelect: 'none',
-      fontFamily: 'Helvetica, Arial, sans-serif',
-    }
-
     return (
-      <div id="calendar-heatmap" style={style} ref={elem => {this.container = elem}}></div>
+      <div id='calendar-heatmap'
+        className={styles.calendarHeatmap}
+        ref={elem => {this.container = elem}}>
+      </div>
     )
   }
 }
