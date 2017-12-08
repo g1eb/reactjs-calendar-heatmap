@@ -1,27 +1,9 @@
 .calendarHeatmap {
+  font-family: Helvetica, Arial, sans-serif;
   user-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-}
-.calendarHeatmap .item {
-  cursor: pointer;
-}
-.calendarHeatmap .label {
-  cursor: pointer;
-  fill: rgb(170, 170, 170);
-  font-family: Helvetica, Arial, sans-serif;
-}
-.calendarHeatmap .button {
-  cursor: pointer;
-  fill: transparent;
-  stroke-width: 2;
-  stroke: rgb(170, 170, 170);
-}
-.calendarHeatmap .button text {
-  stroke-width: 1;
-  text-anchor: middle;
-  fill: rgb(170, 170, 170);
 }
 .calendarHeatmap .heatmapTooltip {
   pointer-events: none;
