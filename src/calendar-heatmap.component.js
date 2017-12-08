@@ -57,7 +57,7 @@ class CalendarHeatmap extends React.Component {
     // Add tooltip to the same element as main svg
     this.tooltip = d3.select('#calendar-heatmap')
       .append('div')
-      .attr('class', 'heatmap-tooltip')
+      .attr('class', styles.heatmapTooltip)
       .style('opacity', 0)
       .style('pointer-events', 'none')
       .style('position', 'absolute')
