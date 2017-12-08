@@ -1556,7 +1556,10 @@ class CalendarHeatmap extends React.Component {
       .attr('cy', this.settings.label_padding / 2.5)
       .attr('r', this.settings.item_size / 2)
     button.append('text')
-      .attr('x', this.settings.label_padding / 3.25)
+      .style('stroke-width', 1)
+      .style('text-anchor', 'middle')
+      .style('fill', 'rgb(170, 170, 170)')
+      .attr('x', this.settings.label_padding / 2.25)
       .attr('y', this.settings.label_padding / 2.5)
       .attr('dy', () => {
         return Math.floor(this.settings.width / 100) / 3
