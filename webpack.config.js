@@ -5,7 +5,7 @@ module.exports = {
 
   entry: {
     'calendar-heatmap': './src/index.js',
-    'calendar-heatmap.min': './src/index.js'
+    'calendar-heatmap.min': './src/index.js',
   },
 
   externals: {
@@ -17,7 +17,7 @@ module.exports = {
       umd: 'react'
     },
     'moment': 'moment',
-    'd3': 'd3'
+    'd3': 'd3',
   },
 
   output: {
@@ -26,7 +26,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
     libraryTarget: 'umd',
-    library: 'CalendarHeatmap'
+    library: 'CalendarHeatmap',
   },
 
   plugins: [
@@ -34,8 +34,8 @@ module.exports = {
       include: /\.min\.js$/,
       minimize: true,
       compress: {
-        warnings: false
-      }
+        warnings: false,
+      },
     })
   ],
 
@@ -45,13 +45,13 @@ module.exports = {
         test: /\.js?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: 'babel-loader',
         },
       }, {
         test: /\.css$/,
-        loader: 'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-      }
-    ]
-  }
+        loader: 'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+      },
+    ],
+  },
 
 };
