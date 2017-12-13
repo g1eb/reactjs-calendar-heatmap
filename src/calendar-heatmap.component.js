@@ -206,7 +206,7 @@ class CalendarHeatmap extends React.Component {
         return d.year()
       }))
 
-    // Add month data items to the overview
+    // Add global data items to the overview
     this.items.selectAll('.item-block-year').remove()
     let item_block = this.items.selectAll('.item-block-year')
       .data(year_data)
@@ -241,7 +241,7 @@ class CalendarHeatmap extends React.Component {
         // Hide tooltip
         this.hideTooltip()
 
-        // Remove all month overview related items and labels
+        // Remove all global overview related items and labels
         this.removeGlobalOverview()
 
         // Redraw the chart
@@ -397,13 +397,13 @@ class CalendarHeatmap extends React.Component {
         // Set in_transition flag
         this.in_transition = true
 
-        // Set selected month to the one clicked on
+        // Set selected year to the one clicked on
         this.selected = d
 
         // Hide tooltip
         this.hideTooltip()
 
-        // Remove all year overview related items and labels
+        // Remove all global overview related items and labels
         this.removeGlobalOverview()
 
         // Redraw the chart
