@@ -331,7 +331,7 @@ var CalendarHeatmap = function (_React$Component) {
         return d.year();
       }));
 
-      // Add month data items to the overview
+      // Add global data items to the overview
       this.items.selectAll('.item-block-year').remove();
       var item_block = this.items.selectAll('.item-block-year').data(year_data).enter().append('rect').attr('class', 'item item-block-year').style('cursor', 'pointer').attr('width', function () {
         return (_this2.settings.width - _this2.settings.label_padding) / year_labels.length - _this2.settings.gutter * 5;
@@ -356,7 +356,7 @@ var CalendarHeatmap = function (_React$Component) {
         // Hide tooltip
         _this2.hideTooltip();
 
-        // Remove all month overview related items and labels
+        // Remove all global overview related items and labels
         _this2.removeGlobalOverview();
 
         // Redraw the chart
@@ -486,13 +486,13 @@ var CalendarHeatmap = function (_React$Component) {
         // Set in_transition flag
         _this2.in_transition = true;
 
-        // Set selected month to the one clicked on
-        _this2.selected = d;
+        // Set selected year to the one clicked on
+        _this2.selected = { date: d
 
-        // Hide tooltip
-        _this2.hideTooltip();
+          // Hide tooltip
+        };_this2.hideTooltip();
 
-        // Remove all year overview related items and labels
+        // Remove all global overview related items and labels
         _this2.removeGlobalOverview();
 
         // Redraw the chart
