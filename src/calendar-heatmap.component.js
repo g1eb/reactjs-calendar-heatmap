@@ -398,7 +398,7 @@ class CalendarHeatmap extends React.Component {
         this.in_transition = true
 
         // Set selected year to the one clicked on
-        this.selected = d
+        this.selected = { date: d }
 
         // Hide tooltip
         this.hideTooltip()
