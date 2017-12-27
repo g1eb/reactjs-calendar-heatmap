@@ -91,7 +91,6 @@ var _calendarHeatmapComponent2 = _interopRequireDefault(_calendarHeatmapComponen
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = _calendarHeatmapComponent2.default;
-module.exports = exports['default'];
 
 /***/ }),
 /* 1 */
@@ -1536,7 +1535,6 @@ CalendarHeatmap.defaultProps = {
 };
 
 exports.default = CalendarHeatmap;
-module.exports = exports['default'];
 
 /***/ }),
 /* 2 */
@@ -1596,7 +1594,7 @@ exports = module.exports = __webpack_require__(7)(undefined);
 
 
 // module
-exports.push([module.i, ".calendar-heatmap__calendarHeatmap___2vEkr {\n  font-family: Helvetica, Arial, sans-serif;\n  user-select: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm {\n  pointer-events: none;\n  position: absolute;\n  z-index: 9999;\n  width: 250px;\n  max-width: 250px;\n  overflow: hidden;\n  padding: 15px;\n  font-size: 12px;\n  line-height: 14px;\n  color: rgb(51, 51, 51);\n  font-family: Helvetica, arial, 'Open Sans', sans-serif;\n  background: rgba(255, 255, 255, 0.75);\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm .calendar-heatmap__header___y_GbL strong {\n  display: inline-block;\n  width: 250px;\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm span {\n  display: inline-block;\n  width: 50%;\n  padding-right: 10px;\n  box-sizing: border-box;\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm span,\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm .calendar-heatmap__header___y_GbL strong {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n", ""]);
+exports.push([module.i, ".calendar-heatmap__calendarHeatmap___2vEkr {\n  font-family: Helvetica, Arial, sans-serif;\n  user-select: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm {\n  pointer-events: none;\n  position: absolute;\n  z-index: 9999;\n  width: 250px;\n  max-width: 250px;\n  overflow: hidden;\n  padding: 15px;\n  font-size: 12px;\n  text-align: left;\n  line-height: 14px;\n  color: rgb(51, 51, 51);\n  font-family: Helvetica, arial, 'Open Sans', sans-serif;\n  background: rgba(255, 255, 255, 0.75);\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm .calendar-heatmap__header___y_GbL strong {\n  display: inline-block;\n  width: 250px;\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm span {\n  display: inline-block;\n  width: 50%;\n  padding-right: 10px;\n  box-sizing: border-box;\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm span,\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm .calendar-heatmap__header___y_GbL strong {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n", ""]);
 
 // exports
 exports.locals = {
