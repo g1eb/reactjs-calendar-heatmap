@@ -91,6 +91,7 @@ var _calendarHeatmapComponent2 = _interopRequireDefault(_calendarHeatmapComponen
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = _calendarHeatmapComponent2.default;
+module.exports = exports['default'];
 
 /***/ }),
 /* 1 */
@@ -1535,6 +1536,7 @@ CalendarHeatmap.defaultProps = {
 };
 
 exports.default = CalendarHeatmap;
+module.exports = exports['default'];
 
 /***/ }),
 /* 2 */
