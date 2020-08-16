@@ -39,6 +39,11 @@ class CalendarHeatmap extends React.Component {
     window.addEventListener('resize', this.calcDimensions)
   }
 
+  componentDidUpdate (prevProps) {
+    this.parseData ();
+    this.drawChart ();
+  }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.calcDimensions)
   }
