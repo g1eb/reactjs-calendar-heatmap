@@ -3,6 +3,12 @@ var path = require('path');
 
 module.exports = {
 
+  mode: 'production',
+
+  optimization: {
+    minimize: false,
+  },
+
   entry: {
     'calendar-heatmap': './src/index.js',
     'calendar-heatmap.min': './src/index.js',
@@ -31,16 +37,6 @@ module.exports = {
 
   devtool: 'source-map',
 
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      include: /\.min\.js$/,
-      minimize: true,
-      compress: {
-        warnings: false,
-      },
-    })
-  ],
-
   module: {
     rules: [
       {
@@ -55,7 +51,7 @@ module.exports = {
         },
       }, {
         test: /\.css$/,
-        loader: 'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+        loader: 'style-loader!css-loader?modules&importLoaders=true',
       },
     ],
   },
