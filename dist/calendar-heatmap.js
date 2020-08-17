@@ -7,7 +7,7 @@
 		exports["CalendarHeatmap"] = factory(require("react"), require("moment"), require("d3"));
 	else
 		root["CalendarHeatmap"] = factory(root["React"], root["moment"], root["d3"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE__3__, __WEBPACK_EXTERNAL_MODULE__4__, __WEBPACK_EXTERNAL_MODULE__5__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -46,12 +46,32 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -69,8 +89,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "/";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -80,18 +101,98 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+// eslint-disable-next-line func-names
+module.exports = function (useSourceMap) {
+  var list = []; // return the list of modules as css string
 
-var _calendarHeatmapComponent = __webpack_require__(1);
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item, useSourceMap);
 
-var _calendarHeatmapComponent2 = _interopRequireDefault(_calendarHeatmapComponent);
+      if (item[2]) {
+        return "@media ".concat(item[2], " {").concat(content, "}");
+      }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+      return content;
+    }).join('');
+  }; // import a list of modules into the list
+  // eslint-disable-next-line func-names
 
-exports.default = _calendarHeatmapComponent2.default;
-module.exports = exports['default'];
+
+  list.i = function (modules, mediaQuery, dedupe) {
+    if (typeof modules === 'string') {
+      // eslint-disable-next-line no-param-reassign
+      modules = [[null, modules, '']];
+    }
+
+    var alreadyImportedModules = {};
+
+    if (dedupe) {
+      for (var i = 0; i < this.length; i++) {
+        // eslint-disable-next-line prefer-destructuring
+        var id = this[i][0];
+
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+
+    for (var _i = 0; _i < modules.length; _i++) {
+      var item = [].concat(modules[_i]);
+
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (mediaQuery) {
+        if (!item[2]) {
+          item[2] = mediaQuery;
+        } else {
+          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
+        }
+      }
+
+      list.push(item);
+    }
+  };
+
+  return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+  var content = item[1] || ''; // eslint-disable-next-line prefer-destructuring
+
+  var cssMapping = item[3];
+
+  if (!cssMapping) {
+    return content;
+  }
+
+  if (useSourceMap && typeof btoa === 'function') {
+    var sourceMapping = toComment(cssMapping);
+    var sourceURLs = cssMapping.sources.map(function (source) {
+      return "/*# sourceURL=".concat(cssMapping.sourceRoot || '').concat(source, " */");
+    });
+    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+  }
+
+  return [content].join('\n');
+} // Adapted from convert-source-map (MIT)
+
+
+function toComment(sourceMap) {
+  // eslint-disable-next-line no-undef
+  var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+  var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
+  return "/*# ".concat(data, " */");
+}
 
 /***/ }),
 /* 1 */
@@ -104,21 +205,41 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _calendarHeatmapComponent = __webpack_require__(2);
+
+var _calendarHeatmapComponent2 = _interopRequireDefault(_calendarHeatmapComponent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _calendarHeatmapComponent2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(2);
+var _react = __webpack_require__(3);
 
 var React = _interopRequireWildcard(_react);
 
-var _moment = __webpack_require__(3);
+var _moment = __webpack_require__(4);
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _d = __webpack_require__(4);
+var _d = __webpack_require__(5);
 
 var d3 = _interopRequireWildcard(_d);
 
-var _calendarHeatmap = __webpack_require__(5);
+var _calendarHeatmap = __webpack_require__(6);
 
 var _calendarHeatmap2 = _interopRequireDefault(_calendarHeatmap);
 
@@ -1545,31 +1666,31 @@ exports.default = CalendarHeatmap;
 module.exports = exports['default'];
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__3__;
 
 /***/ }),
 /* 4 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__4__;
 
 /***/ }),
 /* 5 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__5__;
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(6);
+var content = __webpack_require__(7);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -1580,117 +1701,28 @@ options.transform = transform
 var update = __webpack_require__(8)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./calendar-heatmap.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!./calendar-heatmap.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(7)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, ".calendar-heatmap__calendarHeatmap___2vEkr {\n  font-family: Helvetica, Arial, sans-serif;\n  user-select: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm {\n  pointer-events: none;\n  position: absolute;\n  z-index: 9999;\n  width: 250px;\n  max-width: 250px;\n  overflow: hidden;\n  padding: 15px;\n  font-size: 12px;\n  text-align: left;\n  line-height: 14px;\n  color: rgb(51, 51, 51);\n  font-family: Helvetica, arial, 'Open Sans', sans-serif;\n  background: rgba(255, 255, 255, 0.75);\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm .calendar-heatmap__header___y_GbL strong {\n  display: inline-block;\n  width: 250px;\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm span {\n  display: inline-block;\n  width: 50%;\n  padding-right: 10px;\n  box-sizing: border-box;\n}\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm span,\n.calendar-heatmap__calendarHeatmap___2vEkr .calendar-heatmap__heatmapTooltip___2eEYm .calendar-heatmap__header___y_GbL strong {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n", ""]);
-
-// exports
-exports.locals = {
-	"calendarHeatmap": "calendar-heatmap__calendarHeatmap___2vEkr",
-	"heatmapTooltip": "calendar-heatmap__heatmapTooltip___2eEYm",
-	"header": "calendar-heatmap__header___y_GbL"
-};
+if(false) {}
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
 
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(true);
+// Module
+___CSS_LOADER_EXPORT___.push([module.i, "._3CHw8qXDneiVioUdRHMju8 {\n  font-family: Helvetica, Arial, sans-serif;\n  user-select: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n}\n._3CHw8qXDneiVioUdRHMju8 ._3H8Pw8lhDulhwo-uLcObQx {\n  pointer-events: none;\n  position: absolute;\n  z-index: 9999;\n  width: 250px;\n  max-width: 250px;\n  overflow: hidden;\n  padding: 15px;\n  font-size: 12px;\n  text-align: left;\n  line-height: 14px;\n  color: rgb(51, 51, 51);\n  font-family: Helvetica, arial, 'Open Sans', sans-serif;\n  background: rgba(255, 255, 255, 0.75);\n}\n._3CHw8qXDneiVioUdRHMju8 ._3H8Pw8lhDulhwo-uLcObQx ._3BoZReSmADOwNg8meDWI8X strong {\n  display: inline-block;\n  width: 250px;\n}\n._3CHw8qXDneiVioUdRHMju8 ._3H8Pw8lhDulhwo-uLcObQx span {\n  display: inline-block;\n  width: 50%;\n  padding-right: 10px;\n  box-sizing: border-box;\n}\n._3CHw8qXDneiVioUdRHMju8 ._3H8Pw8lhDulhwo-uLcObQx span,\n._3CHw8qXDneiVioUdRHMju8 ._3H8Pw8lhDulhwo-uLcObQx ._3BoZReSmADOwNg8meDWI8X strong {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n", "",{"version":3,"sources":["calendar-heatmap.css"],"names":[],"mappings":"AAAA;EACE,yCAAyC;EACzC,iBAAiB;EACjB,qBAAqB;EACrB,sBAAsB;EACtB,yBAAyB;AAC3B;AACA;EACE,oBAAoB;EACpB,kBAAkB;EAClB,aAAa;EACb,YAAY;EACZ,gBAAgB;EAChB,gBAAgB;EAChB,aAAa;EACb,eAAe;EACf,gBAAgB;EAChB,iBAAiB;EACjB,sBAAsB;EACtB,sDAAsD;EACtD,qCAAqC;AACvC;AACA;EACE,qBAAqB;EACrB,YAAY;AACd;AACA;EACE,qBAAqB;EACrB,UAAU;EACV,mBAAmB;EACnB,sBAAsB;AACxB;AACA;;EAEE,mBAAmB;EACnB,gBAAgB;EAChB,uBAAuB;AACzB","file":"calendar-heatmap.css","sourcesContent":[".calendarHeatmap {\n  font-family: Helvetica, Arial, sans-serif;\n  user-select: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n}\n.calendarHeatmap .heatmapTooltip {\n  pointer-events: none;\n  position: absolute;\n  z-index: 9999;\n  width: 250px;\n  max-width: 250px;\n  overflow: hidden;\n  padding: 15px;\n  font-size: 12px;\n  text-align: left;\n  line-height: 14px;\n  color: rgb(51, 51, 51);\n  font-family: Helvetica, arial, 'Open Sans', sans-serif;\n  background: rgba(255, 255, 255, 0.75);\n}\n.calendarHeatmap .heatmapTooltip .header strong {\n  display: inline-block;\n  width: 250px;\n}\n.calendarHeatmap .heatmapTooltip span {\n  display: inline-block;\n  width: 50%;\n  padding-right: 10px;\n  box-sizing: border-box;\n}\n.calendarHeatmap .heatmapTooltip span,\n.calendarHeatmap .heatmapTooltip .header strong {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n"]}]);
+// Exports
+___CSS_LOADER_EXPORT___.locals = {
+	"calendarHeatmap": "_3CHw8qXDneiVioUdRHMju8",
+	"heatmapTooltip": "_3H8Pw8lhDulhwo-uLcObQx",
+	"header": "_3BoZReSmADOwNg8meDWI8X"
 };
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
-}
+/* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
