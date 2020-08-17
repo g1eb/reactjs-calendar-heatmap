@@ -7,7 +7,7 @@
 		exports["CalendarHeatmap"] = factory(require("react"), require("moment"), require("d3"));
 	else
 		root["CalendarHeatmap"] = factory(root["React"], root["moment"], root["d3"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -170,6 +170,12 @@ var CalendarHeatmap = function (_React$Component) {
       this.drawChart();
 
       window.addEventListener('resize', this.calcDimensions);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this.parseData();
+      this.drawChart();
     }
   }, {
     key: 'componentWillUnmount',
@@ -1757,7 +1763,7 @@ module.exports = function(list, options) {
 
 	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
 	// tags it will allow on a page
-	if (!options.singleton) options.singleton = isOldIE();
+	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
 
 	// By default, add <style> tags to the <head> element
 	if (!options.insertInto) options.insertInto = "head";
