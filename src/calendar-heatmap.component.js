@@ -5,6 +5,7 @@ import * as d3 from 'd3'
 
 import styles from './calendar-heatmap.css'
 
+
 class CalendarHeatmap extends React.Component {
 
   constructor(props) {
@@ -254,7 +255,7 @@ class CalendarHeatmap extends React.Component {
         this.drawChart()
       })
       .style('opacity', 0)
-      .on('mouseover', (event,d) => {
+      .on('mouseover', (event, d) => {
         if (this.in_transition) { return }
 
         // Construct tooltip
@@ -376,7 +377,7 @@ class CalendarHeatmap extends React.Component {
         return yearScale(d.year())
       })
       .attr('y', this.settings.label_padding / 2)
-      .on('mouseenter', (event,year_label) => {
+      .on('mouseenter', (event, year_label) => {
         if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-year')
@@ -1722,11 +1723,13 @@ class CalendarHeatmap extends React.Component {
   }
 }
 
+
 CalendarHeatmap.defaultProps = {
   data: [],
   overview: 'year',
   color: '#ff4500',
   handler: undefined,
 }
+
 
 export default CalendarHeatmap
