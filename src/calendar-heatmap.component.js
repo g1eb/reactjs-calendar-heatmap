@@ -254,7 +254,7 @@ class CalendarHeatmap extends React.Component {
         this.drawChart()
       })
       .style('opacity', 0)
-      .on('mouseover', d => {
+      .on('mouseover', (event,d) => {
         if (this.in_transition) { return }
 
         // Construct tooltip
@@ -376,7 +376,7 @@ class CalendarHeatmap extends React.Component {
         return yearScale(d.year())
       })
       .attr('y', this.settings.label_padding / 2)
-      .on('mouseenter', year_label => {
+      .on('mouseenter', (event,year_label) => {
         if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-year')
@@ -396,7 +396,7 @@ class CalendarHeatmap extends React.Component {
           .ease(d3.easeLinear)
           .style('opacity', 1)
       })
-      .on('click', d => {
+      .on('click', (event, d) => {
         if (this.in_transition) { return }
 
         // Set in_transition flag
@@ -490,7 +490,7 @@ class CalendarHeatmap extends React.Component {
       .attr('fill', d => {
         return (d.total > 0) ? color(d.total) : 'transparent'
       })
-      .on('click', d => {
+      .on('click', (event, d) => {
         if (this.in_transition) { return }
 
         // Don't transition if there is no data to show
@@ -511,11 +511,11 @@ class CalendarHeatmap extends React.Component {
         this.overview = 'day'
         this.drawChart()
       })
-      .on('mouseover', d => {
+      .on('mouseover', (event, d) => {
         if (this.in_transition) { return }
 
         // Pulsating animation
-        let circle = d3.select(d3.event.currentTarget)
+        let circle = d3.select(event.currentTarget)
         let repeat = () => {
           circle = circle.transition()
             .duration(this.settings.transition_duration)
@@ -576,11 +576,11 @@ class CalendarHeatmap extends React.Component {
           .ease(d3.easeLinear)
           .style('opacity', 1)
       })
-      .on('mouseout', () => {
+      .on('mouseout', (event, d) => {
         if (this.in_transition) { return }
 
         // Set circle radius back to what its supposed to be
-        d3.select(d3.event.currentTarget).transition()
+        d3.select(event.currentTarget).transition()
           .duration(this.settings.transition_duration / 2)
           .ease(d3.easeLinear)
           .attr('x', d => {
@@ -647,7 +647,7 @@ class CalendarHeatmap extends React.Component {
         return monthScale(i) + (monthScale(i) - monthScale(i - 1)) / 2
       })
       .attr('y', this.settings.label_padding / 2)
-      .on('mouseenter', d => {
+      .on('mouseenter', (event, d) => {
         if (this.in_transition) { return }
 
         let selected_month = moment(d)
@@ -668,7 +668,7 @@ class CalendarHeatmap extends React.Component {
           .ease(d3.easeLinear)
           .style('opacity', 1)
       })
-      .on('click', d => {
+      .on('click', (event, d) => {
         if (this.in_transition) { return }
 
         // Check month data
@@ -721,7 +721,7 @@ class CalendarHeatmap extends React.Component {
       .text(d => {
         return moment(d).format('dddd')[0]
       })
-      .on('mouseenter', d => {
+      .on('mouseenter', (event, d) => {
         if (this.in_transition) { return }
 
         let selected_day = moment(d)
@@ -815,7 +815,7 @@ class CalendarHeatmap extends React.Component {
         return d.date
       })
       .attr('offset', 0)
-      .on('click', d => {
+      .on('click', (event, d) => {
         if (this.in_transition) { return }
 
         // Don't transition if there is no data to show
@@ -870,11 +870,11 @@ class CalendarHeatmap extends React.Component {
         return color(d.value) || '#ff4500'
       })
       .style('opacity', 0)
-      .on('mouseover', d => {
+      .on('mouseover', (event, d) => {
         if (this.in_transition) { return }
 
         // Get date from the parent node
-        let parentNode = d3.select(d3.event.currentTarget.parentNode)
+        let parentNode = d3.select(event.currentTarget.parentNode)
         let date = new Date(parentNode.attr('date'))
 
         // Construct tooltip
@@ -947,7 +947,7 @@ class CalendarHeatmap extends React.Component {
         return weekScale(d.week())
       })
       .attr('y', this.settings.label_padding / 2)
-      .on('mouseenter', weekday => {
+      .on('mouseenter', (event, weekday) => {
         if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-month')
@@ -967,7 +967,7 @@ class CalendarHeatmap extends React.Component {
           .ease(d3.easeLinear)
           .style('opacity', 1)
       })
-      .on('click', d => {
+      .on('click', (event, d) => {
         if (this.in_transition) { return }
 
         // Check week data
@@ -1014,7 +1014,7 @@ class CalendarHeatmap extends React.Component {
       .text(d => {
         return moment(d).format('dddd')[0]
       })
-      .on('mouseenter', d => {
+      .on('mouseenter', (event, d) => {
         if (this.in_transition) { return }
 
         let selected_day = moment(d)
@@ -1105,7 +1105,7 @@ class CalendarHeatmap extends React.Component {
         return d.date
       })
       .attr('offset', 0)
-      .on('click', d => {
+      .on('click', (event, d) => {
         if (this.in_transition) { return }
 
         // Don't transition if there is no data to show
@@ -1160,11 +1160,11 @@ class CalendarHeatmap extends React.Component {
         return color(d.value) || '#ff4500'
       })
       .style('opacity', 0)
-      .on('mouseover', d => {
+      .on('mouseover', (event, d) => {
         if (this.in_transition) { return }
 
         // Get date from the parent node
-        let parentNode = d3.select(d3.event.currentTarget.parentNode)
+        let parentNode = d3.select(event.currentTarget.parentNode)
         let date = new Date(parentNode.attr('date'))
 
         // Construct tooltip
@@ -1176,7 +1176,7 @@ class CalendarHeatmap extends React.Component {
         // Calculate tooltip position
         let total = parseInt(parentNode.attr('total'))
         itemScale.domain([0, total])
-        let x = parseInt(d3.select(d3.event.currentTarget).attr('x')) + itemScale(d.value) / 4 + this.settings.tooltip_width / 4
+        let x = parseInt(d3.select(event.currentTarget).attr('x')) + itemScale(d.value) / 4 + this.settings.tooltip_width / 4
         while (this.settings.width - x < (this.settings.tooltip_width + this.settings.tooltip_padding * 3)) {
           x -= 10
         }
@@ -1239,7 +1239,7 @@ class CalendarHeatmap extends React.Component {
         return weekScale(d.week())
       })
       .attr('y', this.settings.label_padding / 2)
-      .on('mouseenter', weekday => {
+      .on('mouseenter', (event, weekday) => {
         if (this.in_transition) { return }
 
         this.items.selectAll('.item-block-week')
@@ -1280,7 +1280,7 @@ class CalendarHeatmap extends React.Component {
       .text(d => {
         return moment(d).format('dddd')[0]
       })
-      .on('mouseenter', d => {
+      .on('mouseenter', (event, d) => {
         if (this.in_transition) { return }
 
         let selected_day = moment(d)
@@ -1355,7 +1355,7 @@ class CalendarHeatmap extends React.Component {
         return this.props.color
       })
       .style('opacity', 0)
-      .on('mouseover', d => {
+      .on('mouseover', (event, d) => {
         if (this.in_transition) { return }
 
         // Construct tooltip
@@ -1384,7 +1384,7 @@ class CalendarHeatmap extends React.Component {
         if (this.in_transition) { return }
         this.hideTooltip()
       })
-      .on('click', d => {
+      .on('click', (event, d) => {
         if (!!this.props.handler && typeof this.props.handler == 'function') {
           this.props.handler(d)
         }
@@ -1440,7 +1440,7 @@ class CalendarHeatmap extends React.Component {
         return timeScale(i)
       })
       .attr('y', this.settings.label_padding / 2)
-      .on('mouseenter', d => {
+      .on('mouseenter', (event, d) => {
         if (this.in_transition) { return }
 
         let selected = itemScale(moment(d))
@@ -1496,7 +1496,7 @@ class CalendarHeatmap extends React.Component {
           text_length = obj.node().getComputedTextLength()
         }
       })
-      .on('mouseenter', project => {
+      .on('mouseenter', (event, project) => {
         if (this.in_transition) { return }
 
         this.items.selectAll('.item-block')
