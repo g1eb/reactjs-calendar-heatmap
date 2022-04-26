@@ -147,7 +147,7 @@ var CalendarHeatmap = function (_React$Component) {
           var summary = d.details.reduce(function (uniques, project) {
             if (!uniques[project.name]) {
               uniques[project.name] = {
-                'value': project.value
+                value: project.value
               };
             } else {
               uniques[project.name].value += project.value;
@@ -156,8 +156,8 @@ var CalendarHeatmap = function (_React$Component) {
           }, {});
           var unsorted_summary = Object.keys(summary).map(function (key) {
             return {
-              'name': key,
-              'value': summary[key].value
+              name: key,
+              value: summary[key].value
             };
           });
           d.summary = unsorted_summary.sort(function (a, b) {
@@ -210,7 +210,7 @@ var CalendarHeatmap = function (_React$Component) {
               d.summary.map(function (item) {
                 if (!summary[item.name]) {
                   summary[item.name] = {
-                    'value': item.value
+                    value: item.value
                   };
                 } else {
                   summary[item.name].value += item.value;
@@ -221,8 +221,8 @@ var CalendarHeatmap = function (_React$Component) {
           }, {});
           var unsorted_summary = Object.keys(summary).map(function (key) {
             return {
-              'name': key,
-              'value': summary[key].value
+              name: key,
+              value: summary[key].value
             };
           });
           return unsorted_summary.sort(function (a, b) {
@@ -230,14 +230,14 @@ var CalendarHeatmap = function (_React$Component) {
           });
         };
         return {
-          'date': date,
-          'total': _this2.props.data.reduce(function (prev, current) {
+          date: date,
+          total: _this2.props.data.reduce(function (prev, current) {
             if ((0, _moment2.default)(current.date).year() === date.year()) {
               prev += current.total;
             }
             return prev;
           }, 0),
-          'summary': getSummary()
+          summary: getSummary()
         };
       });
 
@@ -410,10 +410,10 @@ var CalendarHeatmap = function (_React$Component) {
         _this2.in_transition = true;
 
         // Set selected year to the one clicked on
-        _this2.selected = { date: d
+        _this2.selected = { date: d };
 
-          // Hide tooltip
-        };_this2.hideTooltip();
+        // Hide tooltip
+        _this2.hideTooltip();
 
         // Remove all global overview related items and labels
         _this2.removeGlobalOverview();
@@ -875,10 +875,10 @@ var CalendarHeatmap = function (_React$Component) {
         _this4.in_transition = true;
 
         // Set selected month to the one clicked on
-        _this4.selected = { date: d
+        _this4.selected = { date: d };
 
-          // Hide tooltip
-        };_this4.hideTooltip();
+        // Hide tooltip
+        _this4.hideTooltip();
 
         // Remove all year overview related items and labels
         _this4.removeMonthOverview();
@@ -1440,11 +1440,13 @@ var CalendarHeatmap = function (_React$Component) {
     value: function render() {
       var _this11 = this;
 
-      return React.createElement('div', { id: 'calendar-heatmap',
+      return React.createElement('div', {
+        id: 'calendar-heatmap',
         className: _calendarHeatmap2.default.calendarHeatmap,
         ref: function ref(elem) {
           _this11.container = elem;
-        } });
+        }
+      });
     }
   }]);
 
