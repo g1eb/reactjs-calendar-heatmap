@@ -19,6 +19,7 @@
   "main": "dist/calendar-heatmap.min.js",
   "module": "dist/calendar-heatmap.min.js",
   "jsnext:main": "dist/calendar-heatmap.min.js",
+  "types": "src/types.d.ts",
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
