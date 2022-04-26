@@ -2,7 +2,7 @@
   "name": "@manufac/reactjs-calendar-heatmap",
   "version": "0.2.0",
   "description": "React component for d3.js calendar heatmap graph.",
-  "homepage": "https://github.com/manufac-analytics/reactjs-calendar-heatmap",
+  "homepage": "https://manufac-analytics.github.io/reactjs-calendar-heatmap/",
   "contributors": ["g1eb <mail@g1eb.com> (https://g1eb.com)", "maneetgoyal"],
   "repository": {
     "type": "git",
