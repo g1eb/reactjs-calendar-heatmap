@@ -1,17 +1,19 @@
-interface CalendarHeatmapDatum {
+import type { Component } from "react";
+
+export interface CalendarHeatmapDatum {
     date: string;
 }
 
-type CalendarHeatmapOverview = 'global' | 'year' | 'month' | 'week' | 'day';
+export type CalendarHeatmapOverview = 'global' | 'year' | 'month' | 'week' | 'day';
 
-interface CalendarHeatmapProps {
+export interface CalendarHeatmapProps {
     data: CalendarHeatmapDatum[];
     color?: string;
     overview?: CalendarHeatmapOverview;
     handler?: (d: CalendarHeatmapDatum) => void;
 }
 
-interface CalendarHeatmapSettings {
+export interface CalendarHeatmapSettings {
     gutter: number;
     item_gutter: number;
     width: number;
@@ -24,7 +26,7 @@ interface CalendarHeatmapSettings {
     tooltip_padding: number;
 }
 
-declare class CalendarHeatmap extends React.Component<CalendarHeatmapProps, unknown> {
+export class CalendarHeatmap extends Component<CalendarHeatmapProps, unknown> {
     settings: CalendarHeatmapSettings;
     in_transition: boolean;
     overview: CalendarHeatmapOverview;
@@ -59,6 +61,4 @@ declare class CalendarHeatmap extends React.Component<CalendarHeatmapProps, unkn
     drawChart: () => void;
 }
 
-declare module 'reactjs-calendar-heatmap' {
-    export = CalendarHeatmap;
-}
+export default CalendarHeatmap;
