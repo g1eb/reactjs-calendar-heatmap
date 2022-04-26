@@ -1,9 +1,12 @@
 {
   "name": "@manufac/reactjs-calendar-heatmap",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "React component for d3.js calendar heatmap graph.",
   "homepage": "https://manufac-analytics.github.io/reactjs-calendar-heatmap/",
-  "contributors": ["g1eb <mail@g1eb.com> (https://g1eb.com)", "maneetgoyal"],
+  "contributors": [
+    "g1eb <mail@g1eb.com> (https://g1eb.com)",
+    "maneetgoyal"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/manufac-analytics/reactjs-calendar-heatmap.git"
@@ -20,7 +23,9 @@
   "module": "dist/calendar-heatmap.min.js",
   "jsnext:main": "dist/calendar-heatmap.min.js",
   "types": "dist/types.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
