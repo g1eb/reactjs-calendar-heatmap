@@ -1,9 +1,8 @@
 var webpack = require('webpack');
 var path = require('path');
-const CopyPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-
   mode: 'production',
 
   optimization: {
@@ -16,15 +15,15 @@ module.exports = {
   },
 
   externals: {
-    'react': {
+    react: {
       root: 'React',
       commonjs2: 'react',
       commonjs: 'react',
       amd: 'react',
-      umd: 'react'
+      umd: 'react',
     },
-    'moment': 'moment',
-    'd3': 'd3',
+    moment: 'moment',
+    d3: 'd3',
   },
 
   output: {
@@ -50,7 +49,8 @@ module.exports = {
             plugins: ['add-module-exports'],
           },
         },
-      }, {
+      },
+      {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
@@ -59,10 +59,7 @@ module.exports = {
 
   plugins: [
     new CopyPlugin({
-      patterns: [
-        { from: "src/types.d.ts", to: "./" },
-      ],
+      patterns: [{ from: 'src/types.d.ts', to: './' }],
     }),
   ],
-
 };

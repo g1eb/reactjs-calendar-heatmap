@@ -1,3 +1,3 @@
-import CalendarHeatmap from './calendar-heatmap.component.js'
+import CalendarHeatmap from './calendar-heatmap.component.js';
 
-export default CalendarHeatmap
+export default CalendarHeatmap;
