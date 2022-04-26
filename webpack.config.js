@@ -22,8 +22,6 @@ module.exports = {
       amd: 'react',
       umd: 'react',
     },
-    moment: 'moment',
-    d3: 'd3',
   },
 
   output: {

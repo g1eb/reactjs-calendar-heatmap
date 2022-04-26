@@ -11,57 +11,59 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.0.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 
-    <!-- Dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.4.0/d3.min.js"></script>
-
     <!-- Calendar Heatmap -->
     <script src="./dist/calendar-heatmap.min.js"></script>
 
     <!-- Example Component -->
     <script type="text/babel">
-
       class App extends React.Component {
-
         constructor(props) {
-          super(props)
+          super(props);
 
           // Initialize random data for the demo
-          let now = moment().endOf('day').toDate()
-          let time_ago = moment().startOf('day').subtract(10, 'year').toDate()
-          let data = d3.timeDays(time_ago, now).map(function (dateElement, index) {
-            return {
-              date: dateElement,
-              details: Array.apply(null, new Array(Math.floor(Math.random() * 15))).map(function(e, i, arr) {
-                return {
-                  'name': 'Project ' + Math.ceil(Math.random() * 10),
-                  'date': function () {
-                    let projectDate = new Date(dateElement.getTime())
-                    projectDate.setHours(Math.floor(Math.random() * 24))
-                    projectDate.setMinutes(Math.floor(Math.random() * 60))
-                    return projectDate
-                  }(),
-                  'value': 3600 * ((arr.length - i) / 5) + Math.floor(Math.random() * 3600) * Math.round(Math.random() * (index / 365))
-                }
-              }),
-              init: function () {
-                this.total = this.details.reduce(function (prev, e) {
-                  return prev + e.value
-                }, 0)
-                return this
-              }
-            }.init()
-          })
+          let now = moment().endOf('day').toDate();
+          let time_ago = moment().startOf('day').subtract(10, 'year').toDate();
+          let data = d3
+            .timeDays(time_ago, now)
+            .map(function (dateElement, index) {
+              return {
+                date: dateElement,
+                details: Array.apply(
+                  null,
+                  new Array(Math.floor(Math.random() * 15))
+                ).map(function (e, i, arr) {
+                  return {
+                    name: 'Project ' + Math.ceil(Math.random() * 10),
+                    date: (function () {
+                      let projectDate = new Date(dateElement.getTime());
+                      projectDate.setHours(Math.floor(Math.random() * 24));
+                      projectDate.setMinutes(Math.floor(Math.random() * 60));
+                      return projectDate;
+                    })(),
+                    value:
+                      3600 * ((arr.length - i) / 5) +
+                      Math.floor(Math.random() * 3600) *
+                        Math.round(Math.random() * (index / 365)),
+                  };
+                }),
+                init: function () {
+                  this.total = this.details.reduce(function (prev, e) {
+                    return prev + e.value;
+                  }, 0);
+                  return this;
+                },
+              }.init();
+            });
 
           this.state = {
             data: data,
             color: '#cd2327',
             overview: 'year',
-          }
+          };
         }
 
         print(val) {
-          console.log(val)
+          console.log(val);
         }
 
         render() {
@@ -70,17 +72,16 @@
               data={this.state.data}
               color={this.state.color}
               overview={this.state.overview}
-              handler={this.print.bind(this)}>
-            </CalendarHeatmap>
-          )
+              handler={this.print.bind(this)}
+            ></CalendarHeatmap>
+          );
         }
       }
 
       // Render calendar heatmap component
       const container = document.getElementById('root');
       const root = ReactDOM.createRoot(container);
-      root.render(<App />)
-
+      root.render(<App />);
     </script>
   </body>
 </html>

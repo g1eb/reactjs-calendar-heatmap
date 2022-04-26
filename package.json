@@ -43,10 +43,12 @@
     "webpack-cli": "^4.9.1"
   },
   "peerDependencies": {
-    "d3": "^7.4.4",
-    "moment": "^2.29.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
+  },
+  "dependencies": {
+    "d3": "^7.4.4",
+    "moment": "^2.29.3"
   },
   "engines": {
     "node": ">=6.0.0"
