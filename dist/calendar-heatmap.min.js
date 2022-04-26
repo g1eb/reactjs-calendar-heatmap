@@ -7,7 +7,7 @@
 		exports["CalendarHeatmap"] = factory(require("react"));
 	else
 		root["CalendarHeatmap"] = factory(root["React"]);
-})(self, function(__WEBPACK_EXTERNAL_MODULE__2244__) {
+})(self, (__WEBPACK_EXTERNAL_MODULE__2244__) => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
