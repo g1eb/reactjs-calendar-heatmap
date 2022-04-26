@@ -12,9 +12,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 
     <!-- Moment CDN for dummy data -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
+
+    <!-- d3 CDN for dummy data -->
     <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"
-      integrity="sha512-x/vqovXY/Q4b+rNjgiheBsA/vbWA3IVvsS8lkQSX1gQ4ggSJx38oI2vREZXpTzhAv6tNUaX81E7QBBzkpDQayA=="
+      src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.4.4/d3.min.js"
+      integrity="sha512-hnFpvCiJ8Fr1lYLqcw6wLgFUOEZ89kWCkO+cEekwcWPIPKyknKV1eZmSSG3UxXfsSuf+z/SgmiYB1zFOg3l2UQ=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
@@ -23,7 +26,7 @@
     <script src="./dist/calendar-heatmap.min.js"></script>
 
     <!-- Example Component -->
-    <script type="text/babel">
+    <script type="text/babel" defer>
       class App extends React.Component {
         constructor(props) {
           super(props);
