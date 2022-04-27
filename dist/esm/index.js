@@ -1,6 +1,7 @@
 import { createRef, Component } from 'react';
 import moment from 'moment';
 import { select, timeYears, max, scaleBand, scaleLinear, easeLinear, timeMonths, timeDays, scaleTime, timeSecond, timeHours } from 'd3';
+import { jsx } from 'react/jsx-runtime';
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -1406,7 +1407,7 @@ var CalendarHeatmap = /*#__PURE__*/function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/jsx("div", {
         id: "calendar-heatmap",
         className: "calendarHeatmap",
         ref: this.ref

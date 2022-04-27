@@ -10,7 +10,10 @@ export default {
   plugins: [
     babel({
       babelHelpers: 'bundled', // https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers
-      presets: ['@babel/env', '@babel/preset-react'],
+      presets: [
+        '@babel/env',
+        ['@babel/preset-react', { runtime: 'automatic' }], // Ref: https://stackoverflow.com/questions/32070303/uncaught-referenceerror-react-is-not-defined
+      ],
     }),
     postcss(),
   ],
