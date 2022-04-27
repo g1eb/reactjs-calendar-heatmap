@@ -279,7 +279,7 @@ export class CalendarHeatmap extends Component {
         this.selected = datum;
 
         // Hide tooltip
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
 
         // Remove all global overview related items and labels
         this.removeGlobalOverview();
@@ -289,120 +289,17 @@ export class CalendarHeatmap extends Component {
         this.drawChart();
       })
       .style('opacity', 0)
-      .on('mouseover', (event, d) => {
+      .on('mouseover', (_event, d) => {
         if (this.in_transition) {
           return;
         }
-
-        // Construct tooltip
-        let tooltip_html = '';
-        tooltip_html +=
-          '<div><span><strong>Total time tracked:</strong></span>';
-
-        let sec = parseInt(d.total, 10);
-        let days = Math.floor(sec / 86400);
-        if (days > 0) {
-          tooltip_html +=
-            '<span>' +
-            (days === 1 ? '1 day' : days + ' days') +
-            '</span></div>';
-        }
-        let hours = Math.floor((sec - days * 86400) / 3600);
-        if (hours > 0) {
-          if (days > 0) {
-            tooltip_html +=
-              '<div><span></span><span>' +
-              (hours === 1 ? '1 hour' : hours + ' hours') +
-              '</span></div>';
-          } else {
-            tooltip_html +=
-              '<span>' +
-              (hours === 1 ? '1 hour' : hours + ' hours') +
-              '</span></div>';
-          }
-        }
-        let minutes = Math.floor((sec - days * 86400 - hours * 3600) / 60);
-        if (minutes > 0) {
-          if (days > 0 || hours > 0) {
-            tooltip_html +=
-              '<div><span></span><span>' +
-              (minutes === 1 ? '1 minute' : minutes + ' minutes') +
-              '</span></div>';
-          } else {
-            tooltip_html +=
-              '<span>' +
-              (minutes === 1 ? '1 minute' : minutes + ' minutes') +
-              '</span></div>';
-          }
-        }
-        tooltip_html += '<br />';
-
-        // Add summary to the tooltip
-        if (d.summary.length <= 5) {
-          let counter = 0;
-          while (counter < d.summary.length) {
-            tooltip_html +=
-              '<div><span><strong>' +
-              d.summary[counter].name +
-              '</strong></span>';
-            tooltip_html +=
-              '<span>' +
-              this.formatTime(d.summary[counter].value) +
-              '</span></div>';
-            counter++;
-          }
-        } else {
-          let counter = 0;
-          while (counter < 5) {
-            tooltip_html +=
-              '<div><span><strong>' +
-              d.summary[counter].name +
-              '</strong></span>';
-            tooltip_html +=
-              '<span>' +
-              this.formatTime(d.summary[counter].value) +
-              '</span></div>';
-            counter++;
-          }
-
-          tooltip_html += '<br />';
-
-          counter = 5;
-          let other_projects_sum = 0;
-          while (counter < d.summary.length) {
-            other_projects_sum = +d.summary[counter].value;
-            counter++;
-          }
-          tooltip_html += '<div><span><strong>Other:</strong></span>';
-          tooltip_html +=
-            '<span>' + this.formatTime(other_projects_sum) + '</span></div>';
-        }
-
-        // Calculate tooltip position
-        let x = yearScale(d.date.year()) + this.settings.tooltip_padding * 2;
-        while (
-          this.settings.width - x <
-          this.settings.tooltip_width + this.settings.tooltip_padding * 5
-        ) {
-          x -= 10;
-        }
-        let y = this.settings.tooltip_padding * 3;
-
-        // Show tooltip
-        this.tooltip
-          .html(tooltip_html)
-          .style('left', x + 'px')
-          .style('top', y + 'px')
-          .transition()
-          .duration(this.settings.transition_duration / 2)
-          .ease(easeLinear)
-          .style('opacity', 1);
+        this.props.onTooltip?.({ value: d });
       })
       .on('mouseout', () => {
         if (this.in_transition) {
           return;
         }
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
       })
       .transition()
       .delay((d, i) => {
@@ -492,7 +389,7 @@ export class CalendarHeatmap extends Component {
         this.selected = { date: d };
 
         // Hide tooltip
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
 
         // Remove all global overview related items and labels
         this.removeGlobalOverview();
@@ -604,7 +501,7 @@ export class CalendarHeatmap extends Component {
         this.selected = d;
 
         // Hide tooltip
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
 
         // Remove all year overview related items and labels
         this.removeYearOverview();
@@ -734,7 +631,7 @@ export class CalendarHeatmap extends Component {
           });
 
         // Hide tooltip
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
       })
       .transition()
       .delay(() => {
@@ -842,7 +739,7 @@ export class CalendarHeatmap extends Component {
         this.in_transition = true;
 
         // Hide tooltip
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
 
         // Remove all year overview related items and labels
         this.removeYearOverview();
@@ -1013,7 +910,7 @@ export class CalendarHeatmap extends Component {
         this.selected = d;
 
         // Hide tooltip
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
 
         // Remove all month overview related items and labels
         this.removeMonthOverview();
@@ -1102,7 +999,7 @@ export class CalendarHeatmap extends Component {
         if (this.in_transition) {
           return;
         }
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
       })
       .transition()
       .delay(() => {
@@ -1205,7 +1102,7 @@ export class CalendarHeatmap extends Component {
         this.selected = { date: d };
 
         // Hide tooltip
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
 
         // Remove all year overview related items and labels
         this.removeMonthOverview();
@@ -1365,7 +1262,7 @@ export class CalendarHeatmap extends Component {
         this.selected = d;
 
         // Hide tooltip
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
 
         // Remove all week overview related items and labels
         this.removeWeekOverview();
@@ -1460,7 +1357,7 @@ export class CalendarHeatmap extends Component {
         if (this.in_transition) {
           return;
         }
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
       })
       .transition()
       .delay(() => {
@@ -1692,7 +1589,7 @@ export class CalendarHeatmap extends Component {
         if (this.in_transition) {
           return;
         }
-        this.hideTooltip();
+        this.props.onHideTooltip?.();
       })
       .on('click', (event, d) => {
         if (!!this.props.handler && typeof this.props.handler == 'function') {
@@ -2001,17 +1898,6 @@ export class CalendarHeatmap extends Component {
     this.labels.selectAll('.label-time').remove();
     this.labels.selectAll('.label-project').remove();
     this.hideBackButton();
-  }
-
-  /**
-   * Helper function to hide the tooltip
-   */
-  hideTooltip() {
-    this.tooltip
-      .transition()
-      .duration(this.settings.transition_duration / 2)
-      .ease(easeLinear)
-      .style('opacity', 0);
   }
 
   /**

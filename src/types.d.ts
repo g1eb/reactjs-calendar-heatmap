@@ -5,6 +5,8 @@ export interface CalendarHeatmapDatum {
     total: number;
     details: { name: string; date: string; value: number; }[];
     summary: { name: string; value: number; }[];
+    onTooltip?: (datum: { value: unknown }) => void;
+    onHideTooltip?: () => void;
 }
 
 export type CalendarHeatmapOverview = 'global' | 'year' | 'month' | 'week' | 'day';
