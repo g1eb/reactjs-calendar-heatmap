@@ -2,64 +2,66 @@
 
 This [d3.js](https://d3js.org/) heatmap representing time series data is used to visualize tracked time over the past year, showing details for each of the days on demand.
 
-Includes a global overview of multiple years and visualizations of year, month, week and day overview with zoom for details-on-demand.  
+Includes a global overview of multiple years and visualizations of year, month, week and day overview with zoom for details-on-demand.
 
 Inspired by [Github's contribution graph](https://help.github.com/articles/viewing-contributions-on-your-profile/#contributions-calendar)
 
 Based on [Calendar View](https://bl.ocks.org/mbostock/4063318) by [Mike Bostock](https://github.com/mbostock)  
-Aaand [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) by [Darragh Kirwan](https://github.com/DKirwan) 
-
-## Demo
-Click <a href="https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
+Aaand [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) by [Darragh Kirwan](https://github.com/DKirwan)
 
 ### Global overview
+
 [![calendar heatmap - global overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_global_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ### Year overview
+
 [![calendar heatmap - year overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_year_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ### Month overview
+
 [![calendar heatmap - month overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_month_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ### Week overview
+
 [![calendar heatmap - week overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_week_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ### Day overview
+
 [![calendar heatmap - day overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_day_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ## Install
 
-1) Install 'reactjs-calendar-heatmap' with npm
+1. Install '@manufac/reactjs-calendar-heatmap' with npm
 
 ```
-npm install reactjs-calendar-heatmap
+yarn add @manufac/reactjs-calendar-heatmap
 ```
 
-2) Import `CalendarHeatmap` in your component
+2. Import `CalendarHeatmap` in your component
 
-```javascript
-import CalendarHeatmap from 'reactjs-calendar-heatmap'
+```js
+import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 ```
 
-3) Render `CalendarHeatmap` component
+3. Render `CalendarHeatmap` component
 
-```html
+```jsx
 <CalendarHeatmap
-  data={data}
-  color={color}
-  overview={overview}
-  handler={print}>
-</CalendarHeatmap>
+  data="{data}"
+  color="{color}"
+  overview="{overview}"
+  handler="{print}"
+/>
 ```
 
 ### Properties
 
-|Property        | Usage           | Default  | Required |
-|:------------- |:-------------|:-----:|:-----:|
-| data | Time series data from max a year back | none | yes |
-| color | Theme hex color | #45ff00 | no |
-| overview | Initial overview type (choices are: year, month, day) | year | no |
-| handler | Handler function is fired on click of a time entry in daily overview | none | no |
+| Property | Usage                                                                | Default | Required |
+| :------- | :------------------------------------------------------------------- | :-----: | :------: |
+| data     | Time series data from max a year back                                |  none   |   yes    |
+| color    | Theme hex color                                                      | #45ff00 |    no    |
+| overview | Initial overview type (choices are: year, month, day)                |  year   |    no    |
+| handler  | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
 
 ### Example data
 
@@ -114,20 +116,8 @@ var data = [{
 }]
 ```
 
-See [index.html](https://github.com/g1eb/reactjs-calendar-heatmap/blob/master/index.html) for an example implementation with random data or click <a href="https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
-
-## Vanilla.js version
-
-If you are looking for a plain vanilla javascript version of the heatmap, check out [calendar-heatmap-graph](https://github.com/g1eb/calendar-heatmap)
-
-## AngularJS
-
-If you want to use this heatmap as an AngularJS directive (version 1.x), see [angular-calendar-heatmap](https://github.com/g1eb/angular-calendar-heatmap)
-
-Or as an Angular component (version 2.x), see [angular2-calendar-heatmap](https://github.com/g1eb/angular2-calendar-heatmap)
-
 ## Dependencies
 
-* [react.js](https://reactjs.org/)
-* [moment.js](https://momentjs.com/)
-* [d3.js](https://d3js.org/)
+- [react.js](https://reactjs.org/)
+- [moment.js](https://momentjs.com/)
+- [d3.js](https://d3js.org/)
