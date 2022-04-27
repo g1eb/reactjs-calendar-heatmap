@@ -19,7 +19,9 @@
     "build:umd": "webpack",
     "build:esm": "rollup -c",
     "build": "yarn build:umd && yarn build:esm",
-    "start": "webpack --watch"
+    "start": "webpack --watch",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "exports": {
     "import": "./dist/umd/index.js",
@@ -37,6 +39,14 @@
     "@babel/preset-react": "^7.16.7",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.2.1",
+    "@storybook/addon-actions": "^6.4.22",
+    "@storybook/addon-essentials": "^6.4.22",
+    "@storybook/addon-interactions": "^6.4.22",
+    "@storybook/addon-links": "^6.4.22",
+    "@storybook/builder-webpack5": "^6.4.22",
+    "@storybook/manager-webpack5": "^6.4.22",
+    "@storybook/react": "^6.4.22",
+    "@storybook/testing-library": "^0.0.11",
     "babel-loader": "^8.2.5",
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.7.1",
