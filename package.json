@@ -1,6 +1,6 @@
 {
   "name": "@manufac/reactjs-calendar-heatmap",
-  "version": "0.2.12",
+  "version": "0.2.14",
   "description": "React component for d3.js calendar heatmap graph.",
   "homepage": "https://manufac-analytics.github.io/reactjs-calendar-heatmap/",
   "contributors": [
@@ -24,8 +24,8 @@
     "build-storybook": "build-storybook"
   },
   "exports": {
-    "import": "./dist/umd/index.js",
-    "require": "./dist/esm/index.js"
+    "import": "./dist/esm/index.js",
+    "require": "./dist/umd/index.js"
   },
   "main": "dist/umd/index.js",
   "module": "dist/esm/index.js",
