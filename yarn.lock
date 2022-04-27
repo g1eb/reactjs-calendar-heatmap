@@ -2656,11 +2656,6 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-uglify-js@^3.1.5:
-  version "3.15.4"
-  resolved "https://registry.npmjs.org/uglify-js/-/uglify-js-3.15.4.tgz"
-  integrity sha512-vMOPGDuvXecPs34V74qDKk4iJ/SN4vL3Ow/23ixafENYvtrNvtbcgUeugTcUGRGsOF/5fU8/NYSL5Hyb3l1OJA==
-
 unicode-canonical-property-names-ecmascript@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-2.0.0.tgz"
