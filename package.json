@@ -15,7 +15,7 @@
     "url": "https://github.com/manufac-analytics/reactjs-calendar-heatmap/issues"
   },
   "scripts": {
-    "clean": "rm -rf dist/*",
+    "refresh": "rm -rf dist storybook-static",
     "build:umd": "webpack",
     "build:esm": "rollup -c",
     "build": "yarn build:umd && yarn build:esm",
