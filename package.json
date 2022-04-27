@@ -18,10 +18,10 @@
     "refresh": "rm -rf dist storybook-static",
     "build:umd": "webpack",
     "build:esm": "rollup -c",
-    "build": "yarn build:umd && yarn build:esm",
-    "start": "webpack --watch",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build:storybook": "build-storybook -o docs",
+    "build": "yarn build:umd && yarn build:esm && yarn build:storybook",
+    "watch": "webpack --watch",
+    "start": "start-storybook -p 6006"
   },
   "exports": {
     "import": "./dist/esm/index.js",
