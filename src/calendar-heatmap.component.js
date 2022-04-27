@@ -264,7 +264,7 @@ export class CalendarHeatmap extends Component {
           .domain([-0.15 * max_value, max_value]);
         return color(d.total) || '#ff4500';
       })
-      .on('click', (d) => {
+      .on('click', (_event, datum) => {
         if (this.in_transition) {
           return;
         }
@@ -273,8 +273,8 @@ export class CalendarHeatmap extends Component {
         this.in_transition = true;
 
         // Set selected date to the one clicked on
-        // 'd' has the 'target.__data__' property that store the data that we are trying to pass to 'this.selected' from 'year_data'.
-        this.selected = d.target.__data__;
+        // 'datum' provides the data that this element contains. Ref: https://github.com/d3/d3-selection/blob/main/README.md#handling-events
+        this.selected = datum;
 
         // Hide tooltip
         this.hideTooltip();
