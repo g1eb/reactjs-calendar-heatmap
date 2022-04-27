@@ -22,8 +22,10 @@ module.exports = {
     chunkFilename: '[id].chunk.js',
     path: path.resolve(__dirname, 'dist/umd'),
     publicPath: '/',
-    libraryTarget: 'umd',
-    library: 'CalendarHeatmap',
+    library: {
+      name: 'CalendarHeatmap',
+      type: 'umd',
+    },
   },
 
   devtool: 'source-map',
