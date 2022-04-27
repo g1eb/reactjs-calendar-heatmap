@@ -17,5 +17,5 @@ export default {
     }),
     postcss(),
   ],
-  external: ['moment', 'd3', 'react'],
+  external: ['moment', 'd3', 'react', 'react/jsx-runtime'],
 };

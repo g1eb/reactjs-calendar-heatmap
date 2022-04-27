@@ -4,7 +4,7 @@ export interface CalendarHeatmapDatum {
     date: string;
     total: number;
     details: { name: string; date: string; value: number; }[];
-    summary: { name: string; value: number; }[];
+    summary?: { name: string; value: number; }[];
 }
 
 export type CalendarHeatmapOverview = 'global' | 'year' | 'month' | 'week' | 'day';
