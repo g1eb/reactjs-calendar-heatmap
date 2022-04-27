@@ -13,9 +13,9 @@ import {
   scaleBand,
   scaleTime,
 } from 'd3';
-import styles from './calendar-heatmap.css';
+import './calendar-heatmap.css';
 
-class CalendarHeatmap extends Component {
+export class CalendarHeatmap extends Component {
   constructor(props) {
     super(props);
 
@@ -69,7 +69,7 @@ class CalendarHeatmap extends Component {
     // Add tooltip to the same element as main svg
     this.tooltip = select('#calendar-heatmap')
       .append('div')
-      .attr('class', styles.heatmapTooltip)
+      .attr('class', 'heatmapTooltip')
       .style('opacity', 0)
       .style('pointer-events', 'none')
       .style('position', 'absolute')
@@ -661,7 +661,7 @@ class CalendarHeatmap extends Component {
 
         // Construct tooltip
         let tooltip_html = '';
-        tooltip_html += `<div class="${styles.header}"><strong>${
+        tooltip_html += `<div class="header"><strong>${
           d.total ? this.formatTime(d.total) : 'No time'
         } tracked</strong></div>`;
         tooltip_html +=
@@ -1066,7 +1066,7 @@ class CalendarHeatmap extends Component {
 
         // Construct tooltip
         let tooltip_html = '';
-        tooltip_html += `<div class="${styles.header}"><strong>${d.name}</strong></div><br>`;
+        tooltip_html += `<div class="header"><strong>${d.name}</strong></div><br>`;
         tooltip_html +=
           '<div><strong>' +
           (d.value ? this.formatTime(d.value) : 'No time') +
@@ -1418,7 +1418,7 @@ class CalendarHeatmap extends Component {
 
         // Construct tooltip
         let tooltip_html = '';
-        tooltip_html += `<div class="${styles.header}"><strong>${d.name}</strong></div><br>`;
+        tooltip_html += `<div class="header"><strong>${d.name}</strong></div><br>`;
         tooltip_html +=
           '<div><strong>' +
           (d.value ? this.formatTime(d.value) : 'No time') +
@@ -1652,7 +1652,7 @@ class CalendarHeatmap extends Component {
 
         // Construct tooltip
         let tooltip_html = '';
-        tooltip_html += `<div class="${styles.header}"><strong>${d.name}</strong><div><br>`;
+        tooltip_html += `<div class="header"><strong>${d.name}</strong><div><br>`;
         tooltip_html +=
           '<div><strong>' +
           (d.value ? this.formatTime(d.value) : 'No time') +
@@ -2048,7 +2048,7 @@ class CalendarHeatmap extends Component {
     return (
       <div
         id="calendar-heatmap"
-        className={styles.calendarHeatmap}
+        className="calendarHeatmap"
         ref={(elem) => {
           this.container = elem;
         }}
@@ -2063,5 +2063,3 @@ CalendarHeatmap.defaultProps = {
   color: '#ff4500',
   handler: undefined,
 };
-
-export default CalendarHeatmap;

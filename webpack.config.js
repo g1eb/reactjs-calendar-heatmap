@@ -43,8 +43,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env', 'stage-0', 'react'],
-            plugins: ['add-module-exports'],
+            presets: ['@babel/preset-env', '@babel/preset-react'],
           },
         },
       },

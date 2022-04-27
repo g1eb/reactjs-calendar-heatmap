@@ -7,9 +7,15 @@
     <div id="root"></div>
 
     <!-- React Dependencies -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.0.0/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.0.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <!-- Moment CDN for dummy data -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
@@ -27,6 +33,7 @@
 
     <!-- Example Component -->
     <script type="text/babel" defer>
+      const { CalendarHeatmap: Chart } = CalendarHeatmap;
       class App extends React.Component {
         constructor(props) {
           super(props);
@@ -79,12 +86,12 @@
 
         render() {
           return (
-            <CalendarHeatmap
+            <Chart
               data={this.state.data}
               color={this.state.color}
               overview={this.state.overview}
               handler={this.print.bind(this)}
-            ></CalendarHeatmap>
+            ></Chart>
           );
         }
       }
