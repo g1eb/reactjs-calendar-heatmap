@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, createRef } from 'react';
 import moment from 'moment';
 import {
   select,
@@ -38,6 +38,7 @@ export class CalendarHeatmap extends Component {
     this.selected = {};
 
     this.calcDimensions = this.calcDimensions.bind(this);
+    this.ref = createRef();
   }
 
   componentDidMount() {
@@ -94,8 +95,9 @@ export class CalendarHeatmap extends Component {
     let colIndex = Math.trunc(dayIndex / 7);
     let numWeeks = colIndex + 1;
 
-    this.settings.width =
-      this.container.offsetWidth < 1000 ? 1000 : this.container.offsetWidth;
+    const offsetWidth = this.ref.current?.offsetWidth ?? NaN;
+    this.settings.width = offsetWidth < 1000 ? 1000 : offsetWidth;
+
     this.settings.item_size =
       (this.settings.width - this.settings.label_padding) / numWeeks -
       this.settings.gutter;
@@ -2050,9 +2052,7 @@ export class CalendarHeatmap extends Component {
       <div
         id="calendar-heatmap"
         className="calendarHeatmap"
-        ref={(elem) => {
-          this.container = elem;
-        }}
+        ref={this.ref}
       ></div>
     );
   }

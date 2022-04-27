@@ -1,4 +1,4 @@
-import type { Component } from "react";
+import type { Component, RefObject } from "react";
 
 export interface CalendarHeatmapDatum {
     date: string;
@@ -35,6 +35,7 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps, unknown> {
     overview: CalendarHeatmapOverview;
     history: CalendarHeatmapOverview[];
     selected: CalendarHeatmapDatum;
+    ref: RefObject<HTMLDivElement>;
 
     calcDimensions: () => void;
     createElements: () => void;
