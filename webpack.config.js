@@ -1,5 +1,4 @@
-var webpack = require('webpack');
-var path = require('path');
+const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -10,8 +9,8 @@ module.exports = {
   },
 
   entry: {
-    'calendar-heatmap': './src/index.js',
-    'calendar-heatmap.min': './src/index.js',
+    'calendar-heatmap': './src/index.ts',
+    'calendar-heatmap.min': './src/index.ts',
   },
 
   externals: {
@@ -38,15 +37,14 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['env', 'stage-0', 'react'],
-            plugins: ['add-module-exports'],
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: require.resolve('ts-loader'),
+            options: { compilerOptions: { jsx: 'react-jsx' } },
           },
-        },
+        ],
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
