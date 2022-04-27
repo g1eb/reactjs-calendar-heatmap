@@ -1,0 +1,38 @@
+.calendarHeatmap {
+  font-family: Helvetica, Arial, sans-serif;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+.calendarHeatmap .heatmapTooltip {
+  pointer-events: none;
+  position: absolute;
+  z-index: 9999;
+  width: 250px;
+  max-width: 250px;
+  overflow: hidden;
+  padding: 15px;
+  font-size: 12px;
+  text-align: left;
+  line-height: 14px;
+  color: rgb(51, 51, 51);
+  font-family: Helvetica, arial, 'Open Sans', sans-serif;
+  background: rgba(255, 255, 255, 0.75);
+}
+.calendarHeatmap .heatmapTooltip .header strong {
+  display: inline-block;
+  width: 250px;
+}
+.calendarHeatmap .heatmapTooltip span {
+  display: inline-block;
+  width: 50%;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+.calendarHeatmap .heatmapTooltip span,
+.calendarHeatmap .heatmapTooltip .header strong {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

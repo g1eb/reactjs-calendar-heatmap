@@ -16,7 +16,8 @@
   },
   "scripts": {
     "clean": "rm -rf dist/umd/*",
-    "build": "webpack",
+    "build:umd": "webpack",
+    "build:esm": "rollup -c",
     "start": "webpack --watch"
   },
   "main": "dist/umd/calendar-heatmap.js",
@@ -30,11 +31,15 @@
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-node-resolve": "^13.2.1",
     "babel-loader": "^8.2.5",
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.5.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "rollup": "^2.70.2",
+    "rollup-plugin-import-css": "^3.0.3",
     "style-loader": "^3.3.1",
     "webpack": "^5.66.0",
     "webpack-cli": "^4.9.1"
