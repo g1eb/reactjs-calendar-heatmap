@@ -5,7 +5,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
   mode: 'production',
   entry: {
-    'calendar-heatmap': './src/index.js',
+    index: './src/index.js',
   },
   externals: {
     react: {
