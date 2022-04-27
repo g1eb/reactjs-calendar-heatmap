@@ -111,6 +111,38 @@ function _createSuper(Derived) {
   };
 }
 
+function styleInject(css, ref) {
+  if (ref === void 0) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') {
+    return;
+  }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = ".calendarHeatmap {\n  font-family: Helvetica, Arial, sans-serif;\n  user-select: none;\n  -ms-user-select: none;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n}\n.calendarHeatmap .heatmapTooltip {\n  pointer-events: none;\n  position: absolute;\n  z-index: 9999;\n  width: 250px;\n  max-width: 250px;\n  overflow: hidden;\n  padding: 15px;\n  font-size: 12px;\n  text-align: left;\n  line-height: 14px;\n  color: rgb(51, 51, 51);\n  font-family: Helvetica, arial, 'Open Sans', sans-serif;\n  background: rgba(255, 255, 255, 0.75);\n}\n.calendarHeatmap .heatmapTooltip .header strong {\n  display: inline-block;\n  width: 250px;\n}\n.calendarHeatmap .heatmapTooltip span {\n  display: inline-block;\n  width: 50%;\n  padding-right: 10px;\n  box-sizing: border-box;\n}\n.calendarHeatmap .heatmapTooltip span,\n.calendarHeatmap .heatmapTooltip .header strong {\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n";
+styleInject(css_248z);
+
 var CalendarHeatmap = /*#__PURE__*/function (_Component) {
   _inherits(CalendarHeatmap, _Component);
 

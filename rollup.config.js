@@ -1,5 +1,5 @@
 import { babel } from '@rollup/plugin-babel';
-import css from 'rollup-plugin-import-css';
+import postcss from 'rollup-plugin-postcss';
 
 export default {
   input: 'src/index.js',
@@ -12,7 +12,7 @@ export default {
       babelHelpers: 'bundled', // https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers
       presets: ['@babel/env', '@babel/preset-react'],
     }),
-    css(),
+    postcss(),
   ],
   external: ['moment', 'd3', 'react'],
 };
