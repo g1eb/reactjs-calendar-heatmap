@@ -15,15 +15,18 @@
     "url": "https://github.com/manufac-analytics/reactjs-calendar-heatmap/issues"
   },
   "scripts": {
-    "clean": "rm -rf dist/umd/*",
+    "clean": "rm -rf dist/*",
     "build:umd": "webpack",
     "build:esm": "rollup -c",
     "build": "yarn build:umd && yarn build:esm",
     "start": "webpack --watch"
   },
-  "main": "dist/umd/calendar-heatmap.js",
-  "module": "dist/umd/calendar-heatmap.js",
-  "jsnext:main": "dist/umd/calendar-heatmap.js",
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/umd/index.js"
+  },
+  "main": "dist/umd/index.js",
+  "module": "dist/esm/index.js",
   "types": "dist/umd/types.d.ts",
   "files": [
     "dist"
