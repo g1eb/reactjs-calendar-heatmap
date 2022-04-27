@@ -273,7 +273,8 @@ export class CalendarHeatmap extends Component {
         this.in_transition = true;
 
         // Set selected date to the one clicked on
-        this.selected = d;
+        // 'd' has the 'target.__data__' property that store the data that we are trying to pass to 'this.selected' from 'year_data'.
+        this.selected = d.target.__data__;
 
         // Hide tooltip
         this.hideTooltip();
