@@ -559,49 +559,7 @@ export class CalendarHeatmap extends Component {
         };
         repeat();
 
-        // Construct tooltip
-        let tooltip_html = '';
-        tooltip_html += `<div class="header"><strong>${
-          d.total ? this.formatTime(d.total) : 'No time'
-        } tracked</strong></div>`;
-        tooltip_html +=
-          '<div>on ' +
-          moment(d.date).format('dddd, MMM Do YYYY') +
-          '</div><br>';
-
-        // Add summary to the tooltip
-        let counter = 0;
-        while (counter < d.summary.length) {
-          tooltip_html +=
-            '<div><span><strong>' +
-            d.summary[counter].name +
-            '</strong></span>';
-          tooltip_html +=
-            '<span>' +
-            this.formatTime(d.summary[counter].value) +
-            '</span></div>';
-          counter++;
-        }
-
-        // Calculate tooltip position
-        let x = calcItemX(d) + this.settings.item_size;
-        if (
-          this.settings.width - x <
-          this.settings.tooltip_width + this.settings.tooltip_padding * 3
-        ) {
-          x -= this.settings.tooltip_width + this.settings.tooltip_padding * 2;
-        }
-        let y = calcItemY(d) + this.settings.item_size;
-
-        // Show tooltip
-        this.tooltip
-          .html(tooltip_html)
-          .style('left', x + 'px')
-          .style('top', y + 'px')
-          .transition()
-          .duration(this.settings.transition_duration / 2)
-          .ease(easeLinear)
-          .style('opacity', 1);
+        this.props.onTooltip?.({ value: d });
       })
       .on('mouseout', (event, d) => {
         if (this.in_transition) {
