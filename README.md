@@ -9,6 +9,8 @@ Includes a global overview of multiple years and visualizations of year, month, 
 - Based on [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) by [Darragh Kirwan](https://github.com/DKirwan)
 - Based on [ReactJS Calendar Heatmap](https://github.com/g1eb/reactjs-calendar-heatmap) by [Gleb](https://github.com/g1eb)
 
+[Live Demo](https://manufac-analytics.github.io/reactjs-calendar-heatmap/).
+
 ### Global overview
 
 [![calendar heatmap - global overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_global_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
@@ -31,7 +33,7 @@ Includes a global overview of multiple years and visualizations of year, month, 
 
 ## Install
 
-1. Install '@manufac/reactjs-calendar-heatmap' with npm
+1. Install `@manufac/reactjs-calendar-heatmap` with `yarn` (or `npm`):
 
 ```
 yarn add @manufac/reactjs-calendar-heatmap
