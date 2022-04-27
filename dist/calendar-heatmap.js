@@ -25,15 +25,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(2244);
 
-var React = _interopRequireWildcard(_react);
-
 var _moment = __webpack_require__(381);
 
 var _moment2 = _interopRequireDefault(_moment);
 
 var _d = __webpack_require__(583);
-
-var d3 = _interopRequireWildcard(_d);
 
 var _calendarHeatmap = __webpack_require__(5804);
 
@@ -41,16 +37,14 @@ var _calendarHeatmap2 = _interopRequireDefault(_calendarHeatmap);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var CalendarHeatmap = function (_React$Component) {
-  _inherits(CalendarHeatmap, _React$Component);
+var CalendarHeatmap = function (_Component) {
+  _inherits(CalendarHeatmap, _Component);
 
   function CalendarHeatmap(props) {
     _classCallCheck(this, CalendarHeatmap);
@@ -103,7 +97,7 @@ var CalendarHeatmap = function (_React$Component) {
     key: 'createElements',
     value: function createElements() {
       // Create svg element
-      this.svg = d3.select('#calendar-heatmap').append('svg').attr('class', 'svg');
+      this.svg = (0, _d.select)('#calendar-heatmap').append('svg').attr('class', 'svg');
 
       // Create other svg elements
       this.items = this.svg.append('g');
@@ -111,7 +105,7 @@ var CalendarHeatmap = function (_React$Component) {
       this.buttons = this.svg.append('g');
 
       // Add tooltip to the same element as main svg
-      this.tooltip = d3.select('#calendar-heatmap').append('div').attr('class', _calendarHeatmap2.default.heatmapTooltip).style('opacity', 0).style('pointer-events', 'none').style('position', 'absolute').style('z-index', 9999).style('width', '250px').style('max-width', '250px').style('overflow', 'hidden').style('padding', '15px').style('font-size', '12px').style('line-height', '14px').style('color', 'rgb(51, 51, 51)').style('background', 'rgba(255, 255, 255, 0.75)');
+      this.tooltip = (0, _d.select)('#calendar-heatmap').append('div').attr('class', _calendarHeatmap2.default.heatmapTooltip).style('opacity', 0).style('pointer-events', 'none').style('position', 'absolute').style('z-index', 9999).style('width', '250px').style('max-width', '250px').style('overflow', 'hidden').style('padding', '15px').style('font-size', '12px').style('line-height', '14px').style('color', 'rgb(51, 51, 51)').style('background', 'rgba(255, 255, 255, 0.75)');
 
       this.calcDimensions();
     }
@@ -202,7 +196,7 @@ var CalendarHeatmap = function (_React$Component) {
       var end = (0, _moment2.default)(this.props.data[this.props.data.length - 1].date).endOf('year');
 
       // Define array of years and total values
-      var year_data = d3.timeYears(start, end).map(function (d) {
+      var year_data = (0, _d.timeYears)(start, end).map(function (d) {
         var date = (0, _moment2.default)(d);
         var getSummary = function getSummary() {
           var summary = _this2.props.data.reduce(function (summary, d) {
@@ -242,15 +236,15 @@ var CalendarHeatmap = function (_React$Component) {
       });
 
       // Calculate max value of all the years in the dataset
-      var max_value = d3.max(year_data, function (d) {
+      var max_value = (0, _d.max)(year_data, function (d) {
         return d.total;
       });
 
       // Define year labels and axis
-      var year_labels = d3.timeYears(start, end).map(function (d) {
+      var year_labels = (0, _d.timeYears)(start, end).map(function (d) {
         return (0, _moment2.default)(d);
       });
-      var yearScale = d3.scaleBand().rangeRound([0, this.settings.width]).padding([0.05]).domain(year_labels.map(function (d) {
+      var yearScale = (0, _d.scaleBand)().rangeRound([0, this.settings.width]).padding([0.05]).domain(year_labels.map(function (d) {
         return d.year();
       }));
 
@@ -263,7 +257,7 @@ var CalendarHeatmap = function (_React$Component) {
       }).attr('transform', function (d) {
         return 'translate(' + yearScale(d.date.year()) + ',' + _this2.settings.tooltip_padding * 2 + ')';
       }).attr('fill', function (d) {
-        var color = d3.scaleLinear().range(['#ffffff', _this2.props.color]).domain([-0.15 * max_value, max_value]);
+        var color = (0, _d.scaleLinear)().range(['#ffffff', _this2.props.color]).domain([-0.15 * max_value, max_value]);
         return color(d.total) || '#ff4500';
       }).on('click', function (d) {
         if (_this2.in_transition) {
@@ -353,7 +347,7 @@ var CalendarHeatmap = function (_React$Component) {
         var y = _this2.settings.tooltip_padding * 3;
 
         // Show tooltip
-        _this2.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this2.settings.transition_duration / 2).ease(d3.easeLinear).style('opacity', 1);
+        _this2.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this2.settings.transition_duration / 2).ease(_d.easeLinear).style('opacity', 1);
       }).on('mouseout', function () {
         if (_this2.in_transition) {
           return;
@@ -363,7 +357,7 @@ var CalendarHeatmap = function (_React$Component) {
         return _this2.settings.transition_duration * (i + 1) / 10;
       }).duration(function () {
         return _this2.settings.transition_duration;
-      }).ease(d3.easeLinear).style('opacity', 1).call(function (transition, callback) {
+      }).ease(_d.easeLinear).style('opacity', 1).call(function (transition, callback) {
         if (transition.empty()) {
           callback();
         }
@@ -392,7 +386,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this2.items.selectAll('.item-block-year').transition().duration(_this2.settings.transition_duration).ease(d3.easeLinear).style('opacity', function (d) {
+        _this2.items.selectAll('.item-block-year').transition().duration(_this2.settings.transition_duration).ease(_d.easeLinear).style('opacity', function (d) {
           return (0, _moment2.default)(d.date).year() === year_label.year() ? 1 : 0.1;
         });
       }).on('mouseout', function () {
@@ -400,7 +394,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this2.items.selectAll('.item-block-year').transition().duration(_this2.settings.transition_duration).ease(d3.easeLinear).style('opacity', 1);
+        _this2.items.selectAll('.item-block-year').transition().duration(_this2.settings.transition_duration).ease(_d.easeLinear).style('opacity', 1);
       }).on('click', function (event, d) {
         if (_this2.in_transition) {
           return;
@@ -448,11 +442,11 @@ var CalendarHeatmap = function (_React$Component) {
       });
 
       // Calculate max value of the year data
-      var max_value = d3.max(year_data, function (d) {
+      var max_value = (0, _d.max)(year_data, function (d) {
         return d.total;
       });
 
-      var color = d3.scaleLinear().range(['#ffffff', this.props.color]).domain([-0.15 * max_value, max_value]);
+      var color = (0, _d.scaleLinear)().range(['#ffffff', this.props.color]).domain([-0.15 * max_value, max_value]);
 
       var calcItemX = function calcItemX(d) {
         var date = (0, _moment2.default)(d.date);
@@ -517,13 +511,13 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         // Pulsating animation
-        var circle = d3.select(event.currentTarget);
+        var circle = (0, _d.select)(event.currentTarget);
         var repeat = function repeat() {
-          circle = circle.transition().duration(_this3.settings.transition_duration).ease(d3.easeLinear).attr('x', function (d) {
+          circle = circle.transition().duration(_this3.settings.transition_duration).ease(_d.easeLinear).attr('x', function (d) {
             return calcItemX(d) - (_this3.settings.item_size * 1.1 - _this3.settings.item_size) / 2;
           }).attr('y', function (d) {
             return calcItemY(d) - (_this3.settings.item_size * 1.1 - _this3.settings.item_size) / 2;
-          }).attr('width', _this3.settings.item_size * 1.1).attr('height', _this3.settings.item_size * 1.1).transition().duration(_this3.settings.transition_duration).ease(d3.easeLinear).attr('x', function (d) {
+          }).attr('width', _this3.settings.item_size * 1.1).attr('height', _this3.settings.item_size * 1.1).transition().duration(_this3.settings.transition_duration).ease(_d.easeLinear).attr('x', function (d) {
             return calcItemX(d) + (_this3.settings.item_size - calcItemSize(d)) / 2;
           }).attr('y', function (d) {
             return calcItemY(d) + (_this3.settings.item_size - calcItemSize(d)) / 2;
@@ -556,14 +550,14 @@ var CalendarHeatmap = function (_React$Component) {
         var y = calcItemY(d) + _this3.settings.item_size;
 
         // Show tooltip
-        _this3.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this3.settings.transition_duration / 2).ease(d3.easeLinear).style('opacity', 1);
+        _this3.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this3.settings.transition_duration / 2).ease(_d.easeLinear).style('opacity', 1);
       }).on('mouseout', function (event, d) {
         if (_this3.in_transition) {
           return;
         }
 
         // Set circle radius back to what its supposed to be
-        d3.select(event.currentTarget).transition().duration(_this3.settings.transition_duration / 2).ease(d3.easeLinear).attr('x', function (d) {
+        (0, _d.select)(event.currentTarget).transition().duration(_this3.settings.transition_duration / 2).ease(_d.easeLinear).attr('x', function (d) {
           return calcItemX(d) + (_this3.settings.item_size - calcItemSize(d)) / 2;
         }).attr('y', function (d) {
           return calcItemY(d) + (_this3.settings.item_size - calcItemSize(d)) / 2;
@@ -579,7 +573,7 @@ var CalendarHeatmap = function (_React$Component) {
         return (Math.cos(Math.PI * Math.random()) + 1) * _this3.settings.transition_duration;
       }).duration(function () {
         return _this3.settings.transition_duration;
-      }).ease(d3.easeLinear).style('opacity', 1).call(function (transition, callback) {
+      }).ease(_d.easeLinear).style('opacity', 1).call(function (transition, callback) {
         if (transition.empty()) {
           callback();
         }
@@ -596,8 +590,8 @@ var CalendarHeatmap = function (_React$Component) {
       });
 
       // Add month labels
-      var month_labels = d3.timeMonths(start_of_year, end_of_year);
-      var monthScale = d3.scaleLinear().range([0, this.settings.width]).domain([0, month_labels.length]);
+      var month_labels = (0, _d.timeMonths)(start_of_year, end_of_year);
+      var monthScale = (0, _d.scaleLinear)().range([0, this.settings.width]).domain([0, month_labels.length]);
       this.labels.selectAll('.label-month').remove();
       this.labels.selectAll('.label-month').data(month_labels).enter().append('text').attr('class', 'label label-month').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('font-size', function () {
         return Math.floor(_this3.settings.label_padding / 3) + 'px';
@@ -611,7 +605,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         var selected_month = (0, _moment2.default)(d);
-        _this3.items.selectAll('.item-circle').transition().duration(_this3.settings.transition_duration).ease(d3.easeLinear).style('opacity', function (d) {
+        _this3.items.selectAll('.item-circle').transition().duration(_this3.settings.transition_duration).ease(_d.easeLinear).style('opacity', function (d) {
           return (0, _moment2.default)(d.date).isSame(selected_month, 'month') ? 1 : 0.1;
         });
       }).on('mouseout', function () {
@@ -619,7 +613,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this3.items.selectAll('.item-circle').transition().duration(_this3.settings.transition_duration).ease(d3.easeLinear).style('opacity', 1);
+        _this3.items.selectAll('.item-circle').transition().duration(_this3.settings.transition_duration).ease(_d.easeLinear).style('opacity', 1);
       }).on('click', function (event, d) {
         if (_this3.in_transition) {
           return;
@@ -652,8 +646,8 @@ var CalendarHeatmap = function (_React$Component) {
       });
 
       // Add day labels
-      var day_labels = d3.timeDays((0, _moment2.default)().startOf('week'), (0, _moment2.default)().endOf('week'));
-      var dayScale = d3.scaleBand().rangeRound([this.settings.label_padding, this.settings.height]).domain(day_labels.map(function (d) {
+      var day_labels = (0, _d.timeDays)((0, _moment2.default)().startOf('week'), (0, _moment2.default)().endOf('week'));
+      var dayScale = (0, _d.scaleBand)().rangeRound([this.settings.label_padding, this.settings.height]).domain(day_labels.map(function (d) {
         return (0, _moment2.default)(d).weekday();
       }));
       this.labels.selectAll('.label-day').remove();
@@ -669,7 +663,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         var selected_day = (0, _moment2.default)(d);
-        _this3.items.selectAll('.item-circle').transition().duration(_this3.settings.transition_duration).ease(d3.easeLinear).style('opacity', function (d) {
+        _this3.items.selectAll('.item-circle').transition().duration(_this3.settings.transition_duration).ease(_d.easeLinear).style('opacity', function (d) {
           return (0, _moment2.default)(d.date).day() === selected_day.day() ? 1 : 0.1;
         });
       }).on('mouseout', function () {
@@ -677,7 +671,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this3.items.selectAll('.item-circle').transition().duration(_this3.settings.transition_duration).ease(d3.easeLinear).style('opacity', 1);
+        _this3.items.selectAll('.item-circle').transition().duration(_this3.settings.transition_duration).ease(_d.easeLinear).style('opacity', 1);
       });
 
       // Add button to switch back to previous overview
@@ -706,15 +700,15 @@ var CalendarHeatmap = function (_React$Component) {
       var month_data = this.props.data.filter(function (d) {
         return start_of_month <= (0, _moment2.default)(d.date) && (0, _moment2.default)(d.date) < end_of_month;
       });
-      var max_value = d3.max(month_data, function (d) {
-        return d3.max(d.summary, function (d) {
+      var max_value = (0, _d.max)(month_data, function (d) {
+        return (0, _d.max)(d.summary, function (d) {
           return d.value;
         });
       });
 
       // Define day labels and axis
-      var day_labels = d3.timeDays((0, _moment2.default)().startOf('week'), (0, _moment2.default)().endOf('week'));
-      var dayScale = d3.scaleBand().rangeRound([this.settings.label_padding, this.settings.height]).domain(day_labels.map(function (d) {
+      var day_labels = (0, _d.timeDays)((0, _moment2.default)().startOf('week'), (0, _moment2.default)().endOf('week'));
+      var dayScale = (0, _d.scaleBand)().rangeRound([this.settings.label_padding, this.settings.height]).domain(day_labels.map(function (d) {
         return (0, _moment2.default)(d).weekday();
       }));
 
@@ -723,7 +717,7 @@ var CalendarHeatmap = function (_React$Component) {
       while (start_of_month.week() !== end_of_month.week()) {
         week_labels.push(start_of_month.add(1, 'week').clone());
       }
-      var weekScale = d3.scaleBand().rangeRound([this.settings.label_padding, this.settings.width]).padding([0.05]).domain(week_labels.map(function (weekday) {
+      var weekScale = (0, _d.scaleBand)().rangeRound([this.settings.label_padding, this.settings.width]).padding([0.05]).domain(week_labels.map(function (weekday) {
         return weekday.week();
       }));
 
@@ -766,25 +760,25 @@ var CalendarHeatmap = function (_React$Component) {
       });
 
       var item_width = (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
-      var itemScale = d3.scaleLinear().rangeRound([0, item_width]);
+      var itemScale = (0, _d.scaleLinear)().rangeRound([0, item_width]);
 
       var item_gutter = this.settings.item_gutter;
       item_block.selectAll('.item-block-rect').data(function (d) {
         return d.summary;
       }).enter().append('rect').attr('class', 'item item-block-rect').style('cursor', 'pointer').attr('x', function (d) {
-        var total = parseInt(d3.select(this.parentNode).attr('total'));
-        var offset = parseInt(d3.select(this.parentNode).attr('offset'));
+        var total = parseInt((0, _d.select)(this.parentNode).attr('total'));
+        var offset = parseInt((0, _d.select)(this.parentNode).attr('offset'));
         itemScale.domain([0, total]);
-        d3.select(this.parentNode).attr('offset', offset + itemScale(d.value));
+        (0, _d.select)(this.parentNode).attr('offset', offset + itemScale(d.value));
         return offset;
       }).attr('width', function (d) {
-        var total = parseInt(d3.select(this.parentNode).attr('total'));
+        var total = parseInt((0, _d.select)(this.parentNode).attr('total'));
         itemScale.domain([0, total]);
         return Math.max(itemScale(d.value) - item_gutter, 1);
       }).attr('height', function () {
         return Math.min(dayScale.bandwidth(), _this4.settings.max_block_height);
       }).attr('fill', function (d) {
-        var color = d3.scaleLinear().range(['#ffffff', _this4.props.color]).domain([-0.15 * max_value, max_value]);
+        var color = (0, _d.scaleLinear)().range(['#ffffff', _this4.props.color]).domain([-0.15 * max_value, max_value]);
         return color(d.value) || '#ff4500';
       }).style('opacity', 0).on('mouseover', function (event, d) {
         if (_this4.in_transition) {
@@ -792,7 +786,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         // Get date from the parent node
-        var parentNode = d3.select(event.currentTarget.parentNode);
+        var parentNode = (0, _d.select)(event.currentTarget.parentNode);
         var date = new Date(parentNode.attr('date'));
 
         // Construct tooltip
@@ -809,7 +803,7 @@ var CalendarHeatmap = function (_React$Component) {
         var y = dayScale((0, _moment2.default)(date).weekday()) + _this4.settings.tooltip_padding * 2;
 
         // Show tooltip
-        _this4.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this4.settings.transition_duration / 2).ease(d3.easeLinear).style('opacity', 1);
+        _this4.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this4.settings.transition_duration / 2).ease(_d.easeLinear).style('opacity', 1);
       }).on('mouseout', function () {
         if (_this4.in_transition) {
           return;
@@ -819,7 +813,7 @@ var CalendarHeatmap = function (_React$Component) {
         return (Math.cos(Math.PI * Math.random()) + 1) * _this4.settings.transition_duration;
       }).duration(function () {
         return _this4.settings.transition_duration;
-      }).ease(d3.easeLinear).style('opacity', 1).call(function (transition, callback) {
+      }).ease(_d.easeLinear).style('opacity', 1).call(function (transition, callback) {
         if (transition.empty()) {
           callback();
         }
@@ -848,7 +842,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this4.items.selectAll('.item-block-month').transition().duration(_this4.settings.transition_duration).ease(d3.easeLinear).style('opacity', function (d) {
+        _this4.items.selectAll('.item-block-month').transition().duration(_this4.settings.transition_duration).ease(_d.easeLinear).style('opacity', function (d) {
           return (0, _moment2.default)(d.date).week() === weekday.week() ? 1 : 0.1;
         });
       }).on('mouseout', function () {
@@ -856,7 +850,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this4.items.selectAll('.item-block-month').transition().duration(_this4.settings.transition_duration).ease(d3.easeLinear).style('opacity', 1);
+        _this4.items.selectAll('.item-block-month').transition().duration(_this4.settings.transition_duration).ease(_d.easeLinear).style('opacity', 1);
       }).on('click', function (event, d) {
         if (_this4.in_transition) {
           return;
@@ -902,7 +896,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         var selected_day = (0, _moment2.default)(d);
-        _this4.items.selectAll('.item-block-month').transition().duration(_this4.settings.transition_duration).ease(d3.easeLinear).style('opacity', function (d) {
+        _this4.items.selectAll('.item-block-month').transition().duration(_this4.settings.transition_duration).ease(_d.easeLinear).style('opacity', function (d) {
           return (0, _moment2.default)(d.date).day() === selected_day.day() ? 1 : 0.1;
         });
       }).on('mouseout', function () {
@@ -910,7 +904,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this4.items.selectAll('.item-block-month').transition().duration(_this4.settings.transition_duration).ease(d3.easeLinear).style('opacity', 1);
+        _this4.items.selectAll('.item-block-month').transition().duration(_this4.settings.transition_duration).ease(_d.easeLinear).style('opacity', 1);
       });
 
       // Add button to switch back to previous overview
@@ -939,21 +933,21 @@ var CalendarHeatmap = function (_React$Component) {
       var week_data = this.props.data.filter(function (d) {
         return start_of_week <= (0, _moment2.default)(d.date) && (0, _moment2.default)(d.date) < end_of_week;
       });
-      var max_value = d3.max(week_data, function (d) {
-        return d3.max(d.summary, function (d) {
+      var max_value = (0, _d.max)(week_data, function (d) {
+        return (0, _d.max)(d.summary, function (d) {
           return d.value;
         });
       });
 
       // Define day labels and axis
-      var day_labels = d3.timeDays((0, _moment2.default)().startOf('week'), (0, _moment2.default)().endOf('week'));
-      var dayScale = d3.scaleBand().rangeRound([this.settings.label_padding, this.settings.height]).domain(day_labels.map(function (d) {
+      var day_labels = (0, _d.timeDays)((0, _moment2.default)().startOf('week'), (0, _moment2.default)().endOf('week'));
+      var dayScale = (0, _d.scaleBand)().rangeRound([this.settings.label_padding, this.settings.height]).domain(day_labels.map(function (d) {
         return (0, _moment2.default)(d).weekday();
       }));
 
       // Define week labels and axis
       var week_labels = [start_of_week];
-      var weekScale = d3.scaleBand().rangeRound([this.settings.label_padding, this.settings.width]).padding([0.01]).domain(week_labels.map(function (weekday) {
+      var weekScale = (0, _d.scaleBand)().rangeRound([this.settings.label_padding, this.settings.width]).padding([0.01]).domain(week_labels.map(function (weekday) {
         return weekday.week();
       }));
 
@@ -996,25 +990,25 @@ var CalendarHeatmap = function (_React$Component) {
       });
 
       var item_width = (this.settings.width - this.settings.label_padding) / week_labels.length - this.settings.gutter * 5;
-      var itemScale = d3.scaleLinear().rangeRound([0, item_width]);
+      var itemScale = (0, _d.scaleLinear)().rangeRound([0, item_width]);
 
       var item_gutter = this.settings.item_gutter;
       item_block.selectAll('.item-block-rect').data(function (d) {
         return d.summary;
       }).enter().append('rect').attr('class', 'item item-block-rect').style('cursor', 'pointer').attr('x', function (d) {
-        var total = parseInt(d3.select(this.parentNode).attr('total'));
-        var offset = parseInt(d3.select(this.parentNode).attr('offset'));
+        var total = parseInt((0, _d.select)(this.parentNode).attr('total'));
+        var offset = parseInt((0, _d.select)(this.parentNode).attr('offset'));
         itemScale.domain([0, total]);
-        d3.select(this.parentNode).attr('offset', offset + itemScale(d.value));
+        (0, _d.select)(this.parentNode).attr('offset', offset + itemScale(d.value));
         return offset;
       }).attr('width', function (d) {
-        var total = parseInt(d3.select(this.parentNode).attr('total'));
+        var total = parseInt((0, _d.select)(this.parentNode).attr('total'));
         itemScale.domain([0, total]);
         return Math.max(itemScale(d.value) - item_gutter, 1);
       }).attr('height', function () {
         return Math.min(dayScale.bandwidth(), _this5.settings.max_block_height);
       }).attr('fill', function (d) {
-        var color = d3.scaleLinear().range(['#ffffff', _this5.props.color]).domain([-0.15 * max_value, max_value]);
+        var color = (0, _d.scaleLinear)().range(['#ffffff', _this5.props.color]).domain([-0.15 * max_value, max_value]);
         return color(d.value) || '#ff4500';
       }).style('opacity', 0).on('mouseover', function (event, d) {
         if (_this5.in_transition) {
@@ -1022,7 +1016,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         // Get date from the parent node
-        var parentNode = d3.select(event.currentTarget.parentNode);
+        var parentNode = (0, _d.select)(event.currentTarget.parentNode);
         var date = new Date(parentNode.attr('date'));
 
         // Construct tooltip
@@ -1034,14 +1028,14 @@ var CalendarHeatmap = function (_React$Component) {
         // Calculate tooltip position
         var total = parseInt(parentNode.attr('total'));
         itemScale.domain([0, total]);
-        var x = parseInt(d3.select(event.currentTarget).attr('x')) + itemScale(d.value) / 4 + _this5.settings.tooltip_width / 4;
+        var x = parseInt((0, _d.select)(event.currentTarget).attr('x')) + itemScale(d.value) / 4 + _this5.settings.tooltip_width / 4;
         while (_this5.settings.width - x < _this5.settings.tooltip_width + _this5.settings.tooltip_padding * 3) {
           x -= 10;
         }
         var y = dayScale((0, _moment2.default)(date).weekday()) + _this5.settings.tooltip_padding * 1.5;
 
         // Show tooltip
-        _this5.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this5.settings.transition_duration / 2).ease(d3.easeLinear).style('opacity', 1);
+        _this5.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this5.settings.transition_duration / 2).ease(_d.easeLinear).style('opacity', 1);
       }).on('mouseout', function () {
         if (_this5.in_transition) {
           return;
@@ -1051,7 +1045,7 @@ var CalendarHeatmap = function (_React$Component) {
         return (Math.cos(Math.PI * Math.random()) + 1) * _this5.settings.transition_duration;
       }).duration(function () {
         return _this5.settings.transition_duration;
-      }).ease(d3.easeLinear).style('opacity', 1).call(function (transition, callback) {
+      }).ease(_d.easeLinear).style('opacity', 1).call(function (transition, callback) {
         if (transition.empty()) {
           callback();
         }
@@ -1080,7 +1074,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this5.items.selectAll('.item-block-week').transition().duration(_this5.settings.transition_duration).ease(d3.easeLinear).style('opacity', function (d) {
+        _this5.items.selectAll('.item-block-week').transition().duration(_this5.settings.transition_duration).ease(_d.easeLinear).style('opacity', function (d) {
           return (0, _moment2.default)(d.date).week() === weekday.week() ? 1 : 0.1;
         });
       }).on('mouseout', function () {
@@ -1088,7 +1082,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this5.items.selectAll('.item-block-week').transition().duration(_this5.settings.transition_duration).ease(d3.easeLinear).style('opacity', 1);
+        _this5.items.selectAll('.item-block-week').transition().duration(_this5.settings.transition_duration).ease(_d.easeLinear).style('opacity', 1);
       });
 
       // Add day labels
@@ -1105,7 +1099,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         var selected_day = (0, _moment2.default)(d);
-        _this5.items.selectAll('.item-block-week').transition().duration(_this5.settings.transition_duration).ease(d3.easeLinear).style('opacity', function (d) {
+        _this5.items.selectAll('.item-block-week').transition().duration(_this5.settings.transition_duration).ease(_d.easeLinear).style('opacity', function (d) {
           return (0, _moment2.default)(d.date).day() === selected_day.day() ? 1 : 0.1;
         });
       }).on('mouseout', function () {
@@ -1113,7 +1107,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this5.items.selectAll('.item-block-week').transition().duration(_this5.settings.transition_duration).ease(d3.easeLinear).style('opacity', 1);
+        _this5.items.selectAll('.item-block-week').transition().duration(_this5.settings.transition_duration).ease(_d.easeLinear).style('opacity', 1);
       });
 
       // Add button to switch back to previous overview
@@ -1142,16 +1136,16 @@ var CalendarHeatmap = function (_React$Component) {
       var project_labels = this.selected.summary.map(function (project) {
         return project.name;
       });
-      var projectScale = d3.scaleBand().rangeRound([this.settings.label_padding, this.settings.height]).domain(project_labels);
+      var projectScale = (0, _d.scaleBand)().rangeRound([this.settings.label_padding, this.settings.height]).domain(project_labels);
 
-      var itemScale = d3.scaleTime().range([this.settings.label_padding * 2, this.settings.width]).domain([(0, _moment2.default)(this.selected.date).startOf('day'), (0, _moment2.default)(this.selected.date).endOf('day')]);
+      var itemScale = (0, _d.scaleTime)().range([this.settings.label_padding * 2, this.settings.width]).domain([(0, _moment2.default)(this.selected.date).startOf('day'), (0, _moment2.default)(this.selected.date).endOf('day')]);
       this.items.selectAll('.item-block').remove();
       this.items.selectAll('.item-block').data(this.selected.details).enter().append('rect').attr('class', 'item item-block').style('cursor', 'pointer').attr('x', function (d) {
         return itemScale((0, _moment2.default)(d.date));
       }).attr('y', function (d) {
         return projectScale(d.name) + projectScale.bandwidth() / 2 - 15;
       }).attr('width', function (d) {
-        var end = itemScale(d3.timeSecond.offset((0, _moment2.default)(d.date), d.value));
+        var end = itemScale(_d.timeSecond.offset((0, _moment2.default)(d.date), d.value));
         return Math.max(end - itemScale((0, _moment2.default)(d.date)), 1);
       }).attr('height', function () {
         return Math.min(projectScale.bandwidth(), _this6.settings.max_block_height);
@@ -1176,7 +1170,7 @@ var CalendarHeatmap = function (_React$Component) {
         var y = projectScale(d.name) + projectScale.bandwidth() / 2 + _this6.settings.tooltip_padding / 2;
 
         // Show tooltip
-        _this6.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this6.settings.transition_duration / 2).ease(d3.easeLinear).style('opacity', 1);
+        _this6.tooltip.html(tooltip_html).style('left', x + 'px').style('top', y + 'px').transition().duration(_this6.settings.transition_duration / 2).ease(_d.easeLinear).style('opacity', 1);
       }).on('mouseout', function () {
         if (_this6.in_transition) {
           return;
@@ -1190,7 +1184,7 @@ var CalendarHeatmap = function (_React$Component) {
         return (Math.cos(Math.PI * Math.random()) + 1) * _this6.settings.transition_duration;
       }).duration(function () {
         return _this6.settings.transition_duration;
-      }).ease(d3.easeLinear).style('opacity', 0.5).call(function (transition, callback) {
+      }).ease(_d.easeLinear).style('opacity', 0.5).call(function (transition, callback) {
         if (transition.empty()) {
           callback();
         }
@@ -1207,8 +1201,8 @@ var CalendarHeatmap = function (_React$Component) {
       });
 
       // Add time labels
-      var timeLabels = d3.timeHours((0, _moment2.default)(this.selected.date).startOf('day'), (0, _moment2.default)(this.selected.date).endOf('day'));
-      var timeScale = d3.scaleTime().range([this.settings.label_padding * 2, this.settings.width]).domain([0, timeLabels.length]);
+      var timeLabels = (0, _d.timeHours)((0, _moment2.default)(this.selected.date).startOf('day'), (0, _moment2.default)(this.selected.date).endOf('day'));
+      var timeScale = (0, _d.scaleTime)().range([this.settings.label_padding * 2, this.settings.width]).domain([0, timeLabels.length]);
       this.labels.selectAll('.label-time').remove();
       this.labels.selectAll('.label-time').data(timeLabels).enter().append('text').attr('class', 'label label-time').style('cursor', 'pointer').style('fill', 'rgb(170, 170, 170)').attr('font-size', function () {
         return Math.floor(_this6.settings.label_padding / 3) + 'px';
@@ -1222,7 +1216,7 @@ var CalendarHeatmap = function (_React$Component) {
         }
 
         var selected = itemScale((0, _moment2.default)(d));
-        _this6.items.selectAll('.item-block').transition().duration(_this6.settings.transition_duration).ease(d3.easeLinear).style('opacity', function (d) {
+        _this6.items.selectAll('.item-block').transition().duration(_this6.settings.transition_duration).ease(_d.easeLinear).style('opacity', function (d) {
           var start = itemScale((0, _moment2.default)(d.date));
           var end = itemScale((0, _moment2.default)(d.date).add(d.value, 'seconds'));
           return selected >= start && selected <= end ? 1 : 0.1;
@@ -1232,7 +1226,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this6.items.selectAll('.item-block').transition().duration(_this6.settings.transition_duration).ease(d3.easeLinear).style('opacity', 0.5);
+        _this6.items.selectAll('.item-block').transition().duration(_this6.settings.transition_duration).ease(_d.easeLinear).style('opacity', 0.5);
       });
 
       // Add project labels
@@ -1247,7 +1241,7 @@ var CalendarHeatmap = function (_React$Component) {
       }).text(function (d) {
         return d;
       }).each(function () {
-        var obj = d3.select(this),
+        var obj = (0, _d.select)(this),
             text_length = obj.node().getComputedTextLength(),
             text = obj.text();
         while (text_length > label_padding * 1.5 && text.length > 0) {
@@ -1260,7 +1254,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this6.items.selectAll('.item-block').transition().duration(_this6.settings.transition_duration).ease(d3.easeLinear).style('opacity', function (d) {
+        _this6.items.selectAll('.item-block').transition().duration(_this6.settings.transition_duration).ease(_d.easeLinear).style('opacity', function (d) {
           return d.name === project ? 1 : 0.1;
         });
       }).on('mouseout', function () {
@@ -1268,7 +1262,7 @@ var CalendarHeatmap = function (_React$Component) {
           return;
         }
 
-        _this6.items.selectAll('.item-block').transition().duration(_this6.settings.transition_duration).ease(d3.easeLinear).style('opacity', 0.5);
+        _this6.items.selectAll('.item-block').transition().duration(_this6.settings.transition_duration).ease(_d.easeLinear).style('opacity', 0.5);
       });
 
       // Add button to switch back to previous overview
@@ -1315,7 +1309,7 @@ var CalendarHeatmap = function (_React$Component) {
       }).attr('font-size', function () {
         return Math.floor(_this7.settings.label_padding / 3) + 'px';
       }).html('&#x2190');
-      button.transition().duration(this.settings.transition_duration).ease(d3.easeLinear).style('opacity', 1);
+      button.transition().duration(this.settings.transition_duration).ease(_d.easeLinear).style('opacity', 1);
     }
 
     /**
@@ -1325,7 +1319,7 @@ var CalendarHeatmap = function (_React$Component) {
   }, {
     key: 'removeGlobalOverview',
     value: function removeGlobalOverview() {
-      this.items.selectAll('.item-block-year').transition().duration(this.settings.transition_duration).ease(d3.easeLinear).style('opacity', 0).remove();
+      this.items.selectAll('.item-block-year').transition().duration(this.settings.transition_duration).ease(_d.easeLinear).style('opacity', 0).remove();
       this.labels.selectAll('.label-year').remove();
     }
 
@@ -1336,7 +1330,7 @@ var CalendarHeatmap = function (_React$Component) {
   }, {
     key: 'removeYearOverview',
     value: function removeYearOverview() {
-      this.items.selectAll('.item-circle').transition().duration(this.settings.transition_duration).ease(d3.easeLinear).style('opacity', 0).remove();
+      this.items.selectAll('.item-circle').transition().duration(this.settings.transition_duration).ease(_d.easeLinear).style('opacity', 0).remove();
       this.labels.selectAll('.label-day').remove();
       this.labels.selectAll('.label-month').remove();
       this.hideBackButton();
@@ -1351,7 +1345,7 @@ var CalendarHeatmap = function (_React$Component) {
     value: function removeMonthOverview() {
       var _this8 = this;
 
-      this.items.selectAll('.item-block-month').selectAll('.item-block-rect').transition().duration(this.settings.transition_duration).ease(d3.easeLinear).style('opacity', 0).attr('x', function (d, i) {
+      this.items.selectAll('.item-block-month').selectAll('.item-block-rect').transition().duration(this.settings.transition_duration).ease(_d.easeLinear).style('opacity', 0).attr('x', function (d, i) {
         return i % 2 === 0 ? -_this8.settings.width / 3 : _this8.settings.width / 3;
       }).remove();
       this.labels.selectAll('.label-day').remove();
@@ -1368,7 +1362,7 @@ var CalendarHeatmap = function (_React$Component) {
     value: function removeWeekOverview() {
       var _this9 = this;
 
-      this.items.selectAll('.item-block-week').selectAll('.item-block-rect').transition().duration(this.settings.transition_duration).ease(d3.easeLinear).style('opacity', 0).attr('x', function (d, i) {
+      this.items.selectAll('.item-block-week').selectAll('.item-block-rect').transition().duration(this.settings.transition_duration).ease(_d.easeLinear).style('opacity', 0).attr('x', function (d, i) {
         return i % 2 === 0 ? -_this9.settings.width / 3 : _this9.settings.width / 3;
       }).remove();
       this.labels.selectAll('.label-day').remove();
@@ -1385,7 +1379,7 @@ var CalendarHeatmap = function (_React$Component) {
     value: function removeDayOverview() {
       var _this10 = this;
 
-      this.items.selectAll('.item-block').transition().duration(this.settings.transition_duration).ease(d3.easeLinear).style('opacity', 0).attr('x', function (d, i) {
+      this.items.selectAll('.item-block').transition().duration(this.settings.transition_duration).ease(_d.easeLinear).style('opacity', 0).attr('x', function (d, i) {
         return i % 2 === 0 ? -_this10.settings.width / 3 : _this10.settings.width / 3;
       }).remove();
       this.labels.selectAll('.label-time').remove();
@@ -1400,7 +1394,7 @@ var CalendarHeatmap = function (_React$Component) {
   }, {
     key: 'hideTooltip',
     value: function hideTooltip() {
-      this.tooltip.transition().duration(this.settings.transition_duration / 2).ease(d3.easeLinear).style('opacity', 0);
+      this.tooltip.transition().duration(this.settings.transition_duration / 2).ease(_d.easeLinear).style('opacity', 0);
     }
 
     /**
@@ -1410,7 +1404,7 @@ var CalendarHeatmap = function (_React$Component) {
   }, {
     key: 'hideBackButton',
     value: function hideBackButton() {
-      this.buttons.selectAll('.button').transition().duration(this.settings.transition_duration).ease(d3.easeLinear).style('opacity', 0).remove();
+      this.buttons.selectAll('.button').transition().duration(this.settings.transition_duration).ease(_d.easeLinear).style('opacity', 0).remove();
     }
 
     /**
@@ -1451,7 +1445,7 @@ var CalendarHeatmap = function (_React$Component) {
   }]);
 
   return CalendarHeatmap;
-}(React.Component);
+}(_react.Component);
 
 CalendarHeatmap.defaultProps = {
   data: [],
