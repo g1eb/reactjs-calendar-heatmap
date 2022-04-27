@@ -1231,51 +1231,11 @@ export class CalendarHeatmap extends Component {
         return color(d.value) || '#ff4500';
       })
       .style('opacity', 0)
-      .on('mouseover', (event, d) => {
+      .on('mouseover', (_event, d) => {
         if (this.in_transition) {
           return;
         }
-
-        // Get date from the parent node
-        let parentNode = select(event.currentTarget.parentNode);
-        let date = new Date(parentNode.attr('date'));
-
-        // Construct tooltip
-        let tooltip_html = '';
-        tooltip_html += `<div class="header"><strong>${d.name}</strong></div><br>`;
-        tooltip_html +=
-          '<div><strong>' +
-          (d.value ? this.formatTime(d.value) : 'No time') +
-          ' tracked</strong></div>';
-        tooltip_html +=
-          '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
-
-        // Calculate tooltip position
-        let total = parseInt(parentNode.attr('total'));
-        itemScale.domain([0, total]);
-        let x =
-          parseInt(select(event.currentTarget).attr('x')) +
-          itemScale(d.value) / 4 +
-          this.settings.tooltip_width / 4;
-        while (
-          this.settings.width - x <
-          this.settings.tooltip_width + this.settings.tooltip_padding * 3
-        ) {
-          x -= 10;
-        }
-        let y =
-          dayScale(moment(date).weekday()) +
-          this.settings.tooltip_padding * 1.5;
-
-        // Show tooltip
-        this.tooltip
-          .html(tooltip_html)
-          .style('left', x + 'px')
-          .style('top', y + 'px')
-          .transition()
-          .duration(this.settings.transition_duration / 2)
-          .ease(easeLinear)
-          .style('opacity', 1);
+        this.props.onTooltip?.({ value: d });
       })
       .on('mouseout', () => {
         if (this.in_transition) {
@@ -1469,45 +1429,12 @@ export class CalendarHeatmap extends Component {
         return this.props.color;
       })
       .style('opacity', 0)
-      .on('mouseover', (event, d) => {
+      .on('mouseover', (_event, d) => {
         if (this.in_transition) {
           return;
         }
 
-        // Construct tooltip
-        let tooltip_html = '';
-        tooltip_html += `<div class="header"><strong>${d.name}</strong><div><br>`;
-        tooltip_html +=
-          '<div><strong>' +
-          (d.value ? this.formatTime(d.value) : 'No time') +
-          ' tracked</strong></div>';
-        tooltip_html +=
-          '<div>on ' +
-          moment(d.date).format('dddd, MMM Do YYYY HH:mm') +
-          '</div>';
-
-        // Calculate tooltip position
-        let x = (d.value * 100) / (60 * 60 * 24) + itemScale(moment(d.date));
-        while (
-          this.settings.width - x <
-          this.settings.tooltip_width + this.settings.tooltip_padding * 3
-        ) {
-          x -= 10;
-        }
-        let y =
-          projectScale(d.name) +
-          projectScale.bandwidth() / 2 +
-          this.settings.tooltip_padding / 2;
-
-        // Show tooltip
-        this.tooltip
-          .html(tooltip_html)
-          .style('left', x + 'px')
-          .style('top', y + 'px')
-          .transition()
-          .duration(this.settings.transition_duration / 2)
-          .ease(easeLinear)
-          .style('opacity', 1);
+        this.props.onTooltip?.({ value: d });
       })
       .on('mouseout', () => {
         if (this.in_transition) {
