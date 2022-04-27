@@ -19,9 +19,9 @@
     "build": "webpack",
     "start": "webpack --watch"
   },
-  "main": "dist/calendar-heatmap.min.js",
-  "module": "dist/calendar-heatmap.min.js",
-  "jsnext:main": "dist/calendar-heatmap.min.js",
+  "main": "dist/calendar-heatmap.js",
+  "module": "dist/calendar-heatmap.js",
+  "jsnext:main": "dist/calendar-heatmap.js",
   "types": "dist/types.d.ts",
   "files": [
     "dist"
