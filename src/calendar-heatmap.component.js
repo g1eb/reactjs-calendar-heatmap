@@ -1786,11 +1786,7 @@ export class CalendarHeatmap extends Component {
 
   render() {
     return (
-      <div
-        id="calendar-heatmap"
-        className="calendarHeatmap"
-        ref={this.ref}
-      ></div>
+      <div id="calendar-heatmap" className="calendarHeatmap" ref={this.ref} />
     );
   }
 }
