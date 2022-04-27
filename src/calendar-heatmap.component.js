@@ -917,41 +917,7 @@ export class CalendarHeatmap extends Component {
         if (this.in_transition) {
           return;
         }
-
-        // Get date from the parent node
-        let parentNode = select(event.currentTarget.parentNode);
-        let date = new Date(parentNode.attr('date'));
-
-        // Construct tooltip
-        let tooltip_html = '';
-        tooltip_html += `<div class="header"><strong>${d.name}</strong></div><br>`;
-        tooltip_html +=
-          '<div><strong>' +
-          (d.value ? this.formatTime(d.value) : 'No time') +
-          ' tracked</strong></div>';
-        tooltip_html +=
-          '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
-
-        // Calculate tooltip position
-        let x = weekScale(moment(date).week()) + this.settings.tooltip_padding;
-        while (
-          this.settings.width - x <
-          this.settings.tooltip_width + this.settings.tooltip_padding * 3
-        ) {
-          x -= 10;
-        }
-        let y =
-          dayScale(moment(date).weekday()) + this.settings.tooltip_padding * 2;
-
-        // Show tooltip
-        this.tooltip
-          .html(tooltip_html)
-          .style('left', x + 'px')
-          .style('top', y + 'px')
-          .transition()
-          .duration(this.settings.transition_duration / 2)
-          .ease(easeLinear)
-          .style('opacity', 1);
+        this.props.onTooltip?.({ value: d });
       })
       .on('mouseout', () => {
         if (this.in_transition) {
