@@ -8,10 +8,13 @@ import {
   timeHours,
   timeSecond,
   scaleLinear,
+  min,
   max,
   easeLinear,
   scaleBand,
   scaleTime,
+  interpolateSpectral,
+  scaleSequential,
 } from 'd3';
 import './calendar-heatmap.css';
 
@@ -158,6 +161,20 @@ export class CalendarHeatmap extends Component {
     }
   }
 
+  // Create spectral color generator function
+  generateSpectralInterpolate(min_value, max_value) {
+    return scaleSequential()
+      .domain([min_value, max_value])
+      .interpolator(interpolateSpectral);
+  }
+
+  // Create linear color generator function
+  generateLinearColor(min_value, max_value) {
+    return scaleLinear()
+      .range(['#ffffff', this.props.color])
+      .domain([min_value, max_value]);
+  }
+
   /**
    * Draw global overview (multiple years)
    */
@@ -218,6 +235,11 @@ export class CalendarHeatmap extends Component {
       return d.total;
     });
 
+    // Calculate min value of all the years in the dataset
+    let min_value = min(year_data, (d) => {
+      return d.total;
+    });
+
     // Define year labels and axis
     let year_labels = timeYears(start, end).map((d) => {
       return moment(d);
@@ -243,7 +265,7 @@ export class CalendarHeatmap extends Component {
       .attr('width', () => {
         return (
           (this.settings.width - this.settings.label_padding) /
-            year_labels.length -
+          year_labels.length -
           this.settings.gutter * 5
         );
       })
@@ -260,10 +282,18 @@ export class CalendarHeatmap extends Component {
         );
       })
       .attr('fill', (d) => {
-        let color = scaleLinear()
-          .range(['#ffffff', this.props.color])
-          .domain([-0.15 * max_value, max_value]);
-        return color(d.total) || '#ff4500';
+        let finalColor = '#ff4500';
+        if (this.props.color === 'spectral') {
+          const spectralColor = this.generateSpectralInterpolate(
+            min_value,
+            max_value
+          );
+          finalColor = spectralColor(d.total);
+        } else {
+          const color = this.generateLinearColor(min_value, max_value);
+          finalColor = color(d.total) || finalColor;
+        }
+        return finalColor;
       })
       .on('click', (_event, datum) => {
         if (this.in_transition) {
@@ -419,10 +449,8 @@ export class CalendarHeatmap extends Component {
 
     // Calculate max value of the year data
     let max_value = max(year_data, (d) => d.total);
-
-    let color = scaleLinear()
-      .range(['#ffffff', this.props.color])
-      .domain([-0.15 * max_value, max_value]);
+    // Calculate min value of the year data
+    let min_value = min(year_data, (d) => d.total);
 
     let calcItemX = (d) => {
       let date = moment(d.date);
@@ -440,7 +468,7 @@ export class CalendarHeatmap extends Component {
       return (
         this.settings.label_padding +
         moment(d.date).weekday() *
-          (this.settings.item_size + this.settings.gutter)
+        (this.settings.item_size + this.settings.gutter)
       );
     };
 
@@ -482,7 +510,18 @@ export class CalendarHeatmap extends Component {
         return calcItemSize(d);
       })
       .attr('fill', (d) => {
-        return d.total > 0 ? color(d.total) : 'transparent';
+        let finalColor = '#ff4500';
+        if (this.props.color === 'spectral') {
+          const spectralColor = this.generateSpectralInterpolate(
+            min_value,
+            max_value
+          );
+          finalColor = spectralColor(d.total);
+        } else {
+          const color = this.generateLinearColor(min_value, max_value);
+          finalColor = color(d.total) || finalColor;
+        }
+        return d.total > 0 ? finalColor : 'transparent';
       })
       .on('click', (event, d) => {
         if (this.in_transition) {
@@ -784,8 +823,17 @@ export class CalendarHeatmap extends Component {
     let month_data = this.props.data.filter((d) => {
       return start_of_month <= moment(d.date) && moment(d.date) < end_of_month;
     });
+
+    // Calculate max value of month in the dataset
     let max_value = max(month_data, (d) => {
       return max(d.summary, (d) => {
+        return d.value;
+      });
+    });
+
+    // Calculate min value of month in the dataset
+    let min_value = min(month_data, (d) => {
+      return min(d.summary, (d) => {
         return d.value;
       });
     });
@@ -826,7 +874,7 @@ export class CalendarHeatmap extends Component {
       .attr('width', () => {
         return (
           (this.settings.width - this.settings.label_padding) /
-            week_labels.length -
+          week_labels.length -
           this.settings.gutter * 5
         );
       })
@@ -906,10 +954,18 @@ export class CalendarHeatmap extends Component {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
       .attr('fill', (d) => {
-        let color = scaleLinear()
-          .range(['#ffffff', this.props.color])
-          .domain([-0.15 * max_value, max_value]);
-        return color(d.value) || '#ff4500';
+        let finalColor = '#ff4500';
+        if (this.props.color === 'spectral') {
+          const spectralColor = this.generateSpectralInterpolate(
+            min_value,
+            max_value
+          );
+          finalColor = spectralColor(d.value);
+        } else {
+          const color = this.generateLinearColor(min_value, max_value);
+          finalColor = color(d.value) || finalColor;
+        }
+        return finalColor;
       })
       .style('opacity', 0)
       .on('mouseover', (event, d) => {
@@ -1105,8 +1161,17 @@ export class CalendarHeatmap extends Component {
     let week_data = this.props.data.filter((d) => {
       return start_of_week <= moment(d.date) && moment(d.date) < end_of_week;
     });
+
+    // Calculate max value of week in the dataset
     let max_value = max(week_data, (d) => {
       return max(d.summary, (d) => {
+        return d.value;
+      });
+    });
+
+    // Calculate min value of week in the dataset
+    let min_value = min(week_data, (d) => {
+      return min(d.summary, (d) => {
         return d.value;
       });
     });
@@ -1144,7 +1209,7 @@ export class CalendarHeatmap extends Component {
       .attr('width', () => {
         return (
           (this.settings.width - this.settings.label_padding) /
-            week_labels.length -
+          week_labels.length -
           this.settings.gutter * 5
         );
       })
@@ -1224,10 +1289,18 @@ export class CalendarHeatmap extends Component {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
       .attr('fill', (d) => {
-        let color = scaleLinear()
-          .range(['#ffffff', this.props.color])
-          .domain([-0.15 * max_value, max_value]);
-        return color(d.value) || '#ff4500';
+        let finalColor = '#ff4500';
+        if (this.props.color === 'spectral') {
+          const spectralColor = this.generateSpectralInterpolate(
+            min_value,
+            max_value
+          );
+          finalColor = spectralColor(d.value);
+        } else {
+          const color = this.generateLinearColor(min_value, max_value);
+          finalColor = color(d.value) || finalColor;
+        }
+        return finalColor;
       })
       .style('opacity', 0)
       .on('mouseover', (_event, d) => {
@@ -1394,6 +1467,29 @@ export class CalendarHeatmap extends Component {
       .rangeRound([this.settings.label_padding, this.settings.height])
       .domain(project_labels);
 
+    // Define beginning and end of the day
+    let start_of_day = moment(this.selected.date).startOf('day');
+    let end_of_day = moment(this.selected.date).endOf('day');
+
+    // Filter data down to the selected week
+    let day_data = this.props.data.filter((d) => {
+      return start_of_day <= moment(d.date) && moment(d.date) < end_of_day;
+    });
+
+    // Calculate max value of day in the dataset
+    let max_value = max(day_data, (d) => {
+      return max(d.summary, (d) => {
+        return d.value;
+      });
+    });
+
+    // Calculate min value of day in the dataset
+    let min_value = min(day_data, (d) => {
+      return min(d.summary, (d) => {
+        return d.value;
+      });
+    });
+
     let itemScale = scaleTime()
       .range([this.settings.label_padding * 2, this.settings.width])
       .domain([
@@ -1424,8 +1520,19 @@ export class CalendarHeatmap extends Component {
           this.settings.max_block_height
         );
       })
-      .attr('fill', () => {
-        return this.props.color;
+      .attr('fill', (d) => {
+        let finalColor = '#ff4500';
+        if (this.props.color === 'spectral') {
+          const spectralColor = this.generateSpectralInterpolate(
+            min_value,
+            max_value
+          );
+          finalColor = spectralColor(d.value);
+        } else {
+          const color = this.generateLinearColor(min_value, max_value);
+          finalColor = color(d.value) || finalColor;
+        }
+        return finalColor;
       })
       .style('opacity', 0)
       .on('mouseover', (_event, d) => {
