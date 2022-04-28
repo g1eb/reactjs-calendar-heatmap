@@ -9,8 +9,6 @@ import {
   timeHours,
   timeSecond,
   scaleLinear,
-  min,
-  max,
   easeLinear,
   scaleBand,
   scaleTime,
@@ -811,19 +809,11 @@ export class CalendarHeatmap extends Component {
       return start_of_month <= moment(d.date) && moment(d.date) < end_of_month;
     });
 
-    // Calculate max value of month in the dataset
-    let max_value = max(month_data, (d) => {
-      return max(d.summary, (d) => {
-        return d.value;
-      });
-    });
+    const monthSummaries = month_data.flatMap((e) => e.summary);
+    const monthValues = monthSummaries.map((e) => e.value);
 
-    // Calculate min value of month in the dataset
-    let min_value = min(month_data, (d) => {
-      return min(d.summary, (d) => {
-        return d.value;
-      });
-    });
+    // Calculate min and max value of month in the dataset
+    const [min_value, max_value] = extent(monthValues);
 
     // Define day labels and axis
     let day_labels = timeDays(moment().startOf('week'), moment().endOf('week'));
@@ -1153,19 +1143,11 @@ export class CalendarHeatmap extends Component {
       return start_of_week <= moment(d.date) && moment(d.date) < end_of_week;
     });
 
-    // Calculate max value of week in the dataset
-    let max_value = max(week_data, (d) => {
-      return max(d.summary, (d) => {
-        return d.value;
-      });
-    });
+    const weekSummaries = week_data.flatMap((e) => e.summary);
+    const weekValues = weekSummaries.map((e) => e.value);
 
-    // Calculate min value of week in the dataset
-    let min_value = min(week_data, (d) => {
-      return min(d.summary, (d) => {
-        return d.value;
-      });
-    });
+    // Calculate min and max value of week in the dataset
+    const [min_value, max_value] = extent(weekValues);
 
     // Define day labels and axis
     let day_labels = timeDays(moment().startOf('week'), moment().endOf('week'));
@@ -1471,19 +1453,11 @@ export class CalendarHeatmap extends Component {
       return start_of_day <= moment(d.date) && moment(d.date) < end_of_day;
     });
 
-    // Calculate max value of day in the dataset
-    let max_value = max(day_data, (d) => {
-      return max(d.summary, (d) => {
-        return d.value;
-      });
-    });
+    const daySummaries = day_data.flatMap((e) => e.summary);
+    const dayValues = daySummaries.map((e) => e.value);
 
-    // Calculate min value of day in the dataset
-    let min_value = min(day_data, (d) => {
-      return min(d.summary, (d) => {
-        return d.value;
-      });
-    });
+    // Calculate min and max value of day in the dataset
+    const [min_value, max_value] = extent(dayValues);
 
     let itemScale = scaleTime()
       .range([this.settings.label_padding * 2, this.settings.width])
