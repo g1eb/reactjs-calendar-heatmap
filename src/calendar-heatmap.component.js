@@ -1,6 +1,7 @@
 import { Component, createRef } from 'react';
 import moment from 'moment';
 import {
+  extent,
   select,
   timeYears,
   timeMonths,
@@ -230,13 +231,8 @@ export class CalendarHeatmap extends Component {
       };
     });
 
-    // Calculate max value of all the years in the dataset
-    let max_value = max(year_data, (d) => {
-      return d.total;
-    });
-
-    // Calculate min value of all the years in the dataset
-    let min_value = min(year_data, (d) => {
+    // Calculate min and max value of all the years in the dataset
+    let [min_value, max_value] = extent(year_data, (d) => {
       return d.total;
     });
 
@@ -265,7 +261,7 @@ export class CalendarHeatmap extends Component {
       .attr('width', () => {
         return (
           (this.settings.width - this.settings.label_padding) /
-          year_labels.length -
+            year_labels.length -
           this.settings.gutter * 5
         );
       })
@@ -447,10 +443,8 @@ export class CalendarHeatmap extends Component {
       return start_of_year <= moment(d.date) && moment(d.date) < end_of_year;
     });
 
-    // Calculate max value of the year data
-    let max_value = max(year_data, (d) => d.total);
-    // Calculate min value of the year data
-    let min_value = min(year_data, (d) => d.total);
+    // Calculate min and max value of the year data
+    let [min_value, max_value] = extent(year_data, (d) => d.total);
 
     let calcItemX = (d) => {
       let date = moment(d.date);
@@ -468,7 +462,7 @@ export class CalendarHeatmap extends Component {
       return (
         this.settings.label_padding +
         moment(d.date).weekday() *
-        (this.settings.item_size + this.settings.gutter)
+          (this.settings.item_size + this.settings.gutter)
       );
     };
 
@@ -874,7 +868,7 @@ export class CalendarHeatmap extends Component {
       .attr('width', () => {
         return (
           (this.settings.width - this.settings.label_padding) /
-          week_labels.length -
+            week_labels.length -
           this.settings.gutter * 5
         );
       })
@@ -1209,7 +1203,7 @@ export class CalendarHeatmap extends Component {
       .attr('width', () => {
         return (
           (this.settings.width - this.settings.label_padding) /
-          week_labels.length -
+            week_labels.length -
           this.settings.gutter * 5
         );
       })
