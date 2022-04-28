@@ -18,7 +18,7 @@
     "refresh": "rm -rf dist storybook-static",
     "build:umd": "webpack",
     "build:esm": "rollup -c",
-    "build:storybook": "build-storybook -o docs",
+    "build:storybook": "build-storybook -o docs && cp .nojekyll docs",
     "build": "yarn build:umd && yarn build:esm && yarn build:storybook",
     "watch": "webpack --watch",
     "start": "start-storybook -p 6006"
