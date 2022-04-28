@@ -14,9 +14,8 @@ import {
   easeLinear,
   scaleBand,
   scaleTime,
-  interpolateSpectral,
-  scaleSequential,
 } from 'd3';
+import { generateLinearColor, generateSpectralInterpolate } from './utils';
 import './calendar-heatmap.css';
 
 export class CalendarHeatmap extends Component {
@@ -162,20 +161,6 @@ export class CalendarHeatmap extends Component {
     }
   }
 
-  // Create spectral color generator function
-  generateSpectralInterpolate(min_value, max_value) {
-    return scaleSequential()
-      .domain([min_value, max_value])
-      .interpolator(interpolateSpectral);
-  }
-
-  // Create linear color generator function
-  generateLinearColor(min_value, max_value) {
-    return scaleLinear()
-      .range(['#ffffff', this.props.color])
-      .domain([min_value, max_value]);
-  }
-
   /**
    * Draw global overview (multiple years)
    */
@@ -280,13 +265,17 @@ export class CalendarHeatmap extends Component {
       .attr('fill', (d) => {
         let finalColor = '#ff4500';
         if (this.props.color === 'spectral') {
-          const spectralColor = this.generateSpectralInterpolate(
+          const spectralColor = generateSpectralInterpolate(
             min_value,
             max_value
           );
           finalColor = spectralColor(d.total);
         } else {
-          const color = this.generateLinearColor(min_value, max_value);
+          const color = generateLinearColor(
+            min_value,
+            max_value,
+            this.props.color
+          );
           finalColor = color(d.total) || finalColor;
         }
         return finalColor;
@@ -506,13 +495,17 @@ export class CalendarHeatmap extends Component {
       .attr('fill', (d) => {
         let finalColor = '#ff4500';
         if (this.props.color === 'spectral') {
-          const spectralColor = this.generateSpectralInterpolate(
+          const spectralColor = generateSpectralInterpolate(
             min_value,
             max_value
           );
           finalColor = spectralColor(d.total);
         } else {
-          const color = this.generateLinearColor(min_value, max_value);
+          const color = generateLinearColor(
+            min_value,
+            max_value,
+            this.props.color
+          );
           finalColor = color(d.total) || finalColor;
         }
         return d.total > 0 ? finalColor : 'transparent';
@@ -950,13 +943,17 @@ export class CalendarHeatmap extends Component {
       .attr('fill', (d) => {
         let finalColor = '#ff4500';
         if (this.props.color === 'spectral') {
-          const spectralColor = this.generateSpectralInterpolate(
+          const spectralColor = generateSpectralInterpolate(
             min_value,
             max_value
           );
           finalColor = spectralColor(d.value);
         } else {
-          const color = this.generateLinearColor(min_value, max_value);
+          const color = generateLinearColor(
+            min_value,
+            max_value,
+            this.props.color
+          );
           finalColor = color(d.value) || finalColor;
         }
         return finalColor;
@@ -1285,13 +1282,17 @@ export class CalendarHeatmap extends Component {
       .attr('fill', (d) => {
         let finalColor = '#ff4500';
         if (this.props.color === 'spectral') {
-          const spectralColor = this.generateSpectralInterpolate(
+          const spectralColor = generateSpectralInterpolate(
             min_value,
             max_value
           );
           finalColor = spectralColor(d.value);
         } else {
-          const color = this.generateLinearColor(min_value, max_value);
+          const color = generateLinearColor(
+            min_value,
+            max_value,
+            this.props.color
+          );
           finalColor = color(d.value) || finalColor;
         }
         return finalColor;
@@ -1517,13 +1518,17 @@ export class CalendarHeatmap extends Component {
       .attr('fill', (d) => {
         let finalColor = '#ff4500';
         if (this.props.color === 'spectral') {
-          const spectralColor = this.generateSpectralInterpolate(
+          const spectralColor = generateSpectralInterpolate(
             min_value,
             max_value
           );
           finalColor = spectralColor(d.value);
         } else {
-          const color = this.generateLinearColor(min_value, max_value);
+          const color = generateLinearColor(
+            min_value,
+            max_value,
+            this.props.color
+          );
           finalColor = color(d.value) || finalColor;
         }
         return finalColor;
