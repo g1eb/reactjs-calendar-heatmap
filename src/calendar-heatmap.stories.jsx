@@ -46,6 +46,14 @@ export default {
     onTooltip: (d) => {
       console.log(d);
     },
+  },
+  argTypes: {
+    color: {
+      control: "text"
+    },
+    overview: {
+      control: "text"
+    }
   }
 };
 
@@ -56,4 +64,17 @@ export const DefaultColor = Template.bind({});
 export const Spectral = Template.bind({});
 Spectral.args = {
   color: 'spectral',
+};
+
+
+export const MonthOverview = Template.bind({});
+MonthOverview.args = {
+  color: 'spectral',
+  overview: "month"
+};
+
+export const DayOverview = Template.bind({});
+DayOverview.args = {
+  color: 'spectral',
+  overview: "day"
 };
