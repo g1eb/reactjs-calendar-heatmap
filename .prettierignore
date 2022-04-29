@@ -1,2 +1,17 @@
 node_modules
 dist
+docs
+
+# Unexpected file extensions
+*.lock
+*.png
+*.jpg
+*.jpeg
+*.log
+*.md
+
+# Unexpected files
+.prettierignore
+.gitignore
+.DS_STORE
+.cache
