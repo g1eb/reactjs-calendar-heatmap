@@ -74,12 +74,12 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
     </td>
     <td>
       <pre>
-        interface CalendarHeatmapDatum {
+        {
           date: string;
           total: number;
           details: { name: string; date: string; value: number }[];
           summary?: { name: string; value: number }[];
-        }
+        }[]
       </pre>
     </td>
     <td>
@@ -117,12 +117,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
     </td>
     <td>
       <pre>
-        type CalendarHeatmapOverview = 
-            |'global'
-            | 'year'
-            | 'month'
-            | 'week'
-            | 'day'
+        'global' | 'year' | 'month' | 'week' | 'day'
       </pre>
     </td>
     <td>
