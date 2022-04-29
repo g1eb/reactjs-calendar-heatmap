@@ -63,7 +63,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 <table>
   <tr>
     <th>Property</th>
-    <th>Interface</th>
+    <th>Type</th>
     <th>Usage</th>
     <th>Default</th>
     <th>Required</th>
@@ -73,6 +73,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
       data
     </td>
     <td>
+    <!-- pre tag has been used to preserve code formatting -->
       <pre>
         {
           date: string;
@@ -97,9 +98,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
       color
     </td>
     <td>
-      <pre>
         string
-      </pre>
     </td>
     <td>
       Theme color in hex code, color names or enum values (choices are: 'spectral') 
@@ -116,9 +115,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
       overview
     </td>
     <td>
-      <pre>
-        'global' | 'year' | 'month' | 'week' | 'day'
-      </pre>
+      'global' | 'year' | 'month' | 'week' | 'day'
     </td>
     <td>
       Initial overview type (choices are: global, year, month, week, day)
@@ -135,9 +132,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
       handler
     </td>
     <td>
-      <pre>
         (d: data) => void;
-      </pre>
     </td>
     <td>
       Handler function is fired on click of a time entry in daily overview
@@ -154,9 +149,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
       onTooltip
     </td>
     <td>
-      <pre>
         (datum: { value: unknown }) => void;
-      </pre>
     </td>
     <td>
       onTooltip function is fired on "mouseover" over a visual element
@@ -173,9 +166,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
       onHideTooltip
     </td>
     <td>
-      <pre>
         () => void;
-      </pre>
     </td>
     <td>
       onHideTooltip function is fired on "mouseout" over a visual element
