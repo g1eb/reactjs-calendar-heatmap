@@ -67,7 +67,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 | overview      | Initial overview type (choices are: global, year, month, week, day)            |  year   |    no    |
 | handler       | Handler function is fired on click of a time entry in daily overview           |  none   |    no    |
 | onTooltip     | onTooltip function is fired on "mouseover" over a visual element                  |  none   |    no    |
-| onHideTooltip | onHideTooltip function is fired on clicking over a visual element              |  none   |    no    |
+| onHideTooltip | onHideTooltip function is fired on "mouseout" over a visual element              |  none   |    no    |
 
 ### Example data
 
