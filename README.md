@@ -53,18 +53,21 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
   color={color}
   overview={overview}
   handler={print}
+  onTooltip={show}
+  onHideTooltip={hide}
 />
 ```
 
 ### Properties
 
-| Property | Usage                                                                | Default | Required |
-| :------- | :------------------------------------------------------------------- | :-----: | :------: |
-| data     | Time series data from max a year back                                |  none   |   yes    |
-| color    | Theme hex color                                                      | #45ff00 |    no    |
-| overview | Initial overview type (choices are: year, month, day)                |  year   |    no    |
-| handler  | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
-
+| Property      | Usage                                                                          | Default | Required |
+|:--------------|:-------------------------------------------------------------------------------|:-------:|:--------:|
+| data          | Time series data from max a year back                                          |  none   |   yes    |
+| color         | Theme color in hex code, color names or enum values (choices are: 'spectral' ) | #ff4500 |    no    |
+| overview      | Initial overview type (choices are: global, year, month, week, day)            |  year   |    no    |
+| handler       | Handler function is fired on click of a time entry in daily overview           |  none   |    no    |
+| onTooltip     | onTooltip function is fired on hovering over a visual element                  |  none   |    no    |
+| onHideTooltip | onHideTooltip function is fired on clicking over a visual element              |  none   |    no    |
 ### Example data
 
 Time series data where each day has a total time tracked (in seconds).  
