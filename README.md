@@ -49,10 +49,10 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 
 ```jsx
 <CalendarHeatmap
-  data="{data}"
-  color="{color}"
-  overview="{overview}"
-  handler="{print}"
+  data={data}
+  color={color}
+  overview={overview}
+  handler={print}
 />
 ```
 
