@@ -95,40 +95,42 @@ export class CalendarHeatmap extends Component {
       .attr('width', this.settings.width)
       .attr('height', this.settings.height);
 
-    if (!!this.props.data && !!this.props.data[0].summary) {
+    if (
+      Array.isArray(this.props.data) &&
+      this.props.data[0].summary !== null &&
+      this.props.data[0].summary !== undefined
+    ) {
       this.drawChart();
     }
   }
 
+  // Calculate daily summary if that was not provided
   parseData() {
-    if (!this.props.data) {
-      return;
-    }
-
-    // Get daily summary if that was not provided
-    if (!this.props.data[0].summary) {
-      this.props.data.map((d) => {
-        let summary = d.details.reduce((uniques, project) => {
-          if (!uniques[project.name]) {
-            uniques[project.name] = {
-              value: project.value,
+    if (Array.isArray(this.props.data)) {
+      if (!this.props.data[0].summary) {
+        this.props.data.map((d) => {
+          let summary = d.details.reduce((uniques, project) => {
+            if (!uniques[project.name]) {
+              uniques[project.name] = {
+                value: project.value,
+              };
+            } else {
+              uniques[project.name].value += project.value;
+            }
+            return uniques;
+          }, {});
+          let unsorted_summary = Object.keys(summary).map((key) => {
+            return {
+              name: key,
+              value: summary[key].value,
             };
-          } else {
-            uniques[project.name].value += project.value;
-          }
-          return uniques;
-        }, {});
-        let unsorted_summary = Object.keys(summary).map((key) => {
-          return {
-            name: key,
-            value: summary[key].value,
-          };
+          });
+          d.summary = unsorted_summary.sort((a, b) => {
+            return b.value - a.value;
+          });
+          return d;
         });
-        d.summary = unsorted_summary.sort((a, b) => {
-          return b.value - a.value;
-        });
-        return d;
-      });
+      }
     }
   }
 
