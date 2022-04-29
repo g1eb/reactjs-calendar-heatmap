@@ -225,7 +225,7 @@ export class CalendarHeatmap extends Component {
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      min_value,
+      -0.15 * max_value,
       max_value,
       this.props.color
     );
@@ -429,7 +429,7 @@ export class CalendarHeatmap extends Component {
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      min_value,
+      -0.15 * max_value,
       max_value,
       this.props.color
     );
@@ -802,7 +802,7 @@ export class CalendarHeatmap extends Component {
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      min_value,
+      -0.15 * max_value,
       max_value,
       this.props.color
     );
@@ -1124,7 +1124,7 @@ export class CalendarHeatmap extends Component {
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      min_value,
+      -0.15 * max_value,
       max_value,
       this.props.color
     );
@@ -1422,7 +1422,7 @@ export class CalendarHeatmap extends Component {
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      min_value,
+      -0.15 * max_value,
       max_value,
       this.props.color
     );
