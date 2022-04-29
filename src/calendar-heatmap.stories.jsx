@@ -27,19 +27,18 @@ function generateStorySampleData(yearsAgo) {
             Math.round(Math.random() * (index / 365)),
       };
     });
+
     const total = details.reduce((acc, e) => {
       return acc + e.value;
     }, 0);
 
     return {
-      name: 'Project ' + Math.ceil(Math.random() * 10),
-      date: generateDate(dateElement).toISOString(),
-      value:
-        3600 * ((arr.length - i) / 5) +
-        Math.floor(Math.random() * 3600) *
-          Math.round(Math.random() * (index / 365)),
+      date,
+      details,
+      total,
     };
   });
+
   return data;
 }
 
