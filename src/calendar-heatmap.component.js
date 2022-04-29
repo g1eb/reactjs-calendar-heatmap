@@ -13,7 +13,11 @@ import {
   scaleBand,
   scaleTime,
 } from 'd3';
-import { generateLinearColor, generateSpectralInterpolate } from './utils';
+import {
+  generateLinearColor,
+  generateSpectralInterpolate,
+  createColorGenerator,
+} from './utils';
 import './calendar-heatmap.css';
 
 export class CalendarHeatmap extends Component {
@@ -219,6 +223,13 @@ export class CalendarHeatmap extends Component {
       return d.total;
     });
 
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      min_value,
+      max_value,
+      this.props.color
+    );
+
     // Define year labels and axis
     let year_labels = timeYears(start, end).map((d) => {
       return moment(d);
@@ -260,24 +271,7 @@ export class CalendarHeatmap extends Component {
           ')'
         );
       })
-      .attr('fill', (d) => {
-        let finalColor = '#ff4500';
-        if (this.props.color === 'spectral') {
-          const spectralColor = generateSpectralInterpolate(
-            min_value,
-            max_value
-          );
-          finalColor = spectralColor(d.total);
-        } else {
-          const color = generateLinearColor(
-            min_value,
-            max_value,
-            this.props.color
-          );
-          finalColor = color(d.total) || finalColor;
-        }
-        return finalColor;
-      })
+      .attr('fill', (d) => colorGenerator(d.total))
       .on('click', (_event, datum) => {
         if (this.in_transition) {
           return;
@@ -433,6 +427,13 @@ export class CalendarHeatmap extends Component {
     // Calculate min and max value of the year data
     let [min_value, max_value] = extent(year_data, (d) => d.total);
 
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      min_value,
+      max_value,
+      this.props.color
+    );
+
     let calcItemX = (d) => {
       let date = moment(d.date);
       let dayIndex = Math.round(
@@ -491,21 +492,7 @@ export class CalendarHeatmap extends Component {
         return calcItemSize(d);
       })
       .attr('fill', (d) => {
-        let finalColor = '#ff4500';
-        if (this.props.color === 'spectral') {
-          const spectralColor = generateSpectralInterpolate(
-            min_value,
-            max_value
-          );
-          finalColor = spectralColor(d.total);
-        } else {
-          const color = generateLinearColor(
-            min_value,
-            max_value,
-            this.props.color
-          );
-          finalColor = color(d.total) || finalColor;
-        }
+        const finalColor = colorGenerator(d.total);
         return d.total > 0 ? finalColor : 'transparent';
       })
       .on('click', (event, d) => {
@@ -813,6 +800,13 @@ export class CalendarHeatmap extends Component {
     // Calculate min and max value of month in the dataset
     const [min_value, max_value] = extent(monthSummaries, (d) => d.value);
 
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      min_value,
+      max_value,
+      this.props.color
+    );
+
     // Define day labels and axis
     let day_labels = timeDays(moment().startOf('week'), moment().endOf('week'));
     let dayScale = scaleBand()
@@ -928,24 +922,7 @@ export class CalendarHeatmap extends Component {
       .attr('height', () => {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
-      .attr('fill', (d) => {
-        let finalColor = '#ff4500';
-        if (this.props.color === 'spectral') {
-          const spectralColor = generateSpectralInterpolate(
-            min_value,
-            max_value
-          );
-          finalColor = spectralColor(d.value);
-        } else {
-          const color = generateLinearColor(
-            min_value,
-            max_value,
-            this.props.color
-          );
-          finalColor = color(d.value) || finalColor;
-        }
-        return finalColor;
-      })
+      .attr('fill', (d) => colorGenerator(d.value))
       .style('opacity', 0)
       .on('mouseover', (event, d) => {
         if (this.in_transition) {
@@ -1145,6 +1122,13 @@ export class CalendarHeatmap extends Component {
     // Calculate min and max value of week in the dataset
     const [min_value, max_value] = extent(weekSummaries, (d) => d.value);
 
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      min_value,
+      max_value,
+      this.props.color
+    );
+
     // Define day labels and axis
     let day_labels = timeDays(moment().startOf('week'), moment().endOf('week'));
     let dayScale = scaleBand()
@@ -1257,24 +1241,7 @@ export class CalendarHeatmap extends Component {
       .attr('height', () => {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
-      .attr('fill', (d) => {
-        let finalColor = '#ff4500';
-        if (this.props.color === 'spectral') {
-          const spectralColor = generateSpectralInterpolate(
-            min_value,
-            max_value
-          );
-          finalColor = spectralColor(d.value);
-        } else {
-          const color = generateLinearColor(
-            min_value,
-            max_value,
-            this.props.color
-          );
-          finalColor = color(d.value) || finalColor;
-        }
-        return finalColor;
-      })
+      .attr('fill', (d) => colorGenerator(d.value))
       .style('opacity', 0)
       .on('mouseover', (_event, d) => {
         if (this.in_transition) {
@@ -1453,6 +1420,13 @@ export class CalendarHeatmap extends Component {
     // Calculate min and max value of day in the dataset
     const [min_value, max_value] = extent(daySummaries, (d) => d.value);
 
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      min_value,
+      max_value,
+      this.props.color
+    );
+
     let itemScale = scaleTime()
       .range([this.settings.label_padding * 2, this.settings.width])
       .domain([
@@ -1483,24 +1457,7 @@ export class CalendarHeatmap extends Component {
           this.settings.max_block_height
         );
       })
-      .attr('fill', (d) => {
-        let finalColor = '#ff4500';
-        if (this.props.color === 'spectral') {
-          const spectralColor = generateSpectralInterpolate(
-            min_value,
-            max_value
-          );
-          finalColor = spectralColor(d.value);
-        } else {
-          const color = generateLinearColor(
-            min_value,
-            max_value,
-            this.props.color
-          );
-          finalColor = color(d.value) || finalColor;
-        }
-        return finalColor;
-      })
+      .attr('fill', (d) => colorGenerator(d.value))
       .style('opacity', 0)
       .on('mouseover', (_event, d) => {
         if (this.in_transition) {
