@@ -808,12 +808,10 @@ export class CalendarHeatmap extends Component {
     let month_data = this.props.data.filter((d) => {
       return start_of_month <= moment(d.date) && moment(d.date) < end_of_month;
     });
-
     const monthSummaries = month_data.flatMap((e) => e.summary);
-    const monthValues = monthSummaries.map((e) => e.value);
 
     // Calculate min and max value of month in the dataset
-    const [min_value, max_value] = extent(monthValues);
+    const [min_value, max_value] = extent(monthSummaries, (d) => d.value);
 
     // Define day labels and axis
     let day_labels = timeDays(moment().startOf('week'), moment().endOf('week'));
@@ -1142,12 +1140,10 @@ export class CalendarHeatmap extends Component {
     let week_data = this.props.data.filter((d) => {
       return start_of_week <= moment(d.date) && moment(d.date) < end_of_week;
     });
-
     const weekSummaries = week_data.flatMap((e) => e.summary);
-    const weekValues = weekSummaries.map((e) => e.value);
 
     // Calculate min and max value of week in the dataset
-    const [min_value, max_value] = extent(weekValues);
+    const [min_value, max_value] = extent(weekSummaries, (d) => d.value);
 
     // Define day labels and axis
     let day_labels = timeDays(moment().startOf('week'), moment().endOf('week'));
@@ -1452,12 +1448,10 @@ export class CalendarHeatmap extends Component {
     let day_data = this.props.data.filter((d) => {
       return start_of_day <= moment(d.date) && moment(d.date) < end_of_day;
     });
-
     const daySummaries = day_data.flatMap((e) => e.summary);
-    const dayValues = daySummaries.map((e) => e.value);
 
     // Calculate min and max value of day in the dataset
-    const [min_value, max_value] = extent(dayValues);
+    const [min_value, max_value] = extent(daySummaries, (d) => d.value);
 
     let itemScale = scaleTime()
       .range([this.settings.label_padding * 2, this.settings.width])
