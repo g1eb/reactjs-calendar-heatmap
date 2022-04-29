@@ -61,7 +61,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 | Property | Usage                                                                | Default | Required |
 | :------- | :------------------------------------------------------------------- | :-----: | :------: |
 | data     | Time series data from max a year back                                |  none   |   yes    |
-| color    | Theme hex color                                                      | #45ff00 |    no    |
+| color    | Theme hex color                                                      | #ff4500 |    no    |
 | overview | Initial overview type (choices are: year, month, day)                |  year   |    no    |
 | handler  | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
 
