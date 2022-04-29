@@ -21,7 +21,8 @@
     "build:storybook": "build-storybook -o docs && cp .nojekyll docs",
     "build": "yarn build:umd && yarn build:esm && yarn build:storybook",
     "watch": "webpack --watch",
-    "start": "start-storybook -p 6006"
+    "start": "start-storybook -p 6006",
+    "pretty": "prettier --write ."
   },
   "exports": {
     "import": "./dist/esm/index.js",
@@ -51,6 +52,7 @@
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.7.1",
     "postcss": "^8.4.12",
+    "prettier": "^2.6.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "rollup": "^2.70.2",
