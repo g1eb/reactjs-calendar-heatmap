@@ -50,7 +50,6 @@ export class CalendarHeatmap extends Component {
     this.createElements();
     this.parseData();
     this.drawChart();
-
     window.addEventListener('resize', this.calcDimensions);
   }
 
@@ -58,6 +57,7 @@ export class CalendarHeatmap extends Component {
     this.parseData();
     this.drawChart();
   }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.calcDimensions);
   }
