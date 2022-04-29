@@ -13,11 +13,7 @@ import {
   scaleBand,
   scaleTime,
 } from 'd3';
-import {
-  generateLinearColor,
-  generateSpectralInterpolate,
-  createColorGenerator,
-} from './utils';
+import { createColorGenerator } from './utils';
 import './calendar-heatmap.css';
 
 export class CalendarHeatmap extends Component {
