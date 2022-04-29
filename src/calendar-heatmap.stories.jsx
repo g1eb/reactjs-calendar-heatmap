@@ -1,12 +1,6 @@
 import { CalendarHeatmap } from './calendar-heatmap.component';
 import { timeDays, range } from 'd3';
 
-export default {
-  title: 'Calendar Heat Map',
-  component: CalendarHeatmap,
-};
-
-const Template = (args) => <CalendarHeatmap {...args} />;
 
 const generateDate = (dateElement) => {
   const projectDate = new Date(dateElement.getTime());
@@ -44,18 +38,24 @@ const data = timeDays(timeAgo, now).map((dateElement, index) => {
   };
 });
 
-export const CalendarHeatmapWithDefaultColor = Template.bind({});
-
-CalendarHeatmapWithDefaultColor.args = {
-  data,
-  onTooltip: (d) => {
-    console.log(d);
-  },
+export default {
+  title: 'Calendar Heat Map',
+  component: CalendarHeatmap,
+  args: {
+    data,
+    onTooltip: (d) => {
+      console.log(d);
+    },
+  }
 };
 
-export const CalendarHeatmapWithSpectralColor = Template.bind({});
+const Template = (args) => <CalendarHeatmap {...args} />;
 
-CalendarHeatmapWithSpectralColor.args = {
-  ...CalendarHeatmapWithDefaultColor.args,
+
+
+export const DefaultColor = Template.bind({});
+
+export const Spectral = Template.bind({});
+Spectral.args = {
   color: 'spectral',
 };
