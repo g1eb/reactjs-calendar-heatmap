@@ -70,10 +70,22 @@ Spectral.args = {
   color: 'spectral',
 };
 
+export const GlobalOverview = Template.bind({});
+GlobalOverview.args = {
+  color: 'spectral',
+  overview: 'global',
+};
+
 export const MonthOverview = Template.bind({});
 MonthOverview.args = {
   color: 'spectral',
   overview: 'month',
+};
+
+export const WeekOverview = Template.bind({});
+WeekOverview.args = {
+  color: 'spectral',
+  overview: 'week',
 };
 
 export const DayOverview = Template.bind({});
