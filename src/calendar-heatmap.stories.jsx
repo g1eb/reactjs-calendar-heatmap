@@ -1,6 +1,5 @@
 import { timeDays, range } from 'd3';
 import { CalendarHeatmap } from './calendar-heatmap.component';
-import { generateStorySampleData } from './utils';
 
 const generateDate = (dateElement) => {
   const projectDate = new Date(dateElement.getTime());
@@ -9,7 +8,7 @@ const generateDate = (dateElement) => {
   return projectDate;
 };
 
-export function generateStorySampleData(yearsAgo) {
+function generateStorySampleData(yearsAgo) {
   const now = new Date();
   const timeAgo = new Date();
   timeAgo.setFullYear(timeAgo.getFullYear() - yearsAgo); // 'yearsAgo' years ago from now.
