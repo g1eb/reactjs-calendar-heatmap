@@ -72,7 +72,7 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 ### Props interfaces
 
 #### 1. data
-```
+```ts
 interface CalendarHeatmapDatum {
   date: string;
   total: number;
@@ -82,27 +82,27 @@ interface CalendarHeatmapDatum {
 ```
 
 #### 2. color
-```
+```ts
 string
 ```
 
 #### 3. overview
-```
+```ts
 type CalendarHeatmapOverview = 'global' | 'year' | 'month' | 'week' | 'day'
 ```
 
 #### 4. handler
-```
+```ts
 (d: data) => void;
 ```
 
 #### 5. onToolTip
-```
+```ts
 (datum: { value: unknown }) => void;
 ```
 
 #### 6. onHideToolTip
-```
+```ts
 () => void;
 ```
 ### Example data
