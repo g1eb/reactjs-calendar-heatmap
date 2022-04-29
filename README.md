@@ -60,57 +60,146 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 
 ### Properties
 
-| Property      | Usage                                                                          | Default | Required |
-|:--------------|:-------------------------------------------------------------------------------|:-------:|:--------:|
-| data          | Time series data from max a year back                                          |  none   |   yes    |
-| color         | Theme color in hex code, color names or enum values (choices are: 'spectral' ) | #ff4500 |    no    |
-| overview      | Initial overview type (choices are: global, year, month, week, day)            |  year   |    no    |
-| handler       | Handler function is fired on click of a time entry in daily overview           |  none   |    no    |
-| onTooltip     | onTooltip function is fired on "mouseover" over a visual element               |  none   |    no    |
-| onHideTooltip | onHideTooltip function is fired on "mouseout" over a visual element            |  none   |    no    |
+<table>
+  <tr>
+    <th>Property</th>
+    <th>Interface</th>
+    <th>Usage</th>
+    <th>Default</th>
+    <th>Required</th>
+  </tr>
+  <tr> 
+    <td>
+      data
+    </td>
+    <td>
+      <pre>
+        interface CalendarHeatmapDatum {
+          date: string;
+          total: number;
+          details: { name: string; date: string; value: number }[];
+          summary?: { name: string; value: number }[];
+        }
+      </pre>
+    </td>
+    <td>
+      Time series data from max a year back  
+    </td>
+    <td>
+      none
+    </td>
+    <td>
+      yes
+    </td>
+  </tr>
+  <tr> 
+    <td>
+      color
+    </td>
+    <td>
+      <pre>
+        string
+      </pre>
+    </td>
+    <td>
+      Theme color in hex code, color names or enum values (choices are: 'spectral') 
+    </td>
+    <td>
+      #ff4500
+    </td>
+    <td>
+      no
+    </td>
+  </tr>
+  <tr> 
+    <td>
+      overview
+    </td>
+    <td>
+      <pre>
+        type CalendarHeatmapOverview = 
+            |'global'
+            | 'year'
+            | 'month'
+            | 'week'
+            | 'day'
+      </pre>
+    </td>
+    <td>
+      Initial overview type (choices are: global, year, month, week, day)
+    </td>
+    <td>
+      year
+    </td>
+    <td>
+      no
+    </td>
+  </tr>
+  <tr> 
+    <td>
+      handler
+    </td>
+    <td>
+      <pre>
+        (d: data) => void;
+      </pre>
+    </td>
+    <td>
+      Handler function is fired on click of a time entry in daily overview
+    </td>
+    <td>
+      none
+    </td>
+    <td>
+      no
+    </td>
+  </tr>
+  <tr> 
+    <td>
+      onTooltip
+    </td>
+    <td>
+      <pre>
+        (datum: { value: unknown }) => void;
+      </pre>
+    </td>
+    <td>
+      onTooltip function is fired on "mouseover" over a visual element
+    </td>
+    <td>
+      none
+    </td>
+    <td>
+      no
+    </td>
+  </tr>
+  <tr> 
+    <td>
+      onHideTooltip
+    </td>
+    <td>
+      <pre>
+        () => void;
+      </pre>
+    </td>
+    <td>
+      onHideTooltip function is fired on "mouseout" over a visual element
+    </td>
+    <td>
+      none
+    </td>
+    <td>
+      no
+    </td>
+  </tr>
+</table>
 
-### Props interfaces
-
-#### 1. data
-```ts
-interface CalendarHeatmapDatum {
-  date: string;
-  total: number;
-  details: { name: string; date: string; value: number }[];
-  summary?: { name: string; value: number }[];
-}
-```
-
-#### 2. color
-```ts
-string
-```
-
-#### 3. overview
-```ts
-type CalendarHeatmapOverview = 'global' | 'year' | 'month' | 'week' | 'day'
-```
-
-#### 4. handler
-```ts
-(d: data) => void;
-```
-
-#### 5. onToolTip
-```ts
-(datum: { value: unknown }) => void;
-```
-
-#### 6. onHideToolTip
-```ts
-() => void;
-```
 ### Example data
 
 Time series data where each day has a total time tracked (in seconds).  
 Details, if provided, are shown in a tooltip on mouseover in different overviews.
 
-```
+```js
 var data = [{
   "date": "2016-01-01",
   "total": 17164,
@@ -138,7 +227,7 @@ In some cases details array could be large and in order to fit the data into the
 In terms of optimization, summary data can be computed server-side and passed in using the ``summary'' attribute.
 And in addition to the data structure described above this would result in a summary dictionary with distinct project names and total values of tracked time in seconds, e.g.:
 
-```
+```js
 var data = [{
   "date": "2016-01-01",
   "total": 17164,
