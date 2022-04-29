@@ -32,9 +32,12 @@ function generateStorySampleData(yearsAgo) {
     }, 0);
 
     return {
-      date,
-      details,
-      total,
+      name: 'Project ' + Math.ceil(Math.random() * 10),
+      date: generateDate(dateElement).toISOString(),
+      value:
+        3600 * ((arr.length - i) / 5) +
+        Math.floor(Math.random() * 3600) *
+          Math.round(Math.random() * (index / 365)),
     };
   });
   return data;
