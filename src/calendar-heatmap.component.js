@@ -1,6 +1,7 @@
 import { Component, createRef } from 'react';
 import moment from 'moment';
 import {
+  extent,
   select,
   timeYears,
   timeMonths,
@@ -8,11 +9,15 @@ import {
   timeHours,
   timeSecond,
   scaleLinear,
-  max,
   easeLinear,
   scaleBand,
   scaleTime,
 } from 'd3';
+import {
+  generateLinearColor,
+  generateSpectralInterpolate,
+  createColorGenerator,
+} from './utils';
 import './calendar-heatmap.css';
 
 export class CalendarHeatmap extends Component {
@@ -45,7 +50,6 @@ export class CalendarHeatmap extends Component {
     this.createElements();
     this.parseData();
     this.drawChart();
-
     window.addEventListener('resize', this.calcDimensions);
   }
 
@@ -53,6 +57,7 @@ export class CalendarHeatmap extends Component {
     this.parseData();
     this.drawChart();
   }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.calcDimensions);
   }
@@ -65,23 +70,6 @@ export class CalendarHeatmap extends Component {
     this.items = this.svg.append('g');
     this.labels = this.svg.append('g');
     this.buttons = this.svg.append('g');
-
-    // Add tooltip to the same element as main svg
-    this.tooltip = select('#calendar-heatmap')
-      .append('div')
-      .attr('class', 'heatmapTooltip')
-      .style('opacity', 0)
-      .style('pointer-events', 'none')
-      .style('position', 'absolute')
-      .style('z-index', 9999)
-      .style('width', '250px')
-      .style('max-width', '250px')
-      .style('overflow', 'hidden')
-      .style('padding', '15px')
-      .style('font-size', '12px')
-      .style('line-height', '14px')
-      .style('color', 'rgb(51, 51, 51)')
-      .style('background', 'rgba(255, 255, 255, 0.75)');
 
     this.calcDimensions();
   }
@@ -213,10 +201,17 @@ export class CalendarHeatmap extends Component {
       };
     });
 
-    // Calculate max value of all the years in the dataset
-    let max_value = max(year_data, (d) => {
+    // Calculate min and max value of all the years in the dataset
+    let [, max_value] = extent(year_data, (d) => {
       return d.total;
     });
+
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      -0.15 * max_value,
+      max_value,
+      this.props.color
+    );
 
     // Define year labels and axis
     let year_labels = timeYears(start, end).map((d) => {
@@ -259,12 +254,7 @@ export class CalendarHeatmap extends Component {
           ')'
         );
       })
-      .attr('fill', (d) => {
-        let color = scaleLinear()
-          .range(['#ffffff', this.props.color])
-          .domain([-0.15 * max_value, max_value]);
-        return color(d.total) || '#ff4500';
-      })
+      .attr('fill', (d) => colorGenerator(d.total))
       .on('click', (_event, datum) => {
         if (this.in_transition) {
           return;
@@ -417,12 +407,15 @@ export class CalendarHeatmap extends Component {
       return start_of_year <= moment(d.date) && moment(d.date) < end_of_year;
     });
 
-    // Calculate max value of the year data
-    let max_value = max(year_data, (d) => d.total);
+    // Calculate min and max value of the year data
+    let [, max_value] = extent(year_data, (d) => d.total);
 
-    let color = scaleLinear()
-      .range(['#ffffff', this.props.color])
-      .domain([-0.15 * max_value, max_value]);
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      -0.15 * max_value,
+      max_value,
+      this.props.color
+    );
 
     let calcItemX = (d) => {
       let date = moment(d.date);
@@ -482,7 +475,8 @@ export class CalendarHeatmap extends Component {
         return calcItemSize(d);
       })
       .attr('fill', (d) => {
-        return d.total > 0 ? color(d.total) : 'transparent';
+        const finalColor = colorGenerator(d.total);
+        return d.total > 0 ? finalColor : 'transparent';
       })
       .on('click', (event, d) => {
         if (this.in_transition) {
@@ -784,11 +778,17 @@ export class CalendarHeatmap extends Component {
     let month_data = this.props.data.filter((d) => {
       return start_of_month <= moment(d.date) && moment(d.date) < end_of_month;
     });
-    let max_value = max(month_data, (d) => {
-      return max(d.summary, (d) => {
-        return d.value;
-      });
-    });
+    const monthSummaries = month_data.flatMap((e) => e.summary);
+
+    // Calculate min and max value of month in the dataset
+    const [, max_value] = extent(monthSummaries, (d) => d.value);
+
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      -0.15 * max_value,
+      max_value,
+      this.props.color
+    );
 
     // Define day labels and axis
     let day_labels = timeDays(moment().startOf('week'), moment().endOf('week'));
@@ -905,12 +905,7 @@ export class CalendarHeatmap extends Component {
       .attr('height', () => {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
-      .attr('fill', (d) => {
-        let color = scaleLinear()
-          .range(['#ffffff', this.props.color])
-          .domain([-0.15 * max_value, max_value]);
-        return color(d.value) || '#ff4500';
-      })
+      .attr('fill', (d) => colorGenerator(d.value))
       .style('opacity', 0)
       .on('mouseover', (event, d) => {
         if (this.in_transition) {
@@ -1105,11 +1100,17 @@ export class CalendarHeatmap extends Component {
     let week_data = this.props.data.filter((d) => {
       return start_of_week <= moment(d.date) && moment(d.date) < end_of_week;
     });
-    let max_value = max(week_data, (d) => {
-      return max(d.summary, (d) => {
-        return d.value;
-      });
-    });
+    const weekSummaries = week_data.flatMap((e) => e.summary);
+
+    // Calculate min and max value of week in the dataset
+    const [, max_value] = extent(weekSummaries, (d) => d.value);
+
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      -0.15 * max_value,
+      max_value,
+      this.props.color
+    );
 
     // Define day labels and axis
     let day_labels = timeDays(moment().startOf('week'), moment().endOf('week'));
@@ -1223,12 +1224,7 @@ export class CalendarHeatmap extends Component {
       .attr('height', () => {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
-      .attr('fill', (d) => {
-        let color = scaleLinear()
-          .range(['#ffffff', this.props.color])
-          .domain([-0.15 * max_value, max_value]);
-        return color(d.value) || '#ff4500';
-      })
+      .attr('fill', (d) => colorGenerator(d.value))
       .style('opacity', 0)
       .on('mouseover', (_event, d) => {
         if (this.in_transition) {
@@ -1394,6 +1390,26 @@ export class CalendarHeatmap extends Component {
       .rangeRound([this.settings.label_padding, this.settings.height])
       .domain(project_labels);
 
+    // Define beginning and end of the day
+    let start_of_day = moment(this.selected.date).startOf('day');
+    let end_of_day = moment(this.selected.date).endOf('day');
+
+    // Filter data down to the selected week
+    let day_data = this.props.data.filter((d) => {
+      return start_of_day <= moment(d.date) && moment(d.date) < end_of_day;
+    });
+    const daySummaries = day_data.flatMap((e) => e.summary);
+
+    // Calculate min and max value of day in the dataset
+    const [, max_value] = extent(daySummaries, (d) => d.value);
+
+    // Generates color generator function
+    const colorGenerator = createColorGenerator(
+      -0.15 * max_value,
+      max_value,
+      this.props.color
+    );
+
     let itemScale = scaleTime()
       .range([this.settings.label_padding * 2, this.settings.width])
       .domain([
@@ -1424,9 +1440,7 @@ export class CalendarHeatmap extends Component {
           this.settings.max_block_height
         );
       })
-      .attr('fill', () => {
-        return this.props.color;
-      })
+      .attr('fill', (d) => colorGenerator(d.value))
       .style('opacity', 0)
       .on('mouseover', (_event, d) => {
         if (this.in_transition) {
