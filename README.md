@@ -68,6 +68,43 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 | handler       | Handler function is fired on click of a time entry in daily overview           |  none   |    no    |
 | onTooltip     | onTooltip function is fired on hovering over a visual element                  |  none   |    no    |
 | onHideTooltip | onHideTooltip function is fired on clicking over a visual element              |  none   |    no    |
+
+### Props interfaces
+
+#### 1. data
+```
+interface CalendarHeatmapDatum {
+  date: string;
+  total: number;
+  details: { name: string; date: string; value: number }[];
+  summary?: { name: string; value: number }[];
+}
+```
+
+#### 2. color
+```
+string
+```
+
+#### 3. overview
+```
+type CalendarHeatmapOverview = 'global' | 'year' | 'month' | 'week' | 'day'
+```
+
+#### 4. handler
+```
+(d: data) => void;
+```
+
+#### 5. onToolTip
+```
+(datum: { value: unknown }) => void;
+```
+
+#### 6. onHideToolTip
+```
+() => void;
+```
 ### Example data
 
 Time series data where each day has a total time tracked (in seconds).  
