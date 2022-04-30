@@ -218,13 +218,9 @@ export class CalendarHeatmap extends Component {
         return this.settings.height - this.settings.label_padding;
       })
       .attr('transform', (d) => {
-        return (
-          'translate(' +
-          yearScale(d.date.year()) +
-          ',' +
-          this.settings.tooltip_padding * 2 +
-          ')'
-        );
+        return `translate(${yearScale(d.date.year())}, ${
+          this.settings.tooltip_padding * 2
+        })`;
       })
       .attr('fill', (d) => colorGenerator(d.total))
       .on('click', (_event, datum) => {
@@ -303,7 +299,7 @@ export class CalendarHeatmap extends Component {
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return `${Math.floor(this.settings.label_padding / 3)}px`;
       })
       .text((d) => {
         return d.year();
@@ -602,7 +598,7 @@ export class CalendarHeatmap extends Component {
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return `${Math.floor(this.settings.label_padding / 3)}px`;
       })
       .text((d) => {
         return d.toLocaleDateString('en-us', { month: 'short' });
@@ -696,7 +692,7 @@ export class CalendarHeatmap extends Component {
       })
       .style('text-anchor', 'left')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return `${Math.floor(this.settings.label_padding / 3)}px`;
       })
       .text((d) => {
         return moment(d).format('dddd')[0];
@@ -806,15 +802,9 @@ export class CalendarHeatmap extends Component {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
       .attr('transform', (d) => {
-        return (
-          'translate(' +
-          weekScale(moment(d.date).week()) +
-          ',' +
-          (dayScale(moment(d.date).weekday()) +
-            dayScale.bandwidth() / 1.75 -
-            15) +
-          ')'
-        );
+        return `translate(${weekScale(moment(d.date).week())}, ${
+          dayScale(moment(d.date).weekday()) + dayScale.bandwidth() / 1.75 - 15
+        })`;
       })
       .attr('total', (d) => {
         return d.total;
@@ -936,7 +926,7 @@ export class CalendarHeatmap extends Component {
         return Math.floor(this.settings.label_padding / 3) + 'px';
       })
       .text((d) => {
-        return 'Week ' + d.week();
+        return `Week ${d.week()}`;
       })
       .attr('x', (d) => {
         return weekScale(d.week());
@@ -1018,7 +1008,7 @@ export class CalendarHeatmap extends Component {
       })
       .style('text-anchor', 'left')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return `${Math.floor(this.settings.label_padding / 3)}px`;
       })
       .text((d) => {
         return moment(d).format('dddd')[0];
@@ -1125,15 +1115,12 @@ export class CalendarHeatmap extends Component {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
       .attr('transform', (d) => {
-        return (
-          'translate(' +
-          weekScale(moment(d.date).week()) +
-          ',' +
-          (dayScale(moment(d.date).weekday()) +
+        return `translate(${weekScale(moment(d.date).week())}, 
+          ${
+            dayScale(moment(d.date).weekday()) +
             dayScale.bandwidth() / 1.75 -
-            15) +
-          ')'
-        );
+            15
+          })`;
       })
       .attr('total', (d) => {
         return d.total;
@@ -1252,10 +1239,10 @@ export class CalendarHeatmap extends Component {
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return `${Math.floor(this.settings.label_padding / 3)}px`;
       })
       .text((d) => {
-        return 'Week ' + d.week();
+        return `Week ${d.week()}`;
       })
       .attr('x', (d) => {
         return weekScale(d.week());
@@ -1304,7 +1291,7 @@ export class CalendarHeatmap extends Component {
       })
       .style('text-anchor', 'left')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return `${Math.floor(this.settings.label_padding / 3)}px`;
       })
       .text((d) => {
         return moment(d).format('dddd')[0];
@@ -1481,7 +1468,7 @@ export class CalendarHeatmap extends Component {
       .style('cursor', 'pointer')
       .style('fill', 'rgb(170, 170, 170)')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return `${Math.floor(this.settings.label_padding / 3)}px`;
       })
       .text((d) => {
         return moment(d).format('HH:mm');
@@ -1540,7 +1527,7 @@ export class CalendarHeatmap extends Component {
       })
       .style('text-anchor', 'left')
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return `${Math.floor(this.settings.label_padding / 3)}px`;
       })
       .text((d) => d)
       .each(function () {
@@ -1549,7 +1536,7 @@ export class CalendarHeatmap extends Component {
           text = obj.text();
         while (text_length > label_padding * 1.5 && text.length > 0) {
           text = text.slice(0, -1);
-          obj.text(text + '...');
+          obj.text(`${text}...`);
           text_length = obj.node().getComputedTextLength();
         }
       })
@@ -1637,7 +1624,7 @@ export class CalendarHeatmap extends Component {
         return Math.floor(this.settings.width / 100) / 3;
       })
       .attr('font-size', () => {
-        return Math.floor(this.settings.label_padding / 3) + 'px';
+        return `${Math.floor(this.settings.label_padding / 3)}px`;
       })
       .html('&#x2190');
     button
@@ -1758,13 +1745,13 @@ export class CalendarHeatmap extends Component {
     let minutes = Math.floor((seconds - hours * 3600) / 60);
     let time = '';
     if (hours > 0) {
-      time += hours === 1 ? '1 hour ' : hours + ' hours ';
+      time = hours === 1 ? '1 hour' : `${hours} hours`;
     }
     if (minutes > 0) {
-      time += minutes === 1 ? '1 minute' : minutes + ' minutes';
+      time = `${time} ${minutes === 1 ? '1 minute' : `${minutes} minutes`}`;
     }
     if (hours === 0 && minutes === 0) {
-      time = Math.round(seconds) + ' seconds';
+      time = `${Math.round(seconds)} seconds`;
     }
     return time;
   }
