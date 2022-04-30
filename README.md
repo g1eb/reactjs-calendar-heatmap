@@ -80,7 +80,7 @@ interface CalendarHeatmapDatum {
 ### Properties
 | Property      | Type                                                                                 | Usage                                                                | Default | Required |
 |:--------------|:-------------------------------------------------------------------------------------|:---------------------------------------------------------------------|:-------:|:--------:|
-| data          | `CalendarHeatmapDatum[]`                                                             | Time series data span over a year or multiple years                  |  none   |   yes    |
+| data          | `CalendarHeatmapDatum[]`                                                             | Time series data spanning over 1 year or more years                  |  none   |   yes    |
 | color         | color hex code, valid css color name or color scheme names (`'spectral'` or `'hsl'`) | Theme color for the visual elements                                  | #ff4500 |    no    |
 | overview      | `'global' \| 'year' \| 'month' \| 'week' \| 'day'`                                   | Initial overview for the map                                         |  year   |    no    |
 | handler       | `(d: CalendarHeatmapDetail) => void;`                                                | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
