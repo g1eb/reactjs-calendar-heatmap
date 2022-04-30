@@ -1770,10 +1770,10 @@ export class CalendarHeatmap extends Component {
     let minutes = Math.floor((seconds - hours * 3600) / 60);
     let time = '';
     if (hours > 0) {
-      time = hours === 1 ? `${time}1 hour ` : `${time}${hours} hours `;
+      time = hours === 1 ? '1 hour' : `${hours} hours`;
     }
     if (minutes > 0) {
-      time = minutes === 1 ? `${time}1 minute ` : `${time}${minutes} minutes `;
+      time = `${time} ${minutes === 1 ? '1 minute' : `${minutes} minutes`}`;
     }
     if (hours === 0 && minutes === 0) {
       time = `${Math.round(seconds)} seconds`;
