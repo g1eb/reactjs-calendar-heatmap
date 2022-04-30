@@ -159,24 +159,27 @@ export class CalendarHeatmap extends Component {
     );
 
     const getSummary = (date) => {
-      // filtering the 'data' based on the year of date and extracting all the summaries from the data into a single dimensional array
-      const summaries = this.props.data
+      /**
+       * Filtering the 'data' based on the year of date,
+       * extracting all the summaries from the data into a single dimensional array and
+       * create 'summary' dictionary: Record<string, {name: string; value: number}>
+       */
+      const summaryDictionary = this.props.data
         .filter(
           (e) => new Date(e.date).getFullYear() === new Date(date).getFullYear()
         )
-        .flatMap((e) => e.summary);
-      // Create 'summary' dictionary: Record<string, {name: string; value: number}>
-      let summaryDictionary = summaries.reduce((summary, item) => {
-        if (summary[item.name] === undefined) {
-          summary[item.name] = {
-            name: item.name,
-            value: item.value,
-          };
-        } else {
-          summary[item.name].value += item.value;
-        }
-        return summary;
-      }, {});
+        .flatMap((e) => e.summary)
+        .reduce((summary, item) => {
+          if (summary[item.name] === undefined) {
+            summary[item.name] = {
+              name: item.name,
+              value: item.value,
+            };
+          } else {
+            summary[item.name].value += item.value;
+          }
+          return summary;
+        }, {});
       return Object.values(summaryDictionary).sort((a, b) => {
         return b.value - a.value;
       });
