@@ -1,4 +1,7 @@
+import { hsl } from 'd3';
 import { interpolateSpectral, scaleSequential, scaleLinear } from 'd3';
+
+const getHCL = (val) => hsl(360 * val, 0.85, 0.7);
 
 export function createColorGenerator(min_value, max_value, color) {
   let colorGenerator;
@@ -13,6 +16,11 @@ export function createColorGenerator(min_value, max_value, color) {
       colorGenerator = scaleLinear()
         .range(['#ffffff', '#ff4500'])
         .domain([min_value, max_value]);
+      break;
+    case 'hsl':
+      colorGenerator = scaleSequential()
+        .domain([min_value, max_value])
+        .interpolator(getHCL);
       break;
     default:
       colorGenerator = scaleLinear()
