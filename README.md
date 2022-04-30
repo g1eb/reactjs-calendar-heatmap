@@ -9,7 +9,9 @@ Includes a global overview of multiple years and visualizations of year, month, 
 - Based on [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) by [Darragh Kirwan](https://github.com/DKirwan)
 - Based on [ReactJS Calendar Heatmap](https://github.com/g1eb/reactjs-calendar-heatmap) by [Gleb](https://github.com/g1eb)
 
-[Live Demo](https://manufac-analytics.github.io/reactjs-calendar-heatmap/).
+### Demo
+
+[Live Link](https://manufac-analytics.github.io/reactjs-calendar-heatmap/)
 
 ### Global overview
 
