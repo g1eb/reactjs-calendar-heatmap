@@ -66,7 +66,7 @@ const Template = (args) => <CalendarHeatmap {...args} />;
 export const DefaultColor = Template.bind({});
 
 export const HCLColor = Template.bind({});
-HCLColor.args = {
+HSLColor.args = {
   color: 'hsl',
 };
 
