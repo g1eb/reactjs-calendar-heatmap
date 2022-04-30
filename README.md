@@ -53,24 +53,46 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
   color={color}
   overview={overview}
   handler={print}
+  onTooltip={show}
+  onHideTooltip={hide}
 />
 ```
 
-### Properties
+### Interfaces
 
-| Property | Usage                                                                | Default | Required |
-| :------- | :------------------------------------------------------------------- | :-----: | :------: |
-| data     | Time series data from max a year back                                |  none   |   yes    |
-| color    | Theme hex color                                                      | #ff4500 |    no    |
-| overview | Initial overview type (choices are: year, month, day)                |  year   |    no    |
-| handler  | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
+```ts
+export interface CalendarHeatmapDetail {
+  date: string;
+  name: string;
+  value: number;
+}
+```
+
+```ts
+interface CalendarHeatmapDatum {
+  date: string;
+  total: number;
+  details: CalendarHeatmapDetail[];
+  summary?: { name: string; value: number }[];
+}
+```
+
+### Properties
+| Property      | Type                                                                             | Usage                                                                | Default | Required |
+|:--------------|:---------------------------------------------------------------------------------|:---------------------------------------------------------------------|:-------:|:--------:|
+| data          | `CalendarHeatmapDatum[]`                                                        | Time series data from max a year back                                |  none   |   yes    |
+| color         | color hex code, valid css color name or color scheme names (`'spectral'` or `'hsl'`) | Theme color for the visual elements                                  | #ff4500 |    no    |
+| overview      | `'global' \| 'year' \| 'month' \| 'week' \| 'day'`                               | Initial overview for the map                                         |  year   |    no    |
+| handler       | `(d: CalendarHeatmapDetail) => void;`                                            | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
+| onTooltip     | `(datum: { value: unknown }) => void;`                                           | onTooltip function is fired on "mouseover" over a visual element     |  none   |    no    |
+| onHideTooltip | `() => void;`                                                                    | onHideTooltip function is fired on "mouseout" over a visual element  |  none   |    no    |
 
 ### Example data
 
 Time series data where each day has a total time tracked (in seconds).  
 Details, if provided, are shown in a tooltip on mouseover in different overviews.
 
-```
+```js
 var data = [{
   "date": "2016-01-01",
   "total": 17164,
@@ -98,7 +120,7 @@ In some cases details array could be large and in order to fit the data into the
 In terms of optimization, summary data can be computed server-side and passed in using the ``summary'' attribute.
 And in addition to the data structure described above this would result in a summary dictionary with distinct project names and total values of tracked time in seconds, e.g.:
 
-```
+```js
 var data = [{
   "date": "2016-01-01",
   "total": 17164,

@@ -1,9 +1,15 @@
 import type { Component, RefObject } from 'react';
 
+export interface CalendarHeatmapDetail {
+  date: string;
+  name: string;
+  value: number;
+}
+
 export interface CalendarHeatmapDatum {
   date: string;
   total: number;
-  details: { name: string; date: string; value: number }[];
+  details: CalendarHeatmapDetail[];
   summary?: { name: string; value: number }[];
 }
 
@@ -18,7 +24,7 @@ export interface CalendarHeatmapProps {
   data: CalendarHeatmapDatum[];
   color?: string;
   overview?: CalendarHeatmapOverview;
-  handler?: (d: CalendarHeatmapDatum) => void;
+  handler?: (d: CalendarHeatmapDetail) => void;
   onTooltip?: (datum: { value: unknown }) => void;
   onHideTooltip?: () => void;
 }
