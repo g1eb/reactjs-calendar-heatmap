@@ -1140,7 +1140,7 @@ export class CalendarHeatmap extends Component {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
       .attr('transform', (d) => {
-        return `translate(${weekScale(moment(d.date).week())},
+        return `translate(${weekScale(moment(d.date).week())}, 
           ${
             dayScale(moment(d.date).weekday()) +
             dayScale.bandwidth() / 1.75 -
@@ -1773,7 +1773,7 @@ export class CalendarHeatmap extends Component {
       time = hours === 1 ? `${time}1 hour ` : `${time}${hours} hours `;
     }
     if (minutes > 0) {
-      time = minutes === 1 ? `${time}1 minute` : `${time}${minutes} minutes`;
+      time = minutes === 1 ? `${time}1 minute ` : `${time}${minutes} minutes `;
     }
     if (hours === 0 && minutes === 0) {
       time = `${Math.round(seconds)} seconds`;
