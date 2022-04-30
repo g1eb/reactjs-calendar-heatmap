@@ -243,7 +243,7 @@ export class CalendarHeatmap extends Component {
         return this.settings.height - this.settings.label_padding;
       })
       .attr('transform', (d) => {
-        return `translate(${yearScale(d.date.year())},'${
+        return `translate(${yearScale(d.date.year())}, ${
           this.settings.tooltip_padding * 2
         })`;
       })
