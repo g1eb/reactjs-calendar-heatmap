@@ -61,10 +61,18 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 ### Interfaces
 
 ```ts
+export interface CalendarHeatmapDetail {
+  date: string;
+  name: string;
+  value: number;
+}
+```
+
+```ts
 interface CalendarHeatmapDatum {
   date: string;
   total: number;
-  details: { name: string; date: string; value: number }[];
+  details: CalendarHeatmapDetail[];
   summary?: { name: string; value: number }[];
 }
 ```
@@ -75,7 +83,7 @@ interface CalendarHeatmapDatum {
 | data          | `CalendarHeatmapDatump[]`                                                        | Time series data from max a year back                                |  none   |   yes    |
 | color         | color hex code, valid css color name or special color type: 'spectral' and 'hsl' | Theme color for the visual elements                                  | #ff4500 |    no    |
 | overview      | `'global' \| 'year' \| 'month' \| 'week' \| 'day'`                               | Initial overview for the map                                         |  year   |    no    |
-| handler       | `(d: CalendarHeatmapDatum) => void;`                                             | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
+| handler       | `(d: CalendarHeatmapDetail) => void;`                                            | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
 | onTooltip     | `(datum: { value: unknown }) => void;`                                           | onTooltip function is fired on "mouseover" over a visual element     |  none   |    no    |
 | onHideTooltip | `() => void;`                                                                    | onHideTooltip function is fired on "mouseout" over a visual element  |  none   |    no    |
 
