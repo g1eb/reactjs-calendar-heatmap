@@ -58,127 +58,26 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 />
 ```
 
-### Properties
+### Interfaces
 
-<table>
-  <tr>
-    <th>Property</th>
-    <th>Type</th>
-    <th>Usage</th>
-    <th>Default</th>
-    <th>Required</th>
-  </tr>
-  <tr> 
-    <td>
-      data
-    </td>
-    <td>
-    <!-- pre tag has been used to preserve code formatting -->
-      <pre>
-        {
-          date: string;
-          total: number;
-          details: { name: string; date: string; value: number }[];
-          summary?: { name: string; value: number }[];
-        }[]
-      </pre>
-    </td>
-    <td>
-      Time series data from max a year back  
-    </td>
-    <td>
-      none
-    </td>
-    <td>
-      yes
-    </td>
-  </tr>
-  <tr> 
-    <td>
-      color
-    </td>
-    <td>
-        string
-    </td>
-    <td>
-      Theme color in hex code, color names or enum values (choices are: 'spectral') 
-    </td>
-    <td>
-      #ff4500
-    </td>
-    <td>
-      no
-    </td>
-  </tr>
-  <tr> 
-    <td>
-      overview
-    </td>
-    <td>
-      'global' | 'year' | 'month' | 'week' | 'day'
-    </td>
-    <td>
-      Initial overview type (choices are: global, year, month, week, day)
-    </td>
-    <td>
-      year
-    </td>
-    <td>
-      no
-    </td>
-  </tr>
-  <tr> 
-    <td>
-      handler
-    </td>
-    <td>
-        (d: data) => void;
-    </td>
-    <td>
-      Handler function is fired on click of a time entry in daily overview
-    </td>
-    <td>
-      none
-    </td>
-    <td>
-      no
-    </td>
-  </tr>
-  <tr> 
-    <td>
-      onTooltip
-    </td>
-    <td>
-        (datum: { value: unknown }) => void;
-    </td>
-    <td>
-      onTooltip function is fired on "mouseover" over a visual element
-    </td>
-    <td>
-      none
-    </td>
-    <td>
-      no
-    </td>
-  </tr>
-  <tr> 
-    <td>
-      onHideTooltip
-    </td>
-    <td>
-        () => void;
-    </td>
-    <td>
-      onHideTooltip function is fired on "mouseout" over a visual element
-    </td>
-    <td>
-      none
-    </td>
-    <td>
-      no
-    </td>
-  </tr>
-</table>
+```ts
+interface CalendarHeatmapDatum {
+  date: string;
+  total: number;
+  details: { name: string; date: string; value: number }[];
+  summary?: { name: string; value: number }[];
+}
+```
+
+### Properties
+| Property      | Type                                                                              | Usage                                                                | Default | Required |
+|:--------------|:----------------------------------------------------------------------------------|:---------------------------------------------------------------------|:-------:|:--------:|
+| data          | CalendarHeatmapDatump[ ]                                                          | Time series data from max a year back                                |  none   |   yes    |
+| color         | color hex code, valid css color name or special color type: 'spectral' and 'hsl' | Theme color for the visual elements                                  | #ff4500 |    no    |
+| overview      | 'global' \| 'year' \| 'month' \| 'week' \| 'day'                                  | Initial overview for the map                                         |  year   |    no    |
+| handler       | (d: CalendarHeatmapDatum) => void;                                                | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
+| onTooltip     | (datum: { value: unknown }) => void;                                              | onTooltip function is fired on "mouseover" over a visual element     |  none   |    no    |
+| onHideTooltip | () => void;                                                                       | onHideTooltip function is fired on "mouseout" over a visual element  |  none   |    no    |
 
 ### Example data
 
