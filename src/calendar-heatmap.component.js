@@ -199,13 +199,13 @@ export class CalendarHeatmap extends Component {
     });
 
     // Calculate min and max value of all the years in the dataset
-    let [, max_value] = extent(year_data, (d) => {
+    let [min_value, max_value] = extent(year_data, (d) => {
       return d.total;
     });
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      -0.15 * max_value,
+      min_value,
       max_value,
       this.props.color
     );
@@ -405,11 +405,11 @@ export class CalendarHeatmap extends Component {
     });
 
     // Calculate min and max value of the year data
-    let [, max_value] = extent(year_data, (d) => d.total);
+    let [min_value, max_value] = extent(year_data, (d) => d.total);
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      -0.15 * max_value,
+      min_value,
       max_value,
       this.props.color
     );
@@ -778,11 +778,11 @@ export class CalendarHeatmap extends Component {
     const monthSummaries = month_data.flatMap((e) => e.summary);
 
     // Calculate min and max value of month in the dataset
-    const [, max_value] = extent(monthSummaries, (d) => d.value);
+    const [min_value, max_value] = extent(monthSummaries, (d) => d.value);
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      -0.15 * max_value,
+      min_value,
       max_value,
       this.props.color
     );
@@ -1100,11 +1100,11 @@ export class CalendarHeatmap extends Component {
     const weekSummaries = week_data.flatMap((e) => e.summary);
 
     // Calculate min and max value of week in the dataset
-    const [, max_value] = extent(weekSummaries, (d) => d.value);
+    const [min_value, max_value] = extent(weekSummaries, (d) => d.value);
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      -0.15 * max_value,
+      min_value,
       max_value,
       this.props.color
     );
@@ -1398,11 +1398,11 @@ export class CalendarHeatmap extends Component {
     const daySummaries = day_data.flatMap((e) => e.summary);
 
     // Calculate min and max value of day in the dataset
-    const [, max_value] = extent(daySummaries, (d) => d.value);
+    const [min_value, max_value] = extent(daySummaries, (d) => d.value);
 
     // Generates color generator function
     const colorGenerator = createColorGenerator(
-      -0.15 * max_value,
+      min_value,
       max_value,
       this.props.color
     );
