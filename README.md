@@ -78,14 +78,14 @@ interface CalendarHeatmapDatum {
 ```
 
 ### Properties
-| Property      | Type                                                                             | Usage                                                                | Default | Required |
-|:--------------|:---------------------------------------------------------------------------------|:---------------------------------------------------------------------|:-------:|:--------:|
-| data          | `CalendarHeatmapDatum[]`                                                        | Time series data from max a year back                                |  none   |   yes    |
+| Property      | Type                                                                                 | Usage                                                                | Default | Required |
+|:--------------|:-------------------------------------------------------------------------------------|:---------------------------------------------------------------------|:-------:|:--------:|
+| data          | `CalendarHeatmapDatum[]`                                                             | Time series data spanning over 1 year or more years                  |  none   |   yes    |
 | color         | color hex code, valid css color name or color scheme names (`'spectral'` or `'hsl'`) | Theme color for the visual elements                                  | #ff4500 |    no    |
-| overview      | `'global' \| 'year' \| 'month' \| 'week' \| 'day'`                               | Initial overview for the map                                         |  year   |    no    |
-| handler       | `(d: CalendarHeatmapDetail) => void;`                                            | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
-| onTooltip     | `(datum: { value: unknown }) => void;`                                           | onTooltip function is fired on "mouseover" over a visual element     |  none   |    no    |
-| onHideTooltip | `() => void;`                                                                    | onHideTooltip function is fired on "mouseout" over a visual element  |  none   |    no    |
+| overview      | `'global' \| 'year' \| 'month' \| 'week' \| 'day'`                                   | Initial overview for the map                                         |  year   |    no    |
+| handler       | `(d: CalendarHeatmapDetail) => void;`                                                | Handler function is fired on click of a time entry in daily overview |  none   |    no    |
+| onTooltip     | `(datum: { value: unknown }) => void;`                                               | onTooltip function is fired on "mouseover" over a visual element     |  none   |    no    |
+| onHideTooltip | `() => void;`                                                                        | onHideTooltip function is fired on "mouseout" over a visual element  |  none   |    no    |
 
 ### Example data
 
