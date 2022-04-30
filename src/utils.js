@@ -74,14 +74,17 @@ export function getYearSummary(data, date) {
 
 // Calculate daily summary if that was not provided
 export function addSummary(data) {
+  let summaries = [];
   if (Array.isArray(data)) {
     if (data[0].summary === null || data[0].summary === undefined) {
-      data.forEach((d) => {
+      summaries = data.map((d) => {
         // Create project dictionary: Record<string, {name: string; value: number}>
         const summaryDictionary = createSummaryDictionary(d.details);
         // Update "summary" property of the array element
-        d.summary = sortSummaryDictionary(summaryDictionary);
+        const summary = sortSummaryDictionary(summaryDictionary);
+        return summary;
       });
     }
   }
+  return summaries;
 }
