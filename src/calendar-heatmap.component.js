@@ -827,7 +827,7 @@ export class CalendarHeatmap extends Component {
         return Math.min(dayScale.bandwidth(), this.settings.max_block_height);
       })
       .attr('transform', (d) => {
-        return `translate(${weekScale(moment(d.date).week())},${
+        return `translate(${weekScale(moment(d.date).week())}, ${
           dayScale(moment(d.date).weekday()) + dayScale.bandwidth() / 1.75 - 15
         })`;
       })
