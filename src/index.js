@@ -1,1 +1,1 @@
-export { CalendarHeatmap } from './calendar-heatmap.component.js';
+export { CalendarHeatmap } from './calendar-heatmap';
