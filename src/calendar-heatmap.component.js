@@ -13,7 +13,7 @@ import {
   scaleBand,
   scaleTime,
 } from 'd3';
-import { createColorGenerator } from './utils';
+import { createColorGenerator, getYearSummary } from './utils';
 import './calendar-heatmap.css';
 
 export class CalendarHeatmap extends Component {
@@ -158,33 +158,6 @@ export class CalendarHeatmap extends Component {
       'year'
     );
 
-    const getSummary = (date) => {
-      /**
-       * Filtering the 'data' based on the year of date,
-       * extracting all the summaries from the data into a single dimensional array and
-       * create 'summary' dictionary: Record<string, {name: string; value: number}>
-       */
-      const summaryDictionary = this.props.data
-        .filter(
-          (e) => new Date(e.date).getFullYear() === new Date(date).getFullYear()
-        )
-        .flatMap((e) => e.summary)
-        .reduce((summary, item) => {
-          if (summary[item.name] === undefined) {
-            summary[item.name] = {
-              name: item.name,
-              value: item.value,
-            };
-          } else {
-            summary[item.name].value += item.value;
-          }
-          return summary;
-        }, {});
-      return Object.values(summaryDictionary).sort((a, b) => {
-        return b.value - a.value;
-      });
-    };
-
     // Define array of years and total values
     let year_data = timeYears(start, end).map((d) => {
       let date = moment(d);
@@ -196,7 +169,7 @@ export class CalendarHeatmap extends Component {
           }
           return prev;
         }, 0),
-        summary: getSummary(d),
+        summary: getYearSummary(this.props.data, d),
       };
     });
 
