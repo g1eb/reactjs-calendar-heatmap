@@ -1,5 +1,5 @@
 import { timeDays, range } from 'd3';
-import { CalendarHeatmap } from './calendar-heatmap.component';
+import { CalendarHeatmap } from './calendar-heatmap';
 
 const generateDate = (dateElement) => {
   const projectDate = new Date(dateElement.getTime());

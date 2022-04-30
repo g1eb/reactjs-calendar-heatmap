@@ -1,4 +1,5 @@
 import { babel } from '@rollup/plugin-babel';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss';
 
 export default {
@@ -8,6 +9,7 @@ export default {
     dir: 'dist/esm',
   },
   plugins: [
+    nodeResolve({ extensions: ['.js', '.jsx'] }),
     babel({
       babelHelpers: 'bundled', // https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers
       presets: [
