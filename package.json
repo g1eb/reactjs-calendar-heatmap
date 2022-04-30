@@ -1,6 +1,6 @@
 {
   "name": "@manufac/reactjs-calendar-heatmap",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "React component for d3.js calendar heatmap graph.",
   "homepage": "https://manufac-analytics.github.io/reactjs-calendar-heatmap/",
   "contributors": [
