@@ -162,34 +162,31 @@ export class CalendarHeatmap extends Component {
       'year'
     );
 
+    const getSummary = (date) => {
+      // Create 'summary' dictionary: Record<string, {name: string; value: number}>
+      let summaryDictionary = this.props.data.reduce((summary, d) => {
+        if (moment(d.date).year() === date.year()) {
+          d.summary.map((item) => {
+            if (summary[item.name] === undefined) {
+              summary[item.name] = {
+                name: item.name,
+                value: item.value,
+              };
+            } else {
+              summary[item.name].value += item.value;
+            }
+          });
+        }
+        return summary;
+      }, {});
+      return Object.values(summaryDictionary).sort((a, b) => {
+        return b.value - a.value;
+      });
+    };
+
     // Define array of years and total values
     let year_data = timeYears(start, end).map((d) => {
       let date = moment(d);
-      let getSummary = () => {
-        let summary = this.props.data.reduce((summary, d) => {
-          if (moment(d.date).year() === date.year()) {
-            d.summary.map((item) => {
-              if (!summary[item.name]) {
-                summary[item.name] = {
-                  value: item.value,
-                };
-              } else {
-                summary[item.name].value += item.value;
-              }
-            });
-          }
-          return summary;
-        }, {});
-        let unsorted_summary = Object.keys(summary).map((key) => {
-          return {
-            name: key,
-            value: summary[key].value,
-          };
-        });
-        return unsorted_summary.sort((a, b) => {
-          return b.value - a.value;
-        });
-      };
       return {
         date: date,
         total: this.props.data.reduce((prev, current) => {
@@ -198,7 +195,7 @@ export class CalendarHeatmap extends Component {
           }
           return prev;
         }, 0),
-        summary: getSummary(),
+        summary: getSummary(date),
       };
     });
 
