@@ -1,4 +1,4 @@
-# React component for D3.js Calendar Heatmap
+# Drilldown Calendar Heatmap | ReactJS | D3
 
 This [d3.js](https://d3js.org/) heatmap representing time series data is used to visualize tracked time over the past year, showing details for each of the days on demand.
 
@@ -9,7 +9,9 @@ Includes a global overview of multiple years and visualizations of year, month, 
 - Based on [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) by [Darragh Kirwan](https://github.com/DKirwan)
 - Based on [ReactJS Calendar Heatmap](https://github.com/g1eb/reactjs-calendar-heatmap) by [Gleb](https://github.com/g1eb)
 
-[Live Demo](https://manufac-analytics.github.io/reactjs-calendar-heatmap/).
+### Demo
+
+[Live Link](https://manufac-analytics.github.io/reactjs-calendar-heatmap/)
 
 ### Global overview
 
