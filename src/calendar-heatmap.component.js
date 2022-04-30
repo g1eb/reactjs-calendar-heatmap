@@ -13,7 +13,7 @@ import {
   scaleBand,
   scaleTime,
 } from 'd3';
-import { createColorGenerator, getYearSummary, parseData } from './utils';
+import { createColorGenerator, getYearSummary, addSummary } from './utils';
 import './calendar-heatmap.css';
 
 export class CalendarHeatmap extends Component {
@@ -44,13 +44,13 @@ export class CalendarHeatmap extends Component {
 
   componentDidMount() {
     this.createElements();
-    parseData(this.props.data);
+    addSummary(this.props.data);
     this.drawChart();
     window.addEventListener('resize', this.calcDimensions);
   }
 
   componentDidUpdate() {
-    parseData(this.props.data);
+    addSummary(this.props.data);
     this.drawChart();
   }
 

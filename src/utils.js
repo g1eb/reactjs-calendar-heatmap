@@ -34,16 +34,16 @@ export function createColorGenerator(min_value, max_value, color) {
 
 // Create 'summary' dictionary: Record<string, {name: string; value: number}>
 function createSummaryDictionary(summariesOrDetails) {
-  return summariesOrDetails.reduce((summary, item) => {
-    if (summary[item.name] === undefined) {
-      summary[item.name] = {
-        name: item.name,
-        value: item.value,
+  return summariesOrDetails.reduce((acc, curr) => {
+    if (acc[curr.name] === undefined) {
+      acc[curr.name] = {
+        name: curr.name,
+        value: curr.value,
       };
     } else {
-      summary[item.name].value += item.value;
+      acc[curr.name].value += curr.value;
     }
-    return summary;
+    return acc;
   }, {});
 }
 
@@ -55,21 +55,25 @@ function sortSummaryDictionary(summaryDictionary) {
 }
 
 export function getYearSummary(data, date) {
+  let summaries = [];
   /**
    * Filtering the 'data' based on the year of date,
    * extracting all the summaries from the data into a single dimensional array and
    */
-  const summaries = data
-    .filter(
-      (e) => new Date(e.date).getFullYear() === new Date(date).getFullYear()
-    )
-    .flatMap((e) => e.summary);
-  const summaryDictionary = createSummaryDictionary(summaries);
-  return sortSummaryDictionary(summaryDictionary);
+  if (Array.isArray(data)) {
+    const summaries = data
+      .filter(
+        (e) => new Date(e.date).getFullYear() === new Date(date).getFullYear()
+      )
+      .flatMap((e) => e.summary);
+    const summaryDictionary = createSummaryDictionary(summaries);
+    summaries = sortSummaryDictionary(summaryDictionary);
+  }
+  return summaries;
 }
 
 // Calculate daily summary if that was not provided
-export function parseData(data) {
+export function addSummary(data) {
   if (Array.isArray(data)) {
     if (data[0].summary === null || data[0].summary === undefined) {
       data.forEach((d) => {
