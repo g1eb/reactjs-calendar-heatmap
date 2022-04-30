@@ -58,3 +58,29 @@ export function getYearSummary(data, date) {
     return b.value - a.value;
   });
 }
+
+// Calculate daily summary if that was not provided
+export function parseData(data) {
+  if (Array.isArray(data)) {
+    if (data[0].summary === null || data[0].summary === undefined) {
+      data.forEach((d) => {
+        // Create project dictionary: Record<string, {name: string; value: number}>
+        let summaryDictionary = d.details.reduce((uniques, project) => {
+          if (uniques[project.name] === undefined) {
+            uniques[project.name] = {
+              name: project.name,
+              value: project.value,
+            };
+          } else {
+            uniques[project.name].value += project.value;
+          }
+          return uniques;
+        }, {});
+        // Update "summary" property of the array element
+        d.summary = Object.values(summaryDictionary).sort((a, b) => {
+          return b.value - a.value;
+        });
+      });
+    }
+  }
+}
