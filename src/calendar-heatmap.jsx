@@ -471,7 +471,7 @@ export class CalendarHeatmap extends Component {
         const finalColor = colorGenerator(d.total);
         return d.total > 0 ? finalColor : 'transparent';
       })
-      .on('click', (event, d) => {
+      .on('click', (_event, d) => {
         if (this.in_transition) {
           return;
         }
@@ -1759,26 +1759,6 @@ export class CalendarHeatmap extends Component {
       .ease(easeLinear)
       .style('opacity', 0)
       .remove();
-  }
-
-  /**
-   * Helper function to convert seconds to a human readable format
-   * @param seconds Integer
-   */
-  formatTime(seconds) {
-    let hours = Math.floor(seconds / 3600);
-    let minutes = Math.floor((seconds - hours * 3600) / 60);
-    let time = '';
-    if (hours > 0) {
-      time = hours === 1 ? '1 hour' : `${hours} hours`;
-    }
-    if (minutes > 0) {
-      time = `${time} ${minutes === 1 ? '1 minute' : `${minutes} minutes`}`;
-    }
-    if (hours === 0 && minutes === 0) {
-      time = `${Math.round(seconds)} seconds`;
-    }
-    return time;
   }
 
   render() {
