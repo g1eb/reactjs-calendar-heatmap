@@ -1,10 +1,10 @@
-var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
   mode: 'production',
+  devtool: 'source-map',
   entry: {
-    index: './src/index.js',
+    index: './src/index.ts',
   },
   externals: {
     react: {
@@ -15,8 +15,21 @@ module.exports = {
       umd: 'react',
     },
   },
+  module: {
+    rules: [
+      {
+        test: /\.(jsx|js|ts|tsx)$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
   output: {
     filename: '[name].js',
@@ -27,29 +40,5 @@ module.exports = {
       name: 'CalendarHeatmap',
       type: 'umd',
     },
-  },
-
-  devtool: 'source-map',
-
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              '@babel/preset-env',
-              ['@babel/preset-react', { runtime: 'automatic' }], // Ref: https://stackoverflow.com/questions/32070303/uncaught-referenceerror-react-is-not-defined]
-            ],
-          },
-        },
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
   },
 };
