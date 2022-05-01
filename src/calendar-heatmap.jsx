@@ -33,6 +33,7 @@ export class CalendarHeatmap extends Component {
       tooltip_padding: 15,
     };
 
+    // Potential states
     this.in_transition = false;
     this.overview = this.props.overview;
     this.history = ['global'];
@@ -131,7 +132,7 @@ export class CalendarHeatmap extends Component {
       this.history.push(this.overview);
     }
 
-    // Define start and end of the dataset
+    // Define start and end of the dataset | Assumption: this.props.data is in chronological order
     let start = moment(this.props.data[0].date).startOf('year');
     let end = moment(this.props.data[this.props.data.length - 1].date).endOf(
       'year'
