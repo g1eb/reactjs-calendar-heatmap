@@ -15,19 +15,19 @@ Includes a global overview of multiple years and visualizations of year, month, 
 
 ### Global overview
 
-[![calendar heatmap - global overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_global_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
+[![calendar heatmap - global overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/global.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ### Year overview
 
-[![calendar heatmap - year overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_year_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
+[![calendar heatmap - year overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/year.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ### Month overview
 
-[![calendar heatmap - month overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_month_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
+[![calendar heatmap - month overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/month.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ### Week overview
 
-[![calendar heatmap - week overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_week_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
+[![calendar heatmap - week overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/week.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ### Day overview
 
