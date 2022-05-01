@@ -1,21 +1,22 @@
 import { timeDays, range } from 'd3';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { CalendarHeatmap } from './calendar-heatmap';
+import type { CalendarHeatmapDatum } from './interfaces';
 
-const generateDate = (dateElement) => {
-  const projectDate = new Date(dateElement.getTime());
+const generateDate = (date: Date): Date => {
+  const projectDate = date;
   projectDate.setHours(Math.floor(Math.random() * 24));
   projectDate.setMinutes(Math.floor(Math.random() * 60));
   return projectDate;
 };
 
-function generateStorySampleData(yearsAgo) {
+function generateStorySampleData(yearsAgo: number): CalendarHeatmapDatum[] {
   const now = new Date();
   const timeAgo = new Date();
   timeAgo.setFullYear(timeAgo.getFullYear() - yearsAgo); // 'yearsAgo' years ago from now.
   timeAgo.setMonth(0); // Setting month to January.
   timeAgo.setDate(1); // Setting date to first of the given month.
   const data = timeDays(timeAgo, now).map((dateElement, index) => {
-    const date = dateElement.toISOString();
     const maxRange = Math.floor(Math.random() * 10); // Generate random integer 0 to 9.
     const details = range(maxRange).map((_e, i, arr) => {
       return {
@@ -33,7 +34,7 @@ function generateStorySampleData(yearsAgo) {
     }, 0);
 
     return {
-      date,
+      date: dateElement.toISOString(),
       details,
       total,
     };
@@ -42,12 +43,12 @@ function generateStorySampleData(yearsAgo) {
   return data;
 }
 
-export default {
+const Meta: ComponentMeta<typeof CalendarHeatmap> = {
   title: 'Calendar Heat Map',
   component: CalendarHeatmap,
   args: {
     data: generateStorySampleData(10),
-    onTooltip: (d) => {
+    onTooltip: (d: { value: unknown }) => {
       console.log(d);
     },
   },
@@ -60,8 +61,11 @@ export default {
     },
   },
 };
+export default Meta;
 
-const Template = (args) => <CalendarHeatmap {...args} />;
+const Template: ComponentStory<typeof CalendarHeatmap> = (args) => (
+  <CalendarHeatmap {...args} />
+);
 
 export const DefaultColor = Template.bind({});
 
