@@ -47,7 +47,7 @@ export interface CalendarHeatmapSettings {
   tooltip_padding: number;
 }
 
-export declare class CalendarHeatmap extends Component<
+export declare class CalendarHeatmapType extends Component<
   CalendarHeatmapProps,
   undefined
 > {
