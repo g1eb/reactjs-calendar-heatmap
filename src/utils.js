@@ -47,13 +47,6 @@ function createSummaryDictionary(summariesOrDetails) {
   }, {});
 }
 
-// Sort summary dictionary
-function sortSummaryDictionary(summaryDictionary) {
-  return Object.values(summaryDictionary).sort((a, b) => {
-    return b.value - a.value;
-  });
-}
-
 export function getYearSummary(data, date) {
   let summaries = [];
   /**
@@ -61,30 +54,36 @@ export function getYearSummary(data, date) {
    * extracting all the summaries from the data into a single dimensional array and
    */
   if (Array.isArray(data)) {
-    const summaries = data
+    summaries = data
       .filter(
         (e) => new Date(e.date).getFullYear() === new Date(date).getFullYear()
       )
-      .flatMap((e) => e.summary);
-    const summaryDictionary = createSummaryDictionary(summaries);
-    summaries = sortSummaryDictionary(summaryDictionary);
+      .flatMap((e) => e.summary)
+      .sort((a, b) => {
+        return b.value - a.value;
+      });
   }
   return summaries;
 }
 
+// Sort summary dictionary
+function sortSummaryDictionary(summaryDictionary) {
+  return Object.values(summaryDictionary).sort((a, b) => {
+    return b.value - a.value;
+  });
+}
+
 // Calculate daily summary if that was not provided
 export function addSummary(data) {
-  let dataWithSummary = [];
   if (Array.isArray(data)) {
     if (data[0].summary === null || data[0].summary === undefined) {
-      dataWithSummary = data.map((d) => {
+      data.forEach((d) => {
         // Create project dictionary: Record<string, {name: string; value: number}>
         const summaryDictionary = createSummaryDictionary(d.details);
         // Update "summary" property of the array element
         const summary = sortSummaryDictionary(summaryDictionary);
-        return { ...d, summary };
+        d.summary = summary;
       });
     }
   }
-  return dataWithSummary;
 }
