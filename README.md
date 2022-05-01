@@ -1,5 +1,7 @@
 # Drilldown Calendar Heatmap | ReactJS | D3
 
+[![](https://data.jsdelivr.com/v1/package/npm/@manufac/reactjs-calendar-heatmap/badge)](https://www.jsdelivr.com/package/npm/@manufac/reactjs-calendar-heatmap)
+
 This [d3.js](https://d3js.org/) heatmap representing time series data is used to visualize tracked time over the past year, showing details for each of the days on demand.
 
 Includes a global overview of multiple years and visualizations of year, month, week and day overview with zoom for details-on-demand.
