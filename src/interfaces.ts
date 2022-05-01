@@ -6,11 +6,16 @@ export interface CalendarHeatmapDetail {
   value: number;
 }
 
+export interface CalendarHeatmapSummary {
+  name: string;
+  value: number;
+}
+
 export interface CalendarHeatmapDatum {
   date: string;
   total: number;
   details: CalendarHeatmapDetail[];
-  summary?: { name: string; value: number }[];
+  summary?: CalendarHeatmapSummary[];
 }
 
 export type CalendarHeatmapOverview =
@@ -42,7 +47,10 @@ export interface CalendarHeatmapSettings {
   tooltip_padding: number;
 }
 
-export class CalendarHeatmap extends Component<CalendarHeatmapProps, unknown> {
+export declare class CalendarHeatmap extends Component<
+  CalendarHeatmapProps,
+  undefined
+> {
   settings: CalendarHeatmapSettings;
   in_transition: boolean;
   overview: CalendarHeatmapOverview;
@@ -77,5 +85,3 @@ export class CalendarHeatmap extends Component<CalendarHeatmapProps, unknown> {
 
   drawChart: () => void;
 }
-
-export default CalendarHeatmap;
