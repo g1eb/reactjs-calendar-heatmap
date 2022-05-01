@@ -16,12 +16,21 @@ import {
 import { createColorGenerator, getYearSummary, addSummary } from './utils';
 import './calendar-heatmap.css';
 
+/**
+ * @type {import('./interfaces').CalendarHeatmapType}
+ */
 export class CalendarHeatmap extends Component {
   /**
    * @param {import('./interfaces').CalendarHeatmapProps} props
    */
   constructor(props) {
     super(props);
+
+    this.props = props;
+
+    /**
+     * @type {import('./interfaces').CalendarHeatmapSettings}
+     */
     this.settings = {
       gutter: 5,
       item_gutter: 1,
@@ -65,7 +74,7 @@ export class CalendarHeatmap extends Component {
     // Create svg element
     this.svg = select('#calendar-heatmap').append('svg').attr('class', 'svg');
 
-    // Create other svg elements
+    // Create children group elements
     this.items = this.svg.append('g');
     this.labels = this.svg.append('g');
     this.buttons = this.svg.append('g');
@@ -243,7 +252,7 @@ export class CalendarHeatmap extends Component {
         this.props.onHideTooltip?.();
       })
       .transition()
-      .delay((d, i) => {
+      .delay((_d, i) => {
         return (this.settings.transition_duration * (i + 1)) / 10;
       })
       .duration(() => {
@@ -292,7 +301,7 @@ export class CalendarHeatmap extends Component {
         return yearScale(d.year());
       })
       .attr('y', this.settings.label_padding / 2)
-      .on('mouseenter', (event, year_label) => {
+      .on('mouseenter', (_event, year_label) => {
         if (this.in_transition) {
           return;
         }
@@ -318,7 +327,7 @@ export class CalendarHeatmap extends Component {
           .ease(easeLinear)
           .style('opacity', 1);
       })
-      .on('click', (event, d) => {
+      .on('click', (_event, d) => {
         if (this.in_transition) {
           return;
         }
@@ -506,7 +515,7 @@ export class CalendarHeatmap extends Component {
 
         this.props.onTooltip?.({ value: d });
       })
-      .on('mouseout', (event, d) => {
+      .on('mouseout', (event, _d) => {
         if (this.in_transition) {
           return;
         }

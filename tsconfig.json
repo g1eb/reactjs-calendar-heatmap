@@ -25,6 +25,6 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
     "removeComments": true /* Setting to true so that it is easier (manully) write MDX files. Comments are causing MDX compiler failiure. */,
     "allowJs": true,
-    "checkJs": false // Toggle to improve typing
+    "checkJs": false // Toggle to true to improve typing
   }
 }
