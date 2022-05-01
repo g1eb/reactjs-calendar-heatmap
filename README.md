@@ -60,6 +60,10 @@ import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
 />
 ```
 
+## CDN
+
+Available via [JSDelivr](https://www.jsdelivr.com/package/npm/@manufac/reactjs-calendar-heatmap).
+
 ### Interfaces
 
 ```ts
