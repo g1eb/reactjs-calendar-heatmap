@@ -47,25 +47,6 @@ function createSummaryDictionary(summariesOrDetails) {
   }, {});
 }
 
-export function getYearSummary(data, date) {
-  let summaries = [];
-  /**
-   * Filtering the 'data' based on the year of date,
-   * extracting all the summaries from the data into a single dimensional array and
-   */
-  if (Array.isArray(data)) {
-    summaries = data
-      .filter(
-        (e) => new Date(e.date).getFullYear() === new Date(date).getFullYear()
-      )
-      .flatMap((e) => e.summary)
-      .sort((a, b) => {
-        return b.value - a.value;
-      });
-  }
-  return summaries;
-}
-
 // Sort summary dictionary
 function sortSummaryDictionary(summaryDictionary) {
   return Object.values(summaryDictionary).sort((a, b) => {
@@ -86,4 +67,22 @@ export function addSummary(data) {
       });
     }
   }
+}
+
+export function getYearSummary(data, date) {
+  let summaries = [];
+  /**
+   * Filtering the 'data' based on the year of date,
+   * extracting all the summaries from the data into a single dimensional array and
+   */
+  if (Array.isArray(data)) {
+    const summaryArray = data
+      .filter(
+        (e) => new Date(e.date).getFullYear() === new Date(date).getFullYear()
+      )
+      .flatMap((e) => e.summary);
+    const summaryDictionary = createSummaryDictionary(summaryArray);
+    summaries = sortSummaryDictionary(summaryDictionary);
+  }
+  return summaries;
 }
