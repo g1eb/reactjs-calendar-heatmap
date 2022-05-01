@@ -13,7 +13,7 @@ import {
   scaleBand,
   scaleTime,
 } from 'd3';
-import { createColorGenerator } from './utils';
+import { createColorGenerator, getYearSummary, addSummary } from './utils';
 import './calendar-heatmap.css';
 
 export class CalendarHeatmap extends Component {
@@ -44,13 +44,13 @@ export class CalendarHeatmap extends Component {
 
   componentDidMount() {
     this.createElements();
-    this.parseData();
+    addSummary(this.props.data);
     this.drawChart();
     window.addEventListener('resize', this.calcDimensions);
   }
 
   componentDidUpdate() {
-    this.parseData();
+    addSummary(this.props.data);
     this.drawChart();
   }
 
@@ -100,35 +100,6 @@ export class CalendarHeatmap extends Component {
     }
   }
 
-  // Calculate daily summary if that was not provided
-  parseData() {
-    if (Array.isArray(this.props.data)) {
-      if (
-        this.props.data[0].summary === null ||
-        this.props.data[0].summary === undefined
-      ) {
-        this.props.data.forEach((d) => {
-          // Create project dictionary: Record<string, {name: string; value: number}>
-          let summaryDictionary = d.details.reduce((uniques, project) => {
-            if (uniques[project.name] === undefined) {
-              uniques[project.name] = {
-                name: project.name,
-                value: project.value,
-              };
-            } else {
-              uniques[project.name].value += project.value;
-            }
-            return uniques;
-          }, {});
-          // Update "summary" property of the array element
-          d.summary = Object.values(summaryDictionary).sort((a, b) => {
-            return b.value - a.value;
-          });
-        });
-      }
-    }
-  }
-
   drawChart() {
     if (this.overview === 'global') {
       this.drawGlobalOverview();
@@ -161,31 +132,6 @@ export class CalendarHeatmap extends Component {
     // Define array of years and total values
     let year_data = timeYears(start, end).map((d) => {
       let date = moment(d);
-      let getSummary = () => {
-        let summary = this.props.data.reduce((summary, d) => {
-          if (moment(d.date).year() === date.year()) {
-            d.summary.map((item) => {
-              if (!summary[item.name]) {
-                summary[item.name] = {
-                  value: item.value,
-                };
-              } else {
-                summary[item.name].value += item.value;
-              }
-            });
-          }
-          return summary;
-        }, {});
-        let unsorted_summary = Object.keys(summary).map((key) => {
-          return {
-            name: key,
-            value: summary[key].value,
-          };
-        });
-        return unsorted_summary.sort((a, b) => {
-          return b.value - a.value;
-        });
-      };
       return {
         date: date,
         total: this.props.data.reduce((prev, current) => {
@@ -194,7 +140,7 @@ export class CalendarHeatmap extends Component {
           }
           return prev;
         }, 0),
-        summary: getSummary(),
+        summary: getYearSummary(this.props.data, d),
       };
     });
 
