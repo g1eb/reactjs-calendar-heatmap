@@ -31,7 +31,7 @@ Includes a global overview of multiple years and visualizations of year, month, 
 
 ### Day overview
 
-[![calendar heatmap - day overview](https://raw.githubusercontent.com/g1eb/reactjs-calendar-heatmap/master/images/screenshot_day_overview.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
+[![calendar heatmap - day overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/day.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ## Install
 
