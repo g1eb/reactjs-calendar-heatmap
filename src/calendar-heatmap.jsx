@@ -101,16 +101,24 @@ export class CalendarHeatmap extends Component {
   }
 
   drawChart() {
-    if (this.overview === 'global') {
-      this.drawGlobalOverview();
-    } else if (this.overview === 'year') {
-      this.drawYearOverview();
-    } else if (this.overview === 'month') {
-      this.drawMonthOverview();
-    } else if (this.overview === 'week') {
-      this.drawWeekOverview();
-    } else if (this.overview === 'day') {
-      this.drawDayOverview();
+    switch (this.overview) {
+      case 'global':
+        this.drawGlobalOverview();
+        break;
+      case 'year':
+        this.drawYearOverview();
+        break;
+      case 'month':
+        this.drawMonthOverview();
+        break;
+      case 'week':
+        this.drawWeekOverview();
+        break;
+      case 'day':
+        this.drawDayOverview();
+        break;
+      default:
+        break;
     }
   }
 
