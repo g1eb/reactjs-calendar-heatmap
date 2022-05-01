@@ -17,9 +17,11 @@ import { createColorGenerator, getYearSummary, addSummary } from './utils';
 import './calendar-heatmap.css';
 
 export class CalendarHeatmap extends Component {
+  /**
+   * @param {import('./interfaces').CalendarHeatmapProps} props
+   */
   constructor(props) {
     super(props);
-
     this.settings = {
       gutter: 5,
       item_gutter: 1,
@@ -74,7 +76,9 @@ export class CalendarHeatmap extends Component {
   // Calculate dimensions based on available width
   calcDimensions() {
     let dayIndex = Math.round(
-      (moment() - moment().subtract(1, 'year').startOf('week')) / 86400000
+      (moment().valueOf() -
+        moment().subtract(1, 'year').startOf('week').valueOf()) /
+        86400000
     );
     let colIndex = Math.trunc(dayIndex / 7);
     let numWeeks = colIndex + 1;
@@ -89,7 +93,7 @@ export class CalendarHeatmap extends Component {
       this.settings.label_padding +
       7 * (this.settings.item_size + this.settings.gutter);
     this.svg
-      .attr('width', this.settings.width)
+      ?.attr('width', this.settings.width)
       .attr('height', this.settings.height);
 
     if (
@@ -139,7 +143,7 @@ export class CalendarHeatmap extends Component {
     );
 
     // Define array of years and total values
-    let year_data = timeYears(start, end).map((d) => {
+    let year_data = timeYears(start.toDate(), end.toDate()).map((d) => {
       let date = moment(d);
       return {
         date: date,
