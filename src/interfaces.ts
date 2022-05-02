@@ -1,5 +1,3 @@
-import type { Component, RefObject } from 'react';
-
 export interface CalendarHeatmapDetail {
   date: string;
   name: string;
@@ -25,15 +23,6 @@ export type CalendarHeatmapOverview =
   | 'week'
   | 'day';
 
-export interface CalendarHeatmapProps {
-  data: CalendarHeatmapDatum[];
-  color?: string;
-  overview?: CalendarHeatmapOverview;
-  handler?: (d: CalendarHeatmapDetail) => void;
-  onTooltip?: (datum: { value: unknown }) => void;
-  onHideTooltip?: () => void;
-}
-
 export interface CalendarHeatmapSettings {
   gutter: number;
   item_gutter: number;
@@ -47,41 +36,19 @@ export interface CalendarHeatmapSettings {
   tooltip_padding: number;
 }
 
-export declare class CalendarHeatmapType extends Component<
-  CalendarHeatmapProps,
-  undefined
-> {
-  settings: CalendarHeatmapSettings;
-  in_transition: boolean;
-  overview: CalendarHeatmapOverview;
+export interface CalendarHeatmapProps {
+  data: CalendarHeatmapDatum[];
+  color?: string;
+  overview?: CalendarHeatmapOverview;
+  handler?: (d: CalendarHeatmapDetail) => void;
+  onTooltip?: (datum: { value: unknown }) => void;
+  onHideTooltip?: () => void;
+}
+
+export interface CalendarHeatmapState {
   history: CalendarHeatmapOverview[];
-  selected: CalendarHeatmapDatum;
-  ref: RefObject<HTMLDivElement>;
-
-  calcDimensions: () => void;
-  createElements: () => void;
-
-  parseData: () => void;
-  formatTime: (seconds: number) => string;
-
-  hideTooltip: () => void;
-  drawButton: () => void;
-  hideBackButton: () => void;
-
-  drawGlobalOverview: () => void;
-  removeGlobalOverview: () => void;
-
-  drawYearOverview: () => void;
-  removeYearOverview: () => void;
-
-  drawMonthOverview: () => void;
-  removeMonthOverview: () => void;
-
-  drawWeekOverview: () => void;
-  removeWeekOverview: () => void;
-
-  drawDayOverview: () => void;
-  removeDayOverview: () => void;
-
-  drawChart: () => void;
+  in_transition: boolean;
+  selected: Partial<CalendarHeatmapDatum>;
+  settings: CalendarHeatmapSettings;
+  data: CalendarHeatmapDatum[];
 }

@@ -16,9 +16,6 @@ import {
 import { createColorGenerator, getYearSummary, addSummary } from './utils';
 import './calendar-heatmap.css';
 
-/**
- * @type {import('./interfaces').CalendarHeatmapType}
- */
 export class CalendarHeatmap extends Component {
   /**
    * @param {import('./interfaces').CalendarHeatmapProps} props
@@ -26,7 +23,15 @@ export class CalendarHeatmap extends Component {
   constructor(props) {
     super(props);
 
+     /**
+     * @type {import('./interfaces').CalendarHeatmapProps}
+     */
     this.props = props;
+
+   /**
+     * @type {import('./interfaces').CalendarHeatmapState}
+     */
+    this.state = {};
 
     /**
      * @type {import('./interfaces').CalendarHeatmapSettings}
