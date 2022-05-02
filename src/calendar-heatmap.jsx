@@ -77,7 +77,7 @@ export class CalendarHeatmap extends Component {
 
   createElements() {
     // Create svg element
-    this.svg = select('#calendar-heatmap').append('svg').attr('class', 'svg');
+    this.svg = select(this.ref.current).append('svg').attr('class', 'svg');
 
     // Create children group elements
     this.items = this.svg.append('g');
@@ -1736,7 +1736,7 @@ export class CalendarHeatmap extends Component {
 
   render() {
     return (
-      <div id="calendar-heatmap" className="calendarHeatmap" ref={this.ref} />
+      <div className="calendarHeatmap" ref={this.ref} />
     );
   }
 }
