@@ -44,11 +44,3 @@ export interface CalendarHeatmapProps {
   onTooltip?: (datum: { value: unknown }) => void;
   onHideTooltip?: () => void;
 }
-
-export interface CalendarHeatmapState {
-  history: CalendarHeatmapOverview[];
-  in_transition: boolean;
-  selected: Partial<CalendarHeatmapDatum>;
-  settings: CalendarHeatmapSettings;
-  data: CalendarHeatmapDatum[];
-}

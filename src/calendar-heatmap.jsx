@@ -23,15 +23,10 @@ export class CalendarHeatmap extends Component {
   constructor(props) {
     super(props);
 
-     /**
+    /**
      * @type {import('./interfaces').CalendarHeatmapProps}
      */
     this.props = props;
-
-   /**
-     * @type {import('./interfaces').CalendarHeatmapState}
-     */
-    this.state = {};
 
     /**
      * @type {import('./interfaces').CalendarHeatmapSettings}
@@ -1735,9 +1730,7 @@ export class CalendarHeatmap extends Component {
   }
 
   render() {
-    return (
-      <div className="calendarHeatmap" ref={this.ref} />
-    );
+    return <div className="calendarHeatmap" ref={this.ref} />;
   }
 }
 
