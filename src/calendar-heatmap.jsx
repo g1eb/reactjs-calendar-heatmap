@@ -16,9 +16,6 @@ import {
 import { createColorGenerator, getYearSummary, addSummary } from './utils';
 import './calendar-heatmap.css';
 
-/**
- * @type {import('./interfaces').CalendarHeatmapType}
- */
 export class CalendarHeatmap extends Component {
   /**
    * @param {import('./interfaces').CalendarHeatmapProps} props
@@ -26,7 +23,15 @@ export class CalendarHeatmap extends Component {
   constructor(props) {
     super(props);
 
+     /**
+     * @type {import('./interfaces').CalendarHeatmapProps}
+     */
     this.props = props;
+
+   /**
+     * @type {import('./interfaces').CalendarHeatmapState}
+     */
+    this.state = {};
 
     /**
      * @type {import('./interfaces').CalendarHeatmapSettings}
@@ -72,7 +77,7 @@ export class CalendarHeatmap extends Component {
 
   createElements() {
     // Create svg element
-    this.svg = select('#calendar-heatmap').append('svg').attr('class', 'svg');
+    this.svg = select(this.ref.current).append('svg').attr('class', 'svg');
 
     // Create children group elements
     this.items = this.svg.append('g');
@@ -1731,7 +1736,7 @@ export class CalendarHeatmap extends Component {
 
   render() {
     return (
-      <div id="calendar-heatmap" className="calendarHeatmap" ref={this.ref} />
+      <div className="calendarHeatmap" ref={this.ref} />
     );
   }
 }
