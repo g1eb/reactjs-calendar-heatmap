@@ -35,6 +35,7 @@ export function YearOverviewHeatMap({
   onFadeComplete,
   response,
   showWeekLabels,
+  scaleType,
   ...rest
 }: YearOverviewHeatmapProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
@@ -63,8 +64,8 @@ export function YearOverviewHeatMap({
       const weekLabels = range(1, 54).map((e) => e.toString());
 
       // Creating month labels dynamically with 'toLocaleString' function, since month labels may vary based on 'locale'.
-      const monthLabels = monthDates.map((e) =>
-        e.toLocaleString(undefined, { month: 'short' })
+      const monthLabels = monthDates.map(
+        (e) => e.toLocaleString(undefined, { month: 'long' }) // For consistency
       );
 
       // Creating a month-wise first-week label positions' array using starting dates of all the months of a year.
@@ -79,10 +80,6 @@ export function YearOverviewHeatMap({
         response,
         align: 'bottom',
       });
-
-      if (showWeekLabels !== true) {
-        xAxis.tickFormat(() => '');
-      }
 
       // Y Axis
       const [yScale, yAxis] = getYScaleAndAxis({
@@ -99,10 +96,9 @@ export function YearOverviewHeatMap({
         element: ref.current,
         margin,
         response,
-      });
-
-      monthAxis.tickFormat((_, i) => {
-        return monthLabels[i];
+        year: new Date(data[0].date).getFullYear(),
+        monthLabels,
+        scaleType,
       });
 
       svg = select(ref.current)
@@ -117,16 +113,18 @@ export function YearOverviewHeatMap({
         .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
       // Draw week bottom x-axis
-      svg
-        .append('g')
-        .attr(
-          'transform',
-          `translate(${margin.left}, ${
-            ref.current.clientHeight - margin.bottom
-          })`
-        )
-        .attr('class', 'x-axis week')
-        .call(xAxis);
+      if (showWeekLabels === true) {
+        svg
+          .append('g')
+          .attr(
+            'transform',
+            `translate(${margin.left}, ${
+              ref.current.clientHeight - margin.bottom
+            })`
+          )
+          .attr('class', 'x-axis week')
+          .call(xAxis);
+      }
 
       // Draw month top x-axis
       svg
@@ -282,19 +280,15 @@ export function YearOverviewHeatMap({
             align: 'bottom',
           });
 
-          if (showWeekLabels !== true) {
-            newXAxis.tickFormat(() => '');
-          }
-
+          // Month X Axis
           const [, newMonthAxis] = getMonthScaleAndAxis({
             weekPositions: firstWeekPositions,
             element: ref.current,
             margin,
             response,
-          });
-
-          newMonthAxis.tickFormat((_, i) => {
-            return monthLabels[i];
+            year: new Date(data[0].date).getFullYear(),
+            monthLabels,
+            scaleType,
           });
 
           const [newYScale, newYAxis] = getYScaleAndAxis({
@@ -306,14 +300,16 @@ export function YearOverviewHeatMap({
           });
 
           // Update X axis
-          select<SVGGElement, unknown>('.x-axis.week')
-            .call(newXAxis)
-            .attr(
-              'transform',
-              `translate(${margin.left}, ${
-                ref.current.clientHeight - margin.bottom
-              })`
-            );
+          if (showWeekLabels === true) {
+            select<SVGGElement, unknown>('.x-axis.week')
+              .call(newXAxis)
+              .attr(
+                'transform',
+                `translate(${margin.left}, ${
+                  ref.current.clientHeight - margin.bottom
+                })`
+              );
+          }
 
           // Draw month top x-axis
           select<SVGGElement, unknown>('.x-axis.month').call(newMonthAxis);
@@ -360,6 +356,7 @@ export function YearOverviewHeatMap({
     onTooltip,
     response,
     showWeekLabels,
+    scaleType,
   ]);
 
   useEffect(() => {

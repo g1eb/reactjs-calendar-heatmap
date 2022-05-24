@@ -1,5 +1,13 @@
 import { axisTop } from '@d3fc/d3fc-axis';
-import { easeLinear, extent, selectAll, timeDays, scaleThreshold } from 'd3';
+import {
+  easeLinear,
+  extent,
+  selectAll,
+  timeDays,
+  scaleThreshold,
+  scaleTime,
+  NumberValue,
+} from 'd3';
 import { endOfYear, format, startOfYear } from 'date-fns';
 import { removeLastYearWeekData, addAxisLabelResponsivness } from '../utils';
 import type {
@@ -9,7 +17,7 @@ import type {
   Response,
 } from '../utils';
 import type { D3FCAxis } from '@d3fc/d3fc-axis';
-import type { ScaleBand, ScaleThreshold } from 'd3';
+import type { ScaleBand, ScaleThreshold, ScaleTime } from 'd3';
 
 export interface YearOverviewDatum {
   day: number; // Store ISO day of week, 1-7 (Mon till Sun)
@@ -23,16 +31,19 @@ interface YearOverviewData {
   totalExtent: [number, number];
 }
 
+type ScaleType = 'threshold' | 'time';
+
 export interface YearOverviewHeatmapProps
   extends BaseOverviewHeatmapProps<YearOverviewDatum> {
   data: CalendarHeatmapDatum[];
   showWeekLabels?: boolean;
+  scaleType?: ScaleType;
   onMonthLabelClick?: (d: string) => void;
 }
 
 export function getYearData(data: CalendarHeatmapDatum[]): YearOverviewData {
   const { format: monthFormat } = new Intl.DateTimeFormat(undefined, {
-    month: 'short',
+    month: 'long',
   });
   // Contains date string to 'CalendarHeatmapDatum' record
   const dataRecord = data.reduce<Record<string, CalendarHeatmapDatum>>(
@@ -123,27 +134,16 @@ export function getMonthBoundaryPath(
  */
 export function getWeekPosition(firstDateOfMonth: Date): number {
   let weekPosition = NaN;
-  const firstDayOfMonth = Number.parseInt(format(firstDateOfMonth, 'i'), 10); // 1-7
   const firstWeekOfMonth = Number.parseInt(format(firstDateOfMonth, 'I'), 10); // 1-53
   /**
    * Checking if the the month is 'January' and the first day of 'January' belongs to the last week of the last year.
    * If first day of January is part of  the last week of the last year then changing the position of 'Jan' label position from 52/53 to 1,
    * since the first column will be treated as the first week of 'January'.
    */
-  if (firstDateOfMonth.getMonth() === 0 && firstDayOfMonth >= 5) {
+  if (firstDateOfMonth.getMonth() === 0) {
     weekPosition = 1;
-  } else if (firstDayOfMonth === 1) {
-    /**
-     * When the first day of a month is the first weekday then we can use that week label position as the month label position,
-     * since whole column of that week will belong to the current month.
-     */
-    weekPosition = firstWeekOfMonth;
   } else {
-    /**
-     * When the first day of a month is not the first weekday then we move the label positon to next column in order,
-     * since the first week of that month will also be the part of previous month, so the column for the first week of current month will not belong to the current month solely.
-     */
-    weekPosition = firstWeekOfMonth + 1;
+    weekPosition = firstWeekOfMonth;
   }
 
   return weekPosition;
@@ -171,15 +171,17 @@ export function brightenMonthBoundaries(): void {
     .style('opacity', 1);
 }
 
-export function getMonthScaleAndAxis({
+function getMonthThresholdScaleAndAxis({
   weekPositions,
   element,
   margin,
+  monthLabels,
   response,
 }: {
   weekPositions: number[];
   element: HTMLDivElement;
   margin: Margin;
+  monthLabels: string[];
   response?: Response;
 }): [ScaleThreshold<number, number>, D3FCAxis<number>] {
   const monthScaleDomain = [...weekPositions, 53];
@@ -195,6 +197,74 @@ export function getMonthScaleAndAxis({
       ...monthScaleRange,
       element.clientWidth - margin.left - margin.right,
     ]);
-  const monthAxis = axisTop(monthScale).tickSize(0).tickCenterLabel(true);
+  const monthAxis = axisTop(monthScale)
+    .tickSize(0)
+    .tickCenterLabel(true)
+    .tickFormat((_, i) => {
+      return monthLabels[i];
+    });
   return [monthScale, addAxisLabelResponsivness(monthAxis, response)];
+}
+
+function getMonthTimeScaleAndAxis({
+  element,
+  margin,
+  response,
+  year,
+}: {
+  element: HTMLDivElement;
+  margin: Margin;
+  year: number;
+  response?: Response;
+}): [ScaleTime<number, number>, D3FCAxis<Date | NumberValue>] {
+  const monthScale = scaleTime()
+    .domain([new Date(year, 0, 1), new Date(year, 11, 31)])
+    .range([0, element.clientWidth - margin.left - margin.right]);
+  const monthAxis = axisTop(monthScale).tickSize(0);
+  return [monthScale, addAxisLabelResponsivness(monthAxis, response)];
+}
+
+export function getMonthScaleAndAxis({
+  weekPositions,
+  element,
+  margin,
+  response,
+  year,
+  scaleType,
+  monthLabels,
+}: {
+  weekPositions: number[];
+  element: HTMLDivElement;
+  margin: Margin;
+  year: number;
+  monthLabels: string[];
+  response?: Response;
+  scaleType?: ScaleType;
+}):
+  | [ScaleThreshold<number, number>, D3FCAxis<number>]
+  | [ScaleTime<number, number>, D3FCAxis<Date | NumberValue>] {
+  let xScaleAndAxis:
+    | [ScaleThreshold<number, number>, D3FCAxis<number>]
+    | [ScaleTime<number, number>, D3FCAxis<Date | NumberValue>]
+    | undefined;
+  switch (scaleType) {
+    case 'threshold':
+      xScaleAndAxis = getMonthThresholdScaleAndAxis({
+        weekPositions,
+        element,
+        margin,
+        response,
+        monthLabels,
+      });
+      break;
+    case 'time':
+    default:
+      xScaleAndAxis = getMonthTimeScaleAndAxis({
+        element,
+        margin,
+        response,
+        year,
+      });
+  }
+  return xScaleAndAxis;
 }
