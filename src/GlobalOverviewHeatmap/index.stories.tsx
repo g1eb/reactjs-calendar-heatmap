@@ -7,7 +7,7 @@ const Meta: ComponentMeta<typeof GlobalOverviewHeatMap> = {
   title: 'GlobalOverviewHeatMap',
   component: GlobalOverviewHeatMap,
   args: {
-    data: generateStorySampleDataForHeatmap(2, 1),
+    data: generateStorySampleDataForHeatmap(10, 1),
     onTooltip: (d: { value: unknown }) => {
       console.log(d);
     },

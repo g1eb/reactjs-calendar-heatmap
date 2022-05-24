@@ -14,9 +14,9 @@ Inspired by
 
 [Live Link](https://manufac-analytics.github.io/reactjs-calendar-heatmap/)
 
-### Global overview
+### Global
 
-[![calendar heatmap - global overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/global.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
+![Global](https://user-images.githubusercontent.com/25290212/170020601-08ab3317-1c63-46fc-89b8-29a4938b1fb3.png)
 
 ### Year overview
 
