@@ -3,10 +3,7 @@
   "version": "0.2.19",
   "description": "React component for d3.js calendar heatmap graph.",
   "homepage": "https://manufac-analytics.github.io/reactjs-calendar-heatmap/",
-  "contributors": [
-    "g1eb <mail@g1eb.com> (https://g1eb.com)",
-    "maneetgoyal"
-  ],
+  "contributors": ["maneetgoyal", "qur786"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/manufac-analytics/reactjs-calendar-heatmap.git"
@@ -62,8 +59,13 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
+    "@d3fc/d3fc-axis": "^3.0.6",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.6.0",
+    "@mui/material": "^5.6.0",
     "d3": "^7.4.4",
-    "moment": "^2.29.3"
+    "date-fns": "^2.28.0"
   },
   "engines": {
     "node": ">=12.13.0"

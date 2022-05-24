@@ -1,0 +1,37 @@
+.light {
+  color: black;
+  background: white;
+}
+
+.dark {
+  color: white;
+  background: black;
+}
+
+.heat-cell {
+  stroke: white;
+}
+
+.dark .heat-cell {
+  stroke: black;
+}
+
+.x-axis path,
+.y-axis path {
+  fill: black;
+}
+
+.dark .x-axis path,
+.dark .y-axis path {
+  stroke: white;
+}
+
+.x-axis text,
+.y-axis text {
+  fill: black;
+}
+
+.dark .x-axis text,
+.dark .y-axis text {
+  fill: white;
+}

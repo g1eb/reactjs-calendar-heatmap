@@ -147,9 +147,3 @@ var data = [{
   }]
 }]
 ```
-
-## Dependencies
-
-- [react.js](https://reactjs.org/)
-- [moment.js](https://momentjs.com/)
-- [d3.js](https://d3js.org/)

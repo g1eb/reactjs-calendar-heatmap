@@ -24,7 +24,6 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
     "removeComments": true /* Setting to true so that it is easier (manully) write MDX files. Comments are causing MDX compiler failiure. */,
-    "allowJs": true,
-    "checkJs": false // Toggle to true to improve typing
+    "incremental": true /* Ref: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#faster-subsequent-builds-with-the---incremental-flag */
   }
 }
