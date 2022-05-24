@@ -2,9 +2,9 @@
 
 [![](https://data.jsdelivr.com/v1/package/npm/@manufac/reactjs-calendar-heatmap/badge)](https://www.jsdelivr.com/package/npm/@manufac/reactjs-calendar-heatmap)
 
-This [d3.js](https://d3js.org/) heatmap representing time series data is used to visualize tracked time over the past year, showing details for each of the days on demand.
+This [d3.js](https://d3js.org/) heatmap representing time series data is used **to visualize the frequency of an entity over time**.
 
-Includes a global overview of multiple years and visualizations of year, month, week and day overview with zoom for details-on-demand.
+Includes a global overview of multiple years and visualizations of year, month and day overviews.
 
 Inspired by 
 - [Calendar]https://observablehq.com/@d3/calendar) by [Mike Bostock](https://github.com/mbostock)
@@ -14,7 +14,7 @@ Inspired by
 
 [Live Link](https://manufac-analytics.github.io/reactjs-calendar-heatmap/)
 
-### Global
+### Global overview
 
 ![Global](https://user-images.githubusercontent.com/25290212/170020601-08ab3317-1c63-46fc-89b8-29a4938b1fb3.png)
 
@@ -38,16 +38,16 @@ Inspired by
 yarn add @manufac/reactjs-calendar-heatmap
 ```
 
-2. Import `CalendarHeatmap` in your component
+2. Import `DrilldownCalendar` in your component
 
 ```js
-import { CalendarHeatmap } from '@manufac/reactjs-calendar-heatmap';
+import { DrilldownCalendar } from '@manufac/reactjs-calendar-heatmap';
 ```
 
-3. Render `CalendarHeatmap` component
+3. Render `DrilldownCalendar` component
 
 ```jsx
-<CalendarHeatmap
+<DrilldownCalendar
   data={data}
   color={color}
   overview={overview}
