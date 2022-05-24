@@ -20,15 +20,11 @@ Inspired by
 
 ### Year overview
 
-[![calendar heatmap - year overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/year.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
+![Year overview](https://user-images.githubusercontent.com/25290212/170017623-2ac854e0-5451-4ce4-871e-e90d730f51f2.png)
 
 ### Month overview
 
 [![calendar heatmap - month overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/month.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
-
-### Week overview
-
-[![calendar heatmap - week overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/week.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
 
 ### Day overview
 
