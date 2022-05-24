@@ -75,7 +75,7 @@ export interface CalendarHeatmapDetail {
 interface CalendarHeatmapDatum {
   date: string;
   total: number;
-  details: CalendarHeatmapDetail[];
+  details?: CalendarHeatmapDetail[];
 }
 ```
 
