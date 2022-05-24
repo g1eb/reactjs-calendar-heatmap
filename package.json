@@ -3,7 +3,10 @@
   "version": "0.2.19",
   "description": "React component for d3.js calendar heatmap graph.",
   "homepage": "https://manufac-analytics.github.io/reactjs-calendar-heatmap/",
-  "contributors": ["maneetgoyal", "qur786"],
+  "contributors": [
+    "maneetgoyal",
+    "qur786"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/manufac-analytics/reactjs-calendar-heatmap.git"
@@ -15,7 +18,7 @@
     "refresh": "rm -rf dist storybook-static",
     "build:tsc": "tsc",
     "build:umd": "webpack",
-    "build:storybook": "build-storybook -o docs && cp .nojekyll docs",
+    "build:storybook": "build-storybook -o docs && shx cp .nojekyll docs",
     "build": "yarn build:tsc && yarn build:umd && yarn build:storybook",
     "watch": "webpack --watch",
     "start": "start-storybook -p 6006",
@@ -48,6 +51,7 @@
     "prettier": "^2.6.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "shx": "^0.3.4",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.3.0",
     "tslib": "^2.4.0",
@@ -87,5 +91,8 @@
   ],
   "sideEffects": [
     "*.css"
-  ]
+  ],
+  "resolutions": {
+    "@types/react": "18.0.8"
+  }
 }
