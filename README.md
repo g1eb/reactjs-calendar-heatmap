@@ -90,8 +90,9 @@ interface CalendarHeatmapDatum {
 
 ### Example data
 
-Time series data where each day has a total time tracked (in seconds).  
-Details, if provided, are shown in a tooltip on mouseover in different overviews.
+The data contains:
+- Day-by-day frequency of an arbitrary event spaninng across 1 or more years
+- For each data point, the intra-day frequency is also optionally listed in `details`
 
 ```js
 var data = [
