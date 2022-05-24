@@ -66,7 +66,6 @@ Available via [JSDelivr](https://www.jsdelivr.com/package/npm/@manufac/reactjs-c
 ```ts
 export interface CalendarHeatmapDetail {
   date: string;
-  name: string;
   value: number;
 }
 ```
@@ -95,23 +94,22 @@ Time series data where each day has a total time tracked (in seconds).
 Details, if provided, are shown in a tooltip on mouseover in different overviews.
 
 ```js
-var data = [{
-  "date": "2016-01-01",
-  "total": 17164,
-  "details": [{
-    "name": "Project 1",
-    "date": "2016-01-01 12:30:45",
-    "value": 9192
-  }, {
-    "name": "Project 2",
-    "date": "2016-01-01 13:37:00",
-    "value": 6753
-  },
-  .....
+var data = [
   {
-    "name": "Project N",
-    "date": "2016-01-01 17:52:41",
-    "value": 1219
-  }]
-}]
+    "date": "2016-01-01",
+    "total": 17164,
+    "details": [{
+      "date": "2016-01-01 12:30:45",
+      "value": 9192
+    }, {
+      "date": "2016-01-01 13:37:00",
+      "value": 6753
+    },
+    .....
+    {
+      "date": "2016-01-01 17:52:41",
+      "value": 1219
+    }]
+  }
+]
 ```
