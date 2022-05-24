@@ -76,7 +76,6 @@ interface CalendarHeatmapDatum {
   date: string;
   total: number;
   details: CalendarHeatmapDetail[];
-  summary?: { name: string; value: number }[];
 }
 ```
 
