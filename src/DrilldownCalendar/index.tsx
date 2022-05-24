@@ -197,14 +197,14 @@ export function DrilldownCalendar({
           top: 0,
           left: 0,
         }}
-        disabled={overviewOrder.at(-1) === 'global'}
+        disabled={overviewOrder[overviewOrder.length - 1] === 'global'}
         onClick={() => {
           setFade(true);
         }}
       >
         <ArrowBackIos className={rest.className} />
       </IconButton>
-      {getOverviewChart(overviewOrder.at(-1))}
+      {getOverviewChart(overviewOrder[overviewOrder.length - 1])}
     </div>
   );
 }
