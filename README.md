@@ -7,7 +7,7 @@ This [d3.js](https://d3js.org/) heatmap representing time series data is used **
 Includes a global overview of multiple years and visualizations of year, month and day overviews.
 
 Inspired by 
-- [Calendar]https://observablehq.com/@d3/calendar) by [Mike Bostock](https://github.com/mbostock)
+- [Calendar](https://observablehq.com/@d3/calendar) by [Mike Bostock](https://github.com/mbostock)
 - [ReactJS Calendar Heatmap](https://github.com/g1eb/reactjs-calendar-heatmap) by [Gleb](https://github.com/g1eb)
 
 ### Demo
