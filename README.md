@@ -20,15 +20,15 @@ Inspired by
 
 ### Year overview
 
-![Year overview](https://user-images.githubusercontent.com/25290212/170017623-2ac854e0-5451-4ce4-871e-e90d730f51f2.png)
+![Year](https://user-images.githubusercontent.com/25290212/170017623-2ac854e0-5451-4ce4-871e-e90d730f51f2.png)
 
 ### Month overview
 
-[![calendar heatmap - month overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/month.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
+![Month](https://user-images.githubusercontent.com/25290212/170018109-49a91af8-f2b0-4c2f-9368-133bf90ddeae.png)
 
 ### Day overview
 
-[![calendar heatmap - day overview](https://github.com/manufac-analytics/reactjs-calendar-heatmap/blob/main/images/day.png)](https://rawgit.com/g1eb/reactjs-calendar-heatmap/master/)
+![Day](https://user-images.githubusercontent.com/25290212/170018241-2b68707c-2655-49db-99d9-498e8c92656f.png)
 
 ## Install
 
