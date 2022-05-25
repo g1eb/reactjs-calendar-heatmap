@@ -10,5 +10,5 @@ export default {
       sourcemap: true
     },
     plugins: [nodeResolve(), commonjs(), typescript()],
-    external: ['react', 'react-dom'],
+    external: ['react', 'react-dom', 'react/jsx-runtime'],
   };
