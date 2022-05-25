@@ -1,11 +1,5 @@
 import { timeDays, timeMinutes } from 'd3';
-import {
-  endOfDay,
-  startOfDay,
-  startOfYear,
-  subYears,
-  endOfYear,
-} from 'date-fns';
+import { endOfDay, startOfDay, startOfYear, subYears, endOfYear } from 'date-fns';
 import type { CalendarHeatmapDatum } from './utils';
 
 // Modified it to simulate 'bin-data' rest api.
