@@ -65,7 +65,6 @@
     "@d3fc/d3fc-axis": "^3.0.6",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
-    "@mui/icons-material": "^5.6.0",
     "@mui/material": "^5.6.0",
     "d3": "^7.4.4",
     "date-fns": "^2.28.0"

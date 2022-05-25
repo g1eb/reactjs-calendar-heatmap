@@ -1,5 +1,4 @@
-import { ArrowBackIos } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+import { IconButton, SvgIcon } from '@mui/material';
 import { getWeek } from 'date-fns';
 import { useCallback, useState } from 'react';
 import { DayOverviewHeatMap } from '../DayOverviewHeatmap';
@@ -202,7 +201,13 @@ export function DrilldownCalendar({
           setFade(true);
         }}
       >
-        <ArrowBackIos className={rest.className} />
+        <SvgIcon className={rest.className}>
+          {/* MuiIcon not used because it is not available as ESM modules via jsDelivr CDN */}
+          <rect fill="none" height="24" width="24" />
+          <g>
+            <polygon points="17.77,3.77 16,2 6,12 16,22 17.77,20.23 9.54,12" />
+          </g>
+        </SvgIcon>
       </IconButton>
       {getOverviewChart(overviewOrder[overviewOrder.length - 1])}
     </div>
