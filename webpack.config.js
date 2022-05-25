@@ -14,6 +14,13 @@ module.exports = {
       amd: 'react',
       umd: 'react',
     },
+    "react-dom": {
+      root: "ReactDOM",
+      commonjs: "react-dom",
+      commonjs2: "react-dom",
+      amd: "react-dom",
+      umd: "react-dom"
+    },
   },
   module: {
     rules: [
