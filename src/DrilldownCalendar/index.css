@@ -7,9 +7,3 @@
   color: white;
   background: black;
 }
-
-/* Ref: https://mui.com/material-ui/customization/how-to-customize/#state-classes */
-.Mui-disabled .light,
-.Mui-disabled .dark {
-  opacity: 0.54;
-}
