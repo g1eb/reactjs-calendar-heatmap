@@ -24,21 +24,21 @@ export function getWeekLabel(week: number): string {
 }
 
 export function getMonthData(data: CalendarHeatmapDatum[]): MonthOverviewData {
-  // Contains date string to 'CalendarHeatmapDatum' record
-  const dataRecord = data.reduce<Record<string, CalendarHeatmapDatum>>(
-    (acc, curr) => {
-      return {
-        ...acc,
-        [new Date(curr.date).getDate().toString()]: curr,
-      };
-    },
-    {}
-  );
   let dataArray: MonthOverviewDatum[] = [];
   let minTotal: number | undefined;
   let maxTotal: number | undefined;
 
   if (data.length > 0) {
+    // Contains date string to 'CalendarHeatmapDatum' record
+    const dataRecord = data.reduce<Record<string, CalendarHeatmapDatum>>(
+      (acc, curr) => {
+        return {
+          ...acc,
+          [new Date(curr.date).getDate().toString()]: curr,
+        };
+      },
+      {}
+    );
     // Selects an initial date for creating start and end date of that month
     const selectedDate = new Date(data[0].date);
     const minDate = startOfMonth(selectedDate);

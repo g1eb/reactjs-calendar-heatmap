@@ -45,23 +45,23 @@ export function getYearData(data: CalendarHeatmapDatum[]): YearOverviewData {
   const { format: monthFormat } = new Intl.DateTimeFormat(undefined, {
     month: 'short',
   });
-  // Contains date string to 'CalendarHeatmapDatum' record
-  const dataRecord = data.reduce<Record<string, CalendarHeatmapDatum>>(
-    (acc, curr) => {
-      const date = new Date(curr.date);
-      return {
-        ...acc,
-        // 'format' functions here returns ISO week number (1-53) and day (1-7) of a date. Ref: https://date-fns.org/v2.28.0/docs/format
-        [`${format(date, 'I')},${format(date, 'i')},${monthFormat(date)}`]:
-          curr,
-      };
-    },
-    {}
-  );
   let dataArray: YearOverviewDatum[] = [];
   let minTotal: number | undefined;
   let maxTotal: number | undefined;
   if (data.length > 0) {
+    // Contains date string to 'CalendarHeatmapDatum' record
+    const dataRecord = data.reduce<Record<string, CalendarHeatmapDatum>>(
+      (acc, curr) => {
+        const date = new Date(curr.date);
+        return {
+          ...acc,
+          // 'format' functions here returns ISO week number (1-53) and day (1-7) of a date. Ref: https://date-fns.org/v2.28.0/docs/format
+          [`${format(date, 'I')},${format(date, 'i')},${monthFormat(date)}`]:
+            curr,
+        };
+      },
+      {}
+    );
     // Selects an initial date for creating start and end date of that year
     const selectedDate = new Date(data[0].date);
     const minDate = startOfYear(selectedDate);

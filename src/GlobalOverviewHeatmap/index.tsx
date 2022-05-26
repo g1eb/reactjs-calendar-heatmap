@@ -34,7 +34,7 @@ export function GlobalOverviewHeatMap({
     let svg: Selection<SVGSVGElement, unknown, null, undefined> | undefined =
       undefined;
     let resize: (() => void) | undefined = undefined;
-    if (ref.current !== null) {
+    if (ref.current !== null && data.length > 0) {
       // Create array data, min and max year and min and max total of the years
       const { dataArray, yearExtent, totalExtent } = getGlobalData(data);
       const [startYear, endYear] = yearExtent;
