@@ -7,13 +7,16 @@ import './index.css';
 
 // Funtion to create filtered data of a month, to simulate parent component filtered data.
 function filterMonthData(data: CalendarHeatmapDatum[]): CalendarHeatmapDatum[] {
-  const selectedDate = new Date(data[0].date);
-  const minDate = startOfMonth(selectedDate);
-  const maxDate = endOfMonth(selectedDate);
-  // Filter data down to the selected month
-  const monthData = data.filter((d) => {
-    return minDate <= new Date(d.date) && new Date(d.date) < maxDate;
-  });
+  let monthData = data;
+  if (data.length > 0) {
+    const selectedDate = new Date(data[0].date);
+    const minDate = startOfMonth(selectedDate);
+    const maxDate = endOfMonth(selectedDate);
+    // Filter data down to the selected month
+    monthData = data.filter((d) => {
+      return minDate <= new Date(d.date) && new Date(d.date) < maxDate;
+    });
+  }
   return monthData;
 }
 

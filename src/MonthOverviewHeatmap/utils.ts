@@ -34,42 +34,47 @@ export function getMonthData(data: CalendarHeatmapDatum[]): MonthOverviewData {
     },
     {}
   );
+  let dataArray: MonthOverviewDatum[] = [];
+  let minTotal: number | undefined;
+  let maxTotal: number | undefined;
 
-  // Selects an initial date for creating start and end date of that month
-  const selectedDate = new Date(data[0].date);
-  const minDate = startOfMonth(selectedDate);
-  const maxDate = endOfMonth(selectedDate);
+  if (data.length > 0) {
+    // Selects an initial date for creating start and end date of that month
+    const selectedDate = new Date(data[0].date);
+    const minDate = startOfMonth(selectedDate);
+    const maxDate = endOfMonth(selectedDate);
 
-  // Adding missing data
-  const consecutiveDates = timeDays(minDate, maxDate);
-  const consecutiveDatesRecord = consecutiveDates.reduce<
-    Record<string, CalendarHeatmapDatum>
-  >((acc, curr) => {
-    return {
-      ...acc,
-      [curr.getDate().toString()]: {
-        date: curr.toISOString(),
-        total: NaN,
-      },
-    };
-  }, {});
+    // Adding missing data
+    const consecutiveDates = timeDays(minDate, maxDate);
+    const consecutiveDatesRecord = consecutiveDates.reduce<
+      Record<string, CalendarHeatmapDatum>
+    >((acc, curr) => {
+      return {
+        ...acc,
+        [curr.getDate().toString()]: {
+          date: curr.toISOString(),
+          total: NaN,
+        },
+      };
+    }, {});
 
-  const combinedData = { ...consecutiveDatesRecord, ...dataRecord };
-  let dataArray = Object.values(combinedData).map<MonthOverviewDatum>((d) => {
-    const date = new Date(d.date);
-    return {
-      day: Number.parseInt(format(date, 'i'), 10),
-      week: Number.parseInt(format(date, 'I'), 10),
-      total: d.total,
-    };
-  });
+    const combinedData = { ...consecutiveDatesRecord, ...dataRecord };
+    dataArray = Object.values(combinedData).map<MonthOverviewDatum>((d) => {
+      const date = new Date(d.date);
+      return {
+        day: Number.parseInt(format(date, 'i'), 10),
+        week: Number.parseInt(format(date, 'I'), 10),
+        total: d.total,
+      };
+    });
 
-  // 'format(date, 'M')' returns month of a year as 1-12. Ref: https://date-fns.org/v2.28.0/docs/format
-  if (format(new Date(data[0].date), 'M') === '1') {
-    // If the data is of month 'January'
-    dataArray = removeLastYearWeekData<MonthOverviewDatum>(dataArray);
+    // 'format(date, 'M')' returns month of a year as 1-12. Ref: https://date-fns.org/v2.28.0/docs/format
+    if (format(selectedDate, 'M') === '1') {
+      // If the data is of month 'January'
+      dataArray = removeLastYearWeekData<MonthOverviewDatum>(dataArray);
+    }
+
+    [minTotal, maxTotal] = extent(dataArray, (d) => d.total);
   }
-  const [minTotal, maxTotal] = extent(dataArray, (d) => d.total);
-
   return { dataArray, totalExtent: [minTotal ?? NaN, maxTotal ?? NaN] };
 }

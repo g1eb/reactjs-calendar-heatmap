@@ -14,12 +14,12 @@ module.exports = {
       amd: 'react',
       umd: 'react',
     },
-    "react-dom": {
-      root: "ReactDOM",
-      commonjs: "react-dom",
-      commonjs2: "react-dom",
-      amd: "react-dom",
-      umd: "react-dom"
+    'react-dom': {
+      root: 'ReactDOM',
+      commonjs: 'react-dom',
+      commonjs2: 'react-dom',
+      amd: 'react-dom',
+      umd: 'react-dom',
     },
   },
   module: {
@@ -28,7 +28,7 @@ module.exports = {
         test: /\.(ts|tsx)$/,
         use: 'ts-loader',
         exclude: /node_modules/,
-      }
+      },
     ],
   },
   resolve: {

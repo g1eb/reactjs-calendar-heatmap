@@ -182,16 +182,19 @@ export function createColorGenerator(
 export function removeLastYearWeekData<T extends { day: number }>(
   dataArray: T[]
 ): T[] {
-  const firstDayOfYear = dataArray[0].day;
-  let updatedDataArray: T[] = dataArray;
-  if (firstDayOfYear >= 5) {
-    const numberOfDaysToCompleteLastYearWeek = 8 - firstDayOfYear; // Get the total number of days that are part of the last week of the last year
-    /**
-     * Slicing the whole 'dataArray' from the first day of first week i.e. from 'numberOfDaysToCompleteLastYearWeek' + 1 till
-     * the last element of 'dataArray' since 'numberOfDaysToCompleteLastYearWeek' is the last day of the last week of the last year.
-     * Array is a 0 based index data structre so 'numberOfDaysToCompleteLastYearWeek' is the first day of first week in the 'dataArray'.
-     */
-    updatedDataArray = dataArray.slice(numberOfDaysToCompleteLastYearWeek);
+  let updatedDataArray: T[] = [];
+  if (dataArray.length > 0) {
+    const firstDayOfYear = dataArray[0].day;
+    updatedDataArray = dataArray;
+    if (firstDayOfYear >= 5) {
+      const numberOfDaysToCompleteLastYearWeek = 8 - firstDayOfYear; // Get the total number of days that are part of the last week of the last year
+      /**
+       * Slicing the whole 'dataArray' from the first day of first week i.e. from 'numberOfDaysToCompleteLastYearWeek' + 1 till
+       * the last element of 'dataArray' since 'numberOfDaysToCompleteLastYearWeek' is the last day of the last week of the last year.
+       * Array is a 0 based index data structre so 'numberOfDaysToCompleteLastYearWeek' is the first day of first week in the 'dataArray'.
+       */
+      updatedDataArray = dataArray.slice(numberOfDaysToCompleteLastYearWeek);
+    }
   }
   return updatedDataArray;
 }

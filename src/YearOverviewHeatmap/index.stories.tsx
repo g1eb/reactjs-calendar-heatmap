@@ -7,13 +7,16 @@ import './index.css';
 
 // Funtion to create filtered data of a year, to simulate parent component filtered data.
 function filterYearData(data: CalendarHeatmapDatum[]): CalendarHeatmapDatum[] {
-  const selectedDate = new Date(data[0].date);
-  const minDate = startOfYear(selectedDate);
-  const maxDate = endOfYear(selectedDate);
-  // Filter data down to the selected year
-  const yearData = data.filter((d) => {
-    return minDate <= new Date(d.date) && new Date(d.date) < maxDate;
-  });
+  let yearData = data;
+  if (data.length > 0) {
+    const selectedDate = new Date(data[0].date);
+    const minDate = startOfYear(selectedDate);
+    const maxDate = endOfYear(selectedDate);
+    // Filter data down to the selected year
+    yearData = data.filter((d) => {
+      return minDate <= new Date(d.date) && new Date(d.date) < maxDate;
+    });
+  }
   return yearData;
 }
 

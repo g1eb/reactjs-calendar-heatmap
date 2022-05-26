@@ -58,37 +58,42 @@ export function getYearData(data: CalendarHeatmapDatum[]): YearOverviewData {
     },
     {}
   );
-  // Selects an initial date for creating start and end date of that year
-  const selectedDate = new Date(data[0].date);
-  const minDate = startOfYear(selectedDate);
-  const maxDate = endOfYear(selectedDate);
-  // Adding missing data
-  const consecutiveDates = timeDays(minDate, maxDate);
-  const consecutiveDatesRecord = consecutiveDates.reduce<
-    Record<string, CalendarHeatmapDatum>
-  >((acc, curr) => {
-    return {
-      ...acc,
-      // 'format' functions here returns ISO week number (1-53) and day (1-7) of a date. Ref: https://date-fns.org/v2.28.0/docs/format
-      [`${format(curr, 'I')},${format(curr, 'i')},${monthFormat(curr)}`]: {
-        date: curr.toISOString(),
-        total: NaN,
-      },
-    };
-  }, {});
-  const combinedData = { ...consecutiveDatesRecord, ...dataRecord };
-  let dataArray = Object.entries(combinedData).map<YearOverviewDatum>((d) => {
-    const [week, day, month] = d[0].split(',');
-    return {
-      day: Number.parseInt(day, 10),
-      week: Number.parseInt(week, 10),
-      month,
-      total: d[1].total,
-    };
-  });
-  // Remove data related to last week of the last year which spans over the first month of the current year.
-  dataArray = removeLastYearWeekData<YearOverviewDatum>(dataArray);
-  const [minTotal, maxTotal] = extent(dataArray, (d) => d.total);
+  let dataArray: YearOverviewDatum[] = [];
+  let minTotal: number | undefined;
+  let maxTotal: number | undefined;
+  if (data.length > 0) {
+    // Selects an initial date for creating start and end date of that year
+    const selectedDate = new Date(data[0].date);
+    const minDate = startOfYear(selectedDate);
+    const maxDate = endOfYear(selectedDate);
+    // Adding missing data
+    const consecutiveDates = timeDays(minDate, maxDate);
+    const consecutiveDatesRecord = consecutiveDates.reduce<
+      Record<string, CalendarHeatmapDatum>
+    >((acc, curr) => {
+      return {
+        ...acc,
+        // 'format' functions here returns ISO week number (1-53) and day (1-7) of a date. Ref: https://date-fns.org/v2.28.0/docs/format
+        [`${format(curr, 'I')},${format(curr, 'i')},${monthFormat(curr)}`]: {
+          date: curr.toISOString(),
+          total: NaN,
+        },
+      };
+    }, {});
+    const combinedData = { ...consecutiveDatesRecord, ...dataRecord };
+    dataArray = Object.entries(combinedData).map<YearOverviewDatum>((d) => {
+      const [week, day, month] = d[0].split(',');
+      return {
+        day: Number.parseInt(day, 10),
+        week: Number.parseInt(week, 10),
+        month,
+        total: d[1].total,
+      };
+    });
+    // Remove data related to last week of the last year which spans over the first month of the current year.
+    dataArray = removeLastYearWeekData<YearOverviewDatum>(dataArray);
+    [minTotal, maxTotal] = extent(dataArray, (d) => d.total);
+  }
   return {
     dataArray,
     totalExtent: [minTotal ?? NaN, maxTotal ?? NaN],

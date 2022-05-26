@@ -37,193 +37,201 @@ export function MonthOverviewHeatMap({
     let resize: (() => void) | undefined = undefined;
     if (ref.current !== null) {
       // Create array of object containing week, day and total values and min and max total values in a month
-      const { dataArray, totalExtent } = getMonthData(data);
+      if (data.length > 0) {
+        const { dataArray, totalExtent } = getMonthData(data);
 
-      const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      const weekLabels = [
-        ...new Set(dataArray.map((e) => getWeekLabel(e.week))),
-      ];
+        const dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const weekLabels = [
+          ...new Set(dataArray.map((e) => getWeekLabel(e.week))),
+        ];
 
-      // Calculate min and max total of the month in the dataset
-      const [minTotal, maxTotal] = totalExtent;
+        // Calculate min and max total of the month in the dataset
+        const [minTotal, maxTotal] = totalExtent;
 
-      // Generates color generator function
-      const colorGenerator = createColorGenerator(minTotal, maxTotal, color);
+        // Generates color generator function
+        const colorGenerator = createColorGenerator(minTotal, maxTotal, color);
 
-      // X Axis
-      const [xScale, xAxis] = getXScaleAndAxis({
-        labels: weekLabels,
-        element: ref.current,
-        margin,
-        paddingInner: 0.2,
-        response,
-      });
-
-      // Y Axis
-      const [yScale, yAxis] = getYScaleAndAxis({
-        labels: dayLabels,
-        element: ref.current,
-        margin,
-        paddingInner: 0,
-        response,
-      });
-      svg = select(ref.current)
-        .append('svg')
-        .attr('width', '100%')
-        .attr('height', '100%')
-        .style('cursor', 'pointer');
-
-      // Draw parent 'g' tag for heat cells
-      const parent = svg
-        .append('g')
-        .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-      // Draw x axis
-      svg
-        .append('g')
-        .attr('transform', `translate(${margin.left}, ${margin.top})`)
-        .attr('class', 'x-axis')
-        .call(xAxis);
-
-      // Draw y axis
-      svg
-        .append('g')
-        .attr('transform', `translate(${margin.left}, ${margin.top})`)
-        .attr('class', 'y-axis')
-        .call(yAxis);
-
-      // Draw heat cells
-      parent
-        .selectAll('.heat-cell')
-        .data(dataArray)
-        .enter()
-        .append('rect')
-        .attr('class', 'heat-cell')
-        .attr('width', xScale.bandwidth())
-        .attr('height', yScale.bandwidth())
-        .attr('x', (d) => {
-          return xScale(getWeekLabel(d.week)) ?? 0;
-        })
-        .attr('y', (d) => {
-          return yScale(dayLabels[d.day - 1]) ?? 0;
-        })
-        .attr('fill', (d) => {
-          const color = Number.isFinite(d.total)
-            ? colorGenerator(d.total)
-            : 'none';
-          return color;
-        })
-        .attr('stroke-width', 1)
-        .attr('pointer-events', (d) => {
-          return d.total === 0 ? 'none' : 'visiblePainted'; // Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events#usage_notes
+        // X Axis
+        const [xScale, xAxis] = getXScaleAndAxis({
+          labels: weekLabels,
+          element: ref.current,
+          margin,
+          paddingInner: 0.2,
+          response,
         });
 
-      // Add event listner to rect cell
-      selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
-        .on('mouseover', (e: React.MouseEvent<SVGRectElement>, datum) => {
-          select(e.currentTarget).attr('fill-opacity', 0.4);
-          onTooltip?.({
-            value: datum,
-          });
-        })
-        .on('mousemove', (_e: React.MouseEvent<SVGRectElement>, datum) => {
-          onTooltip?.({
-            value: datum,
-          });
-        })
-        .on('mouseout', (e: React.MouseEvent<SVGRectElement>) => {
-          select(e.currentTarget).attr('fill-opacity', 1);
-          onHideTooltip?.();
-        })
-        .on('click', (_e: React.MouseEvent<SVGRectElement>, datum) => {
-          // Pass array of selectors
-          fadeAwayElements(['.heat-cell', '.x-axis', '.y-axis']).then(() => {
-            onCellClick?.(datum);
-          });
+        // Y Axis
+        const [yScale, yAxis] = getYScaleAndAxis({
+          labels: dayLabels,
+          element: ref.current,
+          margin,
+          paddingInner: 0,
+          response,
         });
+        svg = select(ref.current)
+          .append('svg')
+          .attr('width', '100%')
+          .attr('height', '100%')
+          .style('cursor', 'pointer');
 
-      // Adding animation on mouseover to the labels
-      select('.x-axis')
-        .selectAll<SVGTextElement, string>('text')
-        .on('mouseover', (_e: React.MouseEvent<SVGTextElement>, tickLabel) => {
-          selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
-            .filter((d) => getWeekLabel(d.week) !== tickLabel)
-            .transition()
-            .duration(500)
-            .ease(easeLinear)
-            .attr('fill-opacity', 0.2);
-        })
-        .on('mouseout', () => {
-          selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
-            .transition()
-            .duration(500)
-            .ease(easeLinear)
-            .attr('fill-opacity', 1);
-        });
+        // Draw parent 'g' tag for heat cells
+        const parent = svg
+          .append('g')
+          .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
-      select('.y-axis')
-        .selectAll<SVGTextElement, string>('text')
-        .on('mouseover', (_e: React.MouseEvent<SVGTextElement>, tickLabel) => {
-          selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
-            .filter((d) => dayLabels[d.day - 1] !== tickLabel)
-            .transition()
-            .duration(500)
-            .ease(easeLinear)
-            .attr('fill-opacity', 0.2);
-        })
-        .on('mouseout', () => {
-          selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
-            .transition()
-            .duration(500)
-            .ease(easeLinear)
-            .attr('fill-opacity', 1);
-        });
+        // Draw x axis
+        svg
+          .append('g')
+          .attr('transform', `translate(${margin.left}, ${margin.top})`)
+          .attr('class', 'x-axis')
+          .call(xAxis);
 
-      // Add resize listener
-      resize = () => {
-        if (ref.current !== null) {
-          const [newXScale, newXAxis] = getXScaleAndAxis({
-            labels: weekLabels,
-            element: ref.current,
-            margin,
-            paddingInner: 0.2,
-            response,
+        // Draw y axis
+        svg
+          .append('g')
+          .attr('transform', `translate(${margin.left}, ${margin.top})`)
+          .attr('class', 'y-axis')
+          .call(yAxis);
+
+        // Draw heat cells
+        parent
+          .selectAll('.heat-cell')
+          .data(dataArray)
+          .enter()
+          .append('rect')
+          .attr('class', 'heat-cell')
+          .attr('width', xScale.bandwidth())
+          .attr('height', yScale.bandwidth())
+          .attr('x', (d) => {
+            return xScale(getWeekLabel(d.week)) ?? 0;
+          })
+          .attr('y', (d) => {
+            return yScale(dayLabels[d.day - 1]) ?? 0;
+          })
+          .attr('fill', (d) => {
+            const color = Number.isFinite(d.total)
+              ? colorGenerator(d.total)
+              : 'none';
+            return color;
+          })
+          .attr('stroke-width', 1)
+          .attr('pointer-events', (d) => {
+            return d.total === 0 ? 'none' : 'visiblePainted'; // Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events#usage_notes
           });
 
-          const [newYScale, newYAxis] = getYScaleAndAxis({
-            labels: dayLabels,
-            element: ref.current,
-            margin,
-            paddingInner: 0,
-            response,
-          });
-
-          // Update X axis
-          select<SVGGElement, unknown>('.x-axis')
-            .call(newXAxis)
-            .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-          // Update Y axis
-          select<SVGGElement, unknown>('.y-axis')
-            .call(newYAxis)
-            .attr('transform', `translate(${margin.left}, ${margin.top})`);
-
-          // Update heat cells
-          selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
-            .transition()
-            .duration(500)
-            .ease(easeLinear)
-            .attr('width', newXScale.bandwidth())
-            .attr('height', newYScale.bandwidth())
-            .attr('x', (d) => {
-              return newXScale(getWeekLabel(d.week)) ?? 0;
-            })
-            .attr('y', (d) => {
-              return newYScale(dayLabels[d.day - 1]) ?? 0;
+        // Add event listner to rect cell
+        selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
+          .on('mouseover', (e: React.MouseEvent<SVGRectElement>, datum) => {
+            select(e.currentTarget).attr('fill-opacity', 0.4);
+            onTooltip?.({
+              value: datum,
             });
-        }
-      };
-      window.addEventListener('resize', resize);
+          })
+          .on('mousemove', (_e: React.MouseEvent<SVGRectElement>, datum) => {
+            onTooltip?.({
+              value: datum,
+            });
+          })
+          .on('mouseout', (e: React.MouseEvent<SVGRectElement>) => {
+            select(e.currentTarget).attr('fill-opacity', 1);
+            onHideTooltip?.();
+          })
+          .on('click', (_e: React.MouseEvent<SVGRectElement>, datum) => {
+            // Pass array of selectors
+            fadeAwayElements(['.heat-cell', '.x-axis', '.y-axis']).then(() => {
+              onCellClick?.(datum);
+            });
+          });
+
+        // Adding animation on mouseover to the labels
+        select('.x-axis')
+          .selectAll<SVGTextElement, string>('text')
+          .on(
+            'mouseover',
+            (_e: React.MouseEvent<SVGTextElement>, tickLabel) => {
+              selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
+                .filter((d) => getWeekLabel(d.week) !== tickLabel)
+                .transition()
+                .duration(500)
+                .ease(easeLinear)
+                .attr('fill-opacity', 0.2);
+            }
+          )
+          .on('mouseout', () => {
+            selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
+              .transition()
+              .duration(500)
+              .ease(easeLinear)
+              .attr('fill-opacity', 1);
+          });
+
+        select('.y-axis')
+          .selectAll<SVGTextElement, string>('text')
+          .on(
+            'mouseover',
+            (_e: React.MouseEvent<SVGTextElement>, tickLabel) => {
+              selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
+                .filter((d) => dayLabels[d.day - 1] !== tickLabel)
+                .transition()
+                .duration(500)
+                .ease(easeLinear)
+                .attr('fill-opacity', 0.2);
+            }
+          )
+          .on('mouseout', () => {
+            selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
+              .transition()
+              .duration(500)
+              .ease(easeLinear)
+              .attr('fill-opacity', 1);
+          });
+
+        // Add resize listener
+        resize = () => {
+          if (ref.current !== null) {
+            const [newXScale, newXAxis] = getXScaleAndAxis({
+              labels: weekLabels,
+              element: ref.current,
+              margin,
+              paddingInner: 0.2,
+              response,
+            });
+
+            const [newYScale, newYAxis] = getYScaleAndAxis({
+              labels: dayLabels,
+              element: ref.current,
+              margin,
+              paddingInner: 0,
+              response,
+            });
+
+            // Update X axis
+            select<SVGGElement, unknown>('.x-axis')
+              .call(newXAxis)
+              .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+            // Update Y axis
+            select<SVGGElement, unknown>('.y-axis')
+              .call(newYAxis)
+              .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+            // Update heat cells
+            selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')
+              .transition()
+              .duration(500)
+              .ease(easeLinear)
+              .attr('width', newXScale.bandwidth())
+              .attr('height', newYScale.bandwidth())
+              .attr('x', (d) => {
+                return newXScale(getWeekLabel(d.week)) ?? 0;
+              })
+              .attr('y', (d) => {
+                return newYScale(dayLabels[d.day - 1]) ?? 0;
+              });
+          }
+        };
+        window.addEventListener('resize', resize);
+      }
     }
     return () => {
       if (resize !== undefined) {

@@ -195,7 +195,7 @@ export function DrilldownCalendar({
           top: 0,
           left: 0,
           background: 'transparent',
-          borderColor: 'transparent'
+          borderColor: 'transparent',
         }}
         disabled={overviewOrder[overviewOrder.length - 1] === 'global'}
         onClick={() => {
@@ -210,8 +210,11 @@ export function DrilldownCalendar({
           width="24"
           className={rest.className}
         >
-          <path d="M0 0h24v24H0z" fill='transparent' />
-          <path d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z" fill='currentColor' />
+          <path d="M0 0h24v24H0z" fill="transparent" />
+          <path
+            d="M11.67 3.87L9.9 2.1 0 12l9.9 9.9 1.77-1.77L3.54 12z"
+            fill="currentColor"
+          />
         </svg>
       </button>
       {getOverviewChart(overviewOrder[overviewOrder.length - 1])}
