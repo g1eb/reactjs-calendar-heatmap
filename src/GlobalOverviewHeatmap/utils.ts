@@ -36,37 +36,45 @@ export function getGlobalHeatmapCellDimensions(
 export function getGlobalData(
   data: CalendarHeatmapDatum[]
 ): GlobalOverviewData {
-  // Grouping available data
-  const groupedData = rollup(
-    data,
-    (g) => sum(g, (d) => d.total),
-    (d) => new Date(d.date).getFullYear()
-  );
+  let dataArray: GlobalOverviewDatum[] = [];
+  let minTotal: number | undefined;
+  let maxTotal: number | undefined;
+  let minYear: number | undefined;
+  let maxYear: number | undefined;
 
-  // Adding missing data
-  const yearsPresent = Array.from(groupedData.keys()); // Using 'Array.from()' to convert keys "iterator" to "array"
-  let [minYear, maxYear] = extent(yearsPresent);
-  minYear = minYear ?? NaN;
-  maxYear = maxYear ?? NaN;
+  if (data.length > 0) {
+    // Grouping available data
+    const groupedData = rollup(
+      data,
+      (g) => sum(g, (d) => d.total),
+      (d) => new Date(d.date).getFullYear()
+    );
 
-  const consecutiveYears = range(minYear, maxYear + 1);
-  const consecutiveYearsMap = consecutiveYears.reduce((acc, curr) => {
-    acc.set(curr, NaN);
-    return acc;
-  }, new Map<number, number>());
+    // Adding missing data
+    const yearsPresent = Array.from(groupedData.keys()); // Using 'Array.from()' to convert keys "iterator" to "array"
+    [minYear, maxYear] = extent(yearsPresent);
+    minYear = minYear ?? NaN;
+    maxYear = maxYear ?? NaN;
 
-  const combinedData = new Map([...consecutiveYearsMap, ...groupedData]);
+    const consecutiveYears = range(minYear, maxYear + 1);
+    const consecutiveYearsMap = consecutiveYears.reduce((acc, curr) => {
+      acc.set(curr, NaN);
+      return acc;
+    }, new Map<number, number>());
 
-  // Deriving final data from merged data
-  const yearTotalDataArray = Array.from(combinedData); // Using 'Array.from()' to convert keys "iterator" to "array"
-  const dataArray = yearTotalDataArray.map<GlobalOverviewDatum>((ele) => {
-    return { year: ele[0], total: ele[1] };
-  });
+    const combinedData = new Map([...consecutiveYearsMap, ...groupedData]);
 
-  const [minTotal, maxTotal] = extent(dataArray, (d) => d.total);
+    // Deriving final data from merged data
+    const yearTotalDataArray = Array.from(combinedData); // Using 'Array.from()' to convert keys "iterator" to "array"
+    dataArray = yearTotalDataArray.map<GlobalOverviewDatum>((ele) => {
+      return { year: ele[0], total: ele[1] };
+    });
+
+    [minTotal, maxTotal] = extent(dataArray, (d) => d.total);
+  }
   return {
     dataArray,
-    yearExtent: [minYear, maxYear],
+    yearExtent: [minYear ?? NaN, maxYear ?? NaN],
     totalExtent: [minTotal ?? NaN, maxTotal ?? NaN],
   };
 }
