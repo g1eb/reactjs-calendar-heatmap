@@ -67,7 +67,7 @@ export function YearOverviewHeatMap({
 
         // Creating month labels dynamically with 'toLocaleString' function, since month labels may vary based on 'locale'.
         const monthLabels = monthDates.map(
-          (e) => e.toLocaleString(undefined, { month: 'long' }) // For consistency
+          (e) => e.toLocaleString(undefined, { month: 'short' }) // For consistency
         );
 
         // Creating a month-wise first-week label positions' array using starting dates of all the months of a year.

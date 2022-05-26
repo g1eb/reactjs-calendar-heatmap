@@ -38,7 +38,7 @@ function filterMonthData(
 ): CalendarHeatmapDatum[] {
   return data.filter((ele) => {
     return (
-      new Date(ele.date).toLocaleString(undefined, { month: 'long' }) === month
+      new Date(ele.date).toLocaleString(undefined, { month: 'short' }) === month
     );
   });
 }

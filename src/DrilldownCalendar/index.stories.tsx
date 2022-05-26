@@ -7,7 +7,7 @@ const Meta: ComponentMeta<typeof DrilldownCalendar> = {
   title: 'DrilldownCalendar',
   component: DrilldownCalendar,
   args: {
-    data: generateStorySampleDataForHeatmap(2, 10),
+    data: generateStorySampleDataForHeatmap(2, 3),
     onTooltip: (d: { value: unknown }) => {
       console.log(d);
     },
