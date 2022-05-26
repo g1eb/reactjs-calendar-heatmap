@@ -225,7 +225,11 @@ function getMonthTimeScaleAndAxis({
   const monthScale = scaleTime()
     .domain([new Date(year, 0, 1), new Date(year, 11, 31)])
     .range([0, element.clientWidth - margin.left - margin.right]);
-  const monthAxis = axisTop(monthScale).tickSize(0);
+  const monthAxis = axisTop(monthScale)
+    .tickSize(0)
+    .tickFormat((d) =>
+      (d as Date).toLocaleString(undefined, { month: 'short' })
+    );
   return [monthScale, addAxisLabelResponsivness(monthAxis, response)];
 }
 
