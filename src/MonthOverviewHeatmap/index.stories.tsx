@@ -29,6 +29,7 @@ const Meta: ComponentMeta<typeof MonthOverviewHeatMap> = {
       console.log(d);
     },
     color: 'spectral',
+    className: 'light',
   },
 };
 export default Meta;
@@ -41,7 +42,6 @@ const Template: ComponentStory<typeof MonthOverviewHeatMap> = (args) => (
 );
 
 export const Light = Template.bind({});
-Light.args = { className: 'light' };
 
 export const Dark = Template.bind({});
 Dark.args = { className: 'dark' };

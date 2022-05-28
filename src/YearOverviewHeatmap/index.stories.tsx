@@ -29,6 +29,7 @@ const Meta: ComponentMeta<typeof YearOverviewHeatMap> = {
       console.log(d);
     },
     color: 'spectral',
+    className: 'light',
   },
 };
 export default Meta;
@@ -41,10 +42,9 @@ const Template: ComponentStory<typeof YearOverviewHeatMap> = (args) => (
 );
 
 export const Light = Template.bind({});
-Light.args = { className: 'light' };
 
 export const Rotate = Template.bind({});
-Rotate.args = { className: 'light', response: 'rotate', showWeekLabels: true };
+Rotate.args = { response: 'rotate', showWeekLabels: true };
 
 export const Dark = Template.bind({});
 Dark.args = { className: 'dark' };
