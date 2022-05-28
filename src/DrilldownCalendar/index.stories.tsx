@@ -12,6 +12,7 @@ const Meta: ComponentMeta<typeof DrilldownCalendar> = {
       console.log(d);
     },
     color: 'spectral',
+    className: 'light',
   },
 };
 export default Meta;
@@ -24,7 +25,6 @@ const Template: ComponentStory<typeof DrilldownCalendar> = (args) => (
 );
 
 export const Light = Template.bind({});
-Light.args = { className: 'light' };
 
 export const Dark = Template.bind({});
 Dark.args = { className: 'dark' };
