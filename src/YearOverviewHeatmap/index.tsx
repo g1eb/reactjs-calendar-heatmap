@@ -155,7 +155,7 @@ export function YearOverviewHeatMap({
         .attr('fill', (d) => {
           const color = Number.isFinite(d.total)
             ? colorGenerator(d.total)
-            : 'none';
+            : 'var(--background_color)';
           return color;
         })
         .attr('stroke-width', 0.1) // Decresed it to 0.1 to create contrast between cell borders and month before boundary paths

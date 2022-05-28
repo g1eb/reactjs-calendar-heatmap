@@ -110,7 +110,7 @@ export function MonthOverviewHeatMap({
         .attr('fill', (d) => {
           const color = Number.isFinite(d.total)
             ? colorGenerator(d.total)
-            : 'none';
+            : 'var(--background_color)';
           return color;
         })
         .attr('stroke-width', 1)

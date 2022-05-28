@@ -126,7 +126,7 @@ export function DayOverviewHeatMap({
         .attr('fill', (d) => {
           const color = Number.isFinite(d.value)
             ? colorGenerator(d.value)
-            : 'none';
+            : 'var(--background_color)';
           return color;
         })
         .attr('stroke-width', 1)
