@@ -85,7 +85,6 @@ interface CalendarHeatmapDatum {
 | color         | color hex code, valid css color name or color scheme names (`'spectral'` or `'hsl'`) | Theme color for the visual elements                                    | `'#ff4500'` |    no    |
 | overview      | `'global' \| 'year' \| 'month' \| 'week' \| 'day'`                                   | Initial overview for the map                                           |  `'year'`   |    no    |
 | response      | `'hide' \| 'rotate' \| 'offset'`                                                     | Responsiveness strategy for handling overlapping axis labels           |  `'hide'`   |    no    |
-| fade          | Boolean                                                                              | Fade elments of an overview chart, tied with back button click handler |    false    |    no    |
 | onTooltip     | `(datum: { value: unknown }) => void;`                                               | onTooltip function is fired on "mouseover" over a visual element       |    none     |    no    |
 | onHideTooltip | `() => void;`                                                                        | onHideTooltip function is fired on "mouseout" over a visual element    |    none     |    no    |
 | fetchGlobalData | `() => Promise<CalendarHeatmapDatum[]>;` | To fetch data for 'global', 'year' or 'month' overview heatmap from a rest api | none | no
