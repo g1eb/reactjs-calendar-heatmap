@@ -162,7 +162,7 @@ export function YearOverviewHeatMap({
         .attr('pointer-events', (d) => {
           return d.total === 0 ? 'none' : 'visiblePainted'; // Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events#usage_notes
         })
-        .style('stroke', 'var(--background_color)');
+        .attr('stroke', 'var(--background_color)');
 
       const months = parent.append('g'); // 'g' tag to contain paths
       months
@@ -185,12 +185,12 @@ export function YearOverviewHeatMap({
         });
 
       // Add text color
-      select('.x-axis , .y-axis')
+      selectAll('.x-axis , .y-axis')
         .selectAll('text')
         .attr('fill', 'var(--primary_color)');
 
       // Add path color
-      select('.x-axis, .y-axis')
+      selectAll('.x-axis, .y-axis')
         .selectAll('path')
         .attr('stroke', 'var(--primary_color)');
 
