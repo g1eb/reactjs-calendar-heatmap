@@ -1,5 +1,5 @@
 import { getWeek } from 'date-fns';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DayOverviewHeatMap } from '../DayOverviewHeatmap';
 import { GlobalOverviewHeatMap } from '../GlobalOverviewHeatmap';
 import { MonthOverviewHeatMap } from '../MonthOverviewHeatmap';
@@ -74,15 +74,69 @@ export function DrilldownCalendar({
   onTooltip,
   onHideTooltip,
   response,
+  fetchGlobalData,
   ...rest
 }: DrilldownCalendarProps): JSX.Element {
   const [overviewOrder, setOverviewOrder] = useState<
     DrilldownCalendarOverview[]
   >([overview ?? 'global']);
-  const [currentYearData, setCurrentYearData] = useState(data);
-  const [currentMonthData, setCurrentMonthData] = useState(data);
-  const [currentDay, setCurrentDay] = useState(data[0]);
+  const [globalData, setGlobalData] = useState<CalendarHeatmapDatum[]>([]);
+  const [currentYearData, setCurrentYearData] = useState<
+    CalendarHeatmapDatum[]
+  >([]);
+  const [currentMonthData, setCurrentMonthData] = useState<
+    CalendarHeatmapDatum[]
+  >([]);
+  const [currentDay, setCurrentDay] = useState<CalendarHeatmapDatum>({
+    date: new Date().toISOString(),
+    total: NaN,
+  });
   const [fade, setFade] = useState(false);
+
+  // To fetch data.
+  useEffect(() => {
+    let fetchedData: CalendarHeatmapDatum[] = [];
+    async function fetchData() {
+      if (Array.isArray(data) === true && data?.length !== 0) {
+        fetchedData = data ?? [];
+      } else {
+        fetchedData = (await fetchGlobalData?.()) ?? [];
+      }
+      setGlobalData(fetchedData); // Storing the final data in the 'globalData' state variable for further use.
+    }
+    fetchData();
+  }, [data, fetchGlobalData]);
+
+  // To set initial data for first rendering of an overview.
+  useEffect(() => {
+    if (globalData.length > 0) {
+      switch (overview) {
+        case 'month':
+          setCurrentMonthData(
+            filterMonthData(
+              globalData,
+              new Date(globalData[0].date).toLocaleString(undefined, {
+                month: 'short',
+              })
+            )
+          );
+          break;
+        case 'year':
+          setCurrentYearData(
+            filterDataByYear(
+              globalData,
+              new Date(globalData[0].date).getFullYear()
+            )
+          );
+          break;
+        case 'day':
+          setCurrentDay(globalData[0]);
+          break;
+        default:
+          break;
+      }
+    }
+  }, [globalData, overview]);
 
   // To memoize the 'onFadeComplete' handler
   const onFadeComplete = useCallback(() => {
@@ -165,7 +219,7 @@ export function DrilldownCalendar({
         output = (
           <GlobalOverviewHeatMap
             color={color}
-            data={data}
+            data={globalData}
             {...rest}
             response={response}
             fade={fade}
@@ -174,7 +228,7 @@ export function DrilldownCalendar({
             onFadeComplete={onFadeComplete}
             onCellClick={(d) => {
               const { year } = d;
-              setCurrentYearData(filterDataByYear(data, year));
+              setCurrentYearData(filterDataByYear(globalData, year));
               setOverviewOrder((prev) => [
                 ...prev,
                 'year' as DrilldownCalendarOverview,
