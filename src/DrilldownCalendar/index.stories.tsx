@@ -35,6 +35,15 @@ HSL.args = { color: 'hsl' };
 export const Default = Template.bind({});
 Default.args = { color: undefined };
 
+export const DrilldownYearOverview = Template.bind({});
+DrilldownYearOverview.args = { overview: 'year' };
+
+export const DrilldownMonthOverview = Template.bind({});
+DrilldownMonthOverview.args = { overview: 'month' };
+
+export const DrilldownDayOverview = Template.bind({});
+DrilldownDayOverview.args = { overview: 'day' };
+
 export const LiveData = Template.bind({});
 LiveData.args = {
   data: [

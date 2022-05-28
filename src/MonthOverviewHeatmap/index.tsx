@@ -110,13 +110,24 @@ export function MonthOverviewHeatMap({
         .attr('fill', (d) => {
           const color = Number.isFinite(d.total)
             ? colorGenerator(d.total)
-            : 'none';
+            : 'var(--background_color)';
           return color;
         })
         .attr('stroke-width', 1)
         .attr('pointer-events', (d) => {
           return d.total === 0 ? 'none' : 'visiblePainted'; // Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events#usage_notes
-        });
+        })
+        .attr('stroke', ' var(--background_color)');
+
+      // Add text color
+      selectAll('.x-axis, .y-axis')
+        .selectAll('text')
+        .attr('fill', 'var(--primary_color)');
+
+      // Add path color
+      selectAll('.x-axis, .y-axis')
+        .selectAll('path')
+        .attr('stroke', 'var(--primary_color)');
 
       // Add event listner to rect cell
       selectAll<SVGRectElement, MonthOverviewDatum>('.heat-cell')

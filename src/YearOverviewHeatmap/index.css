@@ -1,37 +1,19 @@
 .light {
-  color: black;
-  background: white;
+  color: #383a42;
+  background-color: #fafafa;
+  --primary_color: #383a42;
+  --secondary_color: #c18401;
+  --background_color: #fafafa;
+  --border_color: #c7c7c7;
+  --hover_color: #000;
 }
 
 .dark {
-  color: white;
-  background: black;
-}
-
-.heat-cell {
-  stroke: white;
-}
-
-.dark .heat-cell {
-  stroke: black;
-}
-
-.x-axis path,
-.y-axis path {
-  fill: black;
-}
-
-.dark .x-axis path,
-.dark .y-axis path {
-  stroke: white;
-}
-
-.x-axis text,
-.y-axis text {
-  fill: black;
-}
-
-.dark .x-axis text,
-.dark .y-axis text {
-  fill: white;
+  color: #dcdfe4;
+  background-color: #282c34;
+  --primary_color: #dcdfe4;
+  --secondary_color: #61afef;
+  --background_color: #282c34;
+  --border_color: #49515f;
+  --hover_color: #f78c6c;
 }

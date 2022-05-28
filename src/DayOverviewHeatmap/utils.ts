@@ -15,7 +15,8 @@ interface DayOverviewData {
 
 export interface DayOverviewHeatmapProps
   extends BaseOverviewHeatmapProps<DayOverviewDatum> {
-  data: CalendarHeatmapDatum; // Overriding 'data' property
+  data: CalendarHeatmapDatum;
+  fetchDayData?: (dateTime: string) => Promise<CalendarHeatmapDatum['details']>; // For fetching day data for 'day' overview heatmap with bin size of minutes interval.
 }
 
 /**

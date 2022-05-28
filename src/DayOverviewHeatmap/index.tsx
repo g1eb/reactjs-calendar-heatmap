@@ -1,6 +1,7 @@
 import { easeLinear, range, select, selectAll } from 'd3';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
+  CalendarHeatmapDatum,
   createColorGenerator,
   fadeAwayElements,
   getXScaleAndAxis,
@@ -25,9 +26,21 @@ export function DayOverviewHeatMap({
   fade,
   onFadeComplete,
   response,
+  fetchDayData,
   ...rest
 }: DayOverviewHeatmapProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
+  const [dayData, setDayData] = useState<CalendarHeatmapDatum>(data);
+
+  useEffect(() => {
+    async function fetchData() {
+      const details = data.details ?? (await fetchDayData?.(data.date)) ?? [];
+      setDayData((prev) => {
+        return { ...prev, details };
+      });
+    }
+    fetchData();
+  }, [data.date, data.details, fetchDayData]);
 
   useEffect(() => {
     const margin: Margin = { top: 50, bottom: 50, left: 50, right: 50 };
@@ -37,12 +50,12 @@ export function DayOverviewHeatMap({
     let resize: (() => void) | undefined = undefined;
     if (
       ref.current !== null &&
-      Array.isArray(data.details) &&
-      data.details?.length > 0
+      Array.isArray(dayData.details) &&
+      dayData.details?.length > 0
     ) {
       // Create array day data and max and min value of the whole day.
-      const { dataArray, valueExtent } = getDayData(data);
-      const binCountPerHour = Math.ceil((data.details.length ?? 0) / 24);
+      const { dataArray, valueExtent } = getDayData(dayData);
+      const binCountPerHour = Math.ceil((dayData.details.length ?? 0) / 24);
       const hourLabels = range(0, 24).map((e) => `${e}h`);
       const xAxisLabels = range(0, binCountPerHour).map((e) =>
         createXAxisLabel(e)
@@ -113,10 +126,21 @@ export function DayOverviewHeatMap({
         .attr('fill', (d) => {
           const color = Number.isFinite(d.value)
             ? colorGenerator(d.value)
-            : 'none';
+            : 'var(--background_color)';
           return color;
         })
-        .attr('stroke-width', 1);
+        .attr('stroke-width', 1)
+        .attr('stroke', 'var(--background_color)');
+
+      // Add text color
+      selectAll('.x-axis, .y-axis')
+        .selectAll('text')
+        .attr('fill', 'var(--primary_color)');
+
+      // Add path color
+      selectAll('.x-axis, .y-axis')
+        .selectAll('path')
+        .attr('stroke', 'var(--primary_color)');
 
       // Add hover and click listner to heat cell
       selectAll<SVGRectElement, DayOverviewDatum>('.heat-cell')
@@ -228,7 +252,7 @@ export function DayOverviewHeatMap({
       }
       svg?.remove();
     };
-  }, [color, data, onCellClick, onHideTooltip, onTooltip, response]);
+  }, [color, dayData, onCellClick, onHideTooltip, onTooltip, response]);
 
   useEffect(() => {
     // Fade away heat cells, x and y axis

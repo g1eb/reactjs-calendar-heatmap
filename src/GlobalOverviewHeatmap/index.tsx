@@ -97,10 +97,19 @@ export function GlobalOverviewHeatMap({
         .attr('fill', (d) => {
           const color = Number.isFinite(d.total)
             ? colorGenerator(d.total)
-            : 'none';
+            : 'var(--background_color)';
           return color;
         })
-        .attr('stroke-width', 1);
+        .attr('stroke-width', 1)
+        .attr('stroke', ' var(--background_color)');
+
+      // Add text color
+      select('.x-axis').selectAll('text').attr('fill', 'var(--primary_color)');
+
+      // Add path color
+      select('.x-axis')
+        .selectAll('path')
+        .attr('stroke', 'var(--primary_color)');
 
       // Add hover listner to rect cell
       selectAll<SVGRectElement, GlobalOverviewDatum>('.heat-cell')

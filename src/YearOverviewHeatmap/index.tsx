@@ -155,13 +155,14 @@ export function YearOverviewHeatMap({
         .attr('fill', (d) => {
           const color = Number.isFinite(d.total)
             ? colorGenerator(d.total)
-            : 'none';
+            : 'var(--background_color)';
           return color;
         })
         .attr('stroke-width', 0.1) // Decresed it to 0.1 to create contrast between cell borders and month before boundary paths
         .attr('pointer-events', (d) => {
           return d.total === 0 ? 'none' : 'visiblePainted'; // Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events#usage_notes
-        });
+        })
+        .attr('stroke', 'var(--background_color)');
 
       const months = parent.append('g'); // 'g' tag to contain paths
       months
@@ -177,11 +178,21 @@ export function YearOverviewHeatMap({
         .append('path')
         .attr('class', 'month-boundary')
         .attr('fill', 'none')
-        .attr('stroke', '#fff')
+        .attr('stroke', 'var(--background_color)')
         .attr('stroke-width', 3)
         .attr('d', (d) => {
           return getMonthBoundaryPath(d, xScale, yScale);
         });
+
+      // Add text color
+      selectAll('.x-axis , .y-axis')
+        .selectAll('text')
+        .attr('fill', 'var(--primary_color)');
+
+      // Add path color
+      selectAll('.x-axis, .y-axis')
+        .selectAll('path')
+        .attr('stroke', 'var(--primary_color)');
 
       // Add hover and click listner to heat cell
       selectAll<SVGRectElement, YearOverviewDatum>('.heat-cell')
