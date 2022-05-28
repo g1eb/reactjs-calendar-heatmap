@@ -75,6 +75,7 @@ export function DrilldownCalendar({
   onHideTooltip,
   response,
   fetchGlobalData,
+  fetchDayData,
   ...rest
 }: DrilldownCalendarProps): JSX.Element {
   const [overviewOrder, setOverviewOrder] = useState<
@@ -206,6 +207,7 @@ export function DrilldownCalendar({
             color={color}
             data={currentDay}
             {...rest}
+            fetchDayData={fetchDayData}
             response={response}
             fade={fade}
             onTooltip={onTooltip}

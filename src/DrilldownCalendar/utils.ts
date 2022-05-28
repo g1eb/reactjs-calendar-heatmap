@@ -1,3 +1,4 @@
+import type { DayOverviewHeatmapProps } from '../DayOverviewHeatmap/utils';
 import type { CalendarHeatmapDatum, Response } from '../utils';
 import type { HTMLProps } from 'react';
 
@@ -12,5 +13,5 @@ export interface DrilldownCalendarProps
   onTooltip?: (datum: { value: unknown }) => void;
   onHideTooltip?: () => void;
   fetchGlobalData?: () => Promise<CalendarHeatmapDatum[]>; // For fetching global data for 'global', 'year', and 'month' overview heatmap.
-  fetchDayData?: (day: string) => Promise<CalendarHeatmapDatum>; // For fetching day bins data for 'day' overview heatmap.
+  fetchDayData?: DayOverviewHeatmapProps['fetchDayData'];
 }
