@@ -6,7 +6,8 @@ This [d3.js](https://d3js.org/) heatmap representing time series data is used **
 
 Includes a global overview of multiple years and visualizations of year, month and day overviews.
 
-Inspired by 
+Inspired by
+
 - [Calendar](https://observablehq.com/@d3/calendar) by [Mike Bostock](https://github.com/mbostock)
 - [ReactJS Calendar Heatmap](https://github.com/g1eb/reactjs-calendar-heatmap) by [Gleb](https://github.com/g1eb)
 
@@ -52,8 +53,11 @@ import { DrilldownCalendar } from '@manufac/reactjs-calendar-heatmap';
   color={color}
   overview={overview}
   response={response}
+  showDayXAxisLabels={showDayXAxisLabels}
   onTooltip={show}
   onHideTooltip={hide}
+  fetchGlobalData={fetchGlobalData}
+  fetchDayData={fetchDayData}
 />
 ```
 
@@ -79,12 +83,14 @@ interface CalendarHeatmapDatum {
 ```
 
 ### Properties
+
 | Property      | Type                                                                                 | Usage                                                               |   Default   | Required |
 |:--------------|:-------------------------------------------------------------------------------------|:--------------------------------------------------------------------|:-----------:|:--------:|
 | data          | `CalendarHeatmapDatum[]`                                                             | Time series data spanning over 1 year or more years                 |    none     |   yes    |
 | color         | color hex code, valid css color name or color scheme names (`'spectral'`, `'hsl'`, or `'hslModified'`) | Theme color for the visual elements                                 | `'#ff4500'` |    no    |
 | overview      | `'global' \| 'year' \| 'month' \| 'week' \| 'day'`                                   | Initial overview for the map                                        |  `'year'`   |    no    |
 | response      | `'hide' \| 'rotate' \| 'offset'`                                                     | Responsiveness strategy for handling overlapping axis labels        |  `'hide'`   |    no    |
+| showDayXAxisLabels | `boolean` | To show X Axis labels for day overview heatmap  | none | no |
 | onTooltip     | `(datum: { value: unknown }) => void;`                                               | onTooltip function is fired on "mouseover" over a visual element    |    none     |    no    |
 | onHideTooltip | `() => void;`                                                                        | onHideTooltip function is fired on "mouseout" over a visual element |    none     |    no    |
 | fetchGlobalData | `() => Promise<CalendarHeatmapDatum[]>;` | To fetch data for 'global', 'year' or 'month' overview heatmap from a REST API | none | no
