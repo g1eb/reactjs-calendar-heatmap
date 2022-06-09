@@ -90,7 +90,7 @@ interface CalendarHeatmapDatum {
 | color         | color hex code, valid css color name or color scheme names (`'spectral'`, `'hsl'`, or `'hslModified'`) | Theme color for the visual elements                                 | `'#ff4500'` |    no    |
 | overview      | `'global' \| 'year' \| 'month' \| 'week' \| 'day'`                                   | Initial overview for the map                                        |  `'year'`   |    no    |
 | response      | `'hide' \| 'rotate' \| 'offset'`                                                     | Responsiveness strategy for handling overlapping axis labels        |  `'hide'`   |    no    |
-| showDayXAxisLabels | `boolean` | To show X Axis labels for day overview heatmap  | none | no |
+| showDayXAxisLabels | `boolean`                                                                       | To show X Axis labels for day overview heatmap  | none | no |
 | onTooltip     | `(datum: { value: unknown }) => void;`                                               | onTooltip function is fired on "mouseover" over a visual element    |    none     |    no    |
 | onHideTooltip | `() => void;`                                                                        | onHideTooltip function is fired on "mouseout" over a visual element |    none     |    no    |
 | fetchGlobalData | `() => Promise<CalendarHeatmapDatum[]>;` | To fetch data for 'global', 'year' or 'month' overview heatmap from a REST API | none | no
