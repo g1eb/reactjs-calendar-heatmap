@@ -49,5 +49,8 @@ Dark.args = { className: 'dark' };
 export const HSL = Template.bind({});
 HSL.args = { color: 'hsl' };
 
+export const HSLModified = Template.bind({});
+HSLModified.args = { color: 'hslModified' };
+
 export const Default = Template.bind({});
 Default.args = { color: undefined };

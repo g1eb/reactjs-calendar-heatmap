@@ -24,6 +24,7 @@ export interface YearOverviewDatum {
   week: number; // Store ISO week of year, 1-53
   month: string; // Store month names. ex: 'Jan', 'Feb', 'Mar' etc.
   total: number;
+  date: Date;
 }
 
 interface YearOverviewData {
@@ -83,11 +84,13 @@ export function getYearData(data: CalendarHeatmapDatum[]): YearOverviewData {
     const combinedData = { ...consecutiveDatesRecord, ...dataRecord };
     dataArray = Object.entries(combinedData).map<YearOverviewDatum>((d) => {
       const [week, day, month] = d[0].split(',');
+      const { date } = d[1];
       return {
         day: Number.parseInt(day, 10),
         week: Number.parseInt(week, 10),
         month,
         total: d[1].total,
+        date: new Date(date),
       };
     });
     // Remove data related to last week of the last year which spans over the first month of the current year.
@@ -190,18 +193,14 @@ function getMonthThresholdScaleAndAxis({
   response?: Response;
 }): [ScaleThreshold<number, number>, D3FCAxis<number>] {
   const monthScaleDomain = [...weekPositions, 53];
+  let monthAxisWidth = element.clientWidth - margin.left - margin.right;
+  monthAxisWidth = monthAxisWidth > 0 ? monthAxisWidth : 0;
   const monthScaleRange = monthScaleDomain.map((ele) => {
-    return (
-      ((ele - 1) / 52) * (element.clientWidth - margin.left - margin.right)
-    );
+    return ((ele - 1) / 52) * monthAxisWidth;
   });
   const monthScale = scaleThreshold()
     .domain(monthScaleDomain)
-    .range([
-      0,
-      ...monthScaleRange,
-      element.clientWidth - margin.left - margin.right,
-    ]);
+    .range([0, ...monthScaleRange, monthAxisWidth]);
   const monthAxis = axisTop(monthScale)
     .tickSize(0)
     .tickCenterLabel(true)
@@ -222,9 +221,11 @@ function getMonthTimeScaleAndAxis({
   year: number;
   response?: Response;
 }): [ScaleTime<number, number>, D3FCAxis<Date | NumberValue>] {
+  let monthAxisWidth = element.clientWidth - margin.left - margin.right;
+  monthAxisWidth = monthAxisWidth > 0 ? monthAxisWidth : 0;
   const monthScale = scaleTime()
     .domain([new Date(year, 0, 1), new Date(year, 11, 31)])
-    .range([0, element.clientWidth - margin.left - margin.right]);
+    .range([0, monthAxisWidth]);
   const monthAxis = axisTop(monthScale)
     .tickSize(0)
     .tickFormat((d) =>

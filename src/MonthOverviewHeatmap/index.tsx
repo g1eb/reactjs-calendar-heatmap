@@ -5,6 +5,7 @@ import {
   getXScaleAndAxis,
   getYScaleAndAxis,
   fadeAwayElements,
+  getColor,
 } from '../utils';
 import { getMonthData, getWeekLabel } from './utils';
 import type { Margin } from '../utils';
@@ -108,10 +109,7 @@ export function MonthOverviewHeatMap({
           return yScale(dayLabels[d.day - 1]) ?? 0;
         })
         .attr('fill', (d) => {
-          const color = Number.isFinite(d.total)
-            ? colorGenerator(d.total)
-            : 'var(--background_color)';
-          return color;
+          return getColor(colorGenerator, d.total);
         })
         .attr('stroke-width', 1)
         .attr('pointer-events', (d) => {

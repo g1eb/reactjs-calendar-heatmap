@@ -6,6 +6,7 @@ import {
   getYScaleAndAxis,
   fadeAwayElements,
   getXScaleAndAxis,
+  getColor,
 } from '../utils';
 import {
   getYearData,
@@ -153,10 +154,7 @@ export function YearOverviewHeatMap({
         .attr('x', (d) => xScale(weekLabels[d.week - 1]) ?? 0)
         .attr('y', (d) => yScale(dayLabels[d.day - 1]) ?? 0)
         .attr('fill', (d) => {
-          const color = Number.isFinite(d.total)
-            ? colorGenerator(d.total)
-            : 'var(--background_color)';
-          return color;
+          return getColor(colorGenerator, d.total);
         })
         .attr('stroke-width', 0.1) // Decresed it to 0.1 to create contrast between cell borders and month before boundary paths
         .attr('pointer-events', (d) => {

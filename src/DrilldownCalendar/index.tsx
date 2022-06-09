@@ -1,3 +1,4 @@
+import { maxIndex } from 'd3';
 import { getWeek } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { DayOverviewHeatMap } from '../DayOverviewHeatmap';
@@ -76,6 +77,7 @@ export function DrilldownCalendar({
   response,
   fetchGlobalData,
   fetchDayData,
+  showDayXAxisLabels,
   ...rest
 }: DrilldownCalendarProps): JSX.Element {
   const [overviewOrder, setOverviewOrder] = useState<
@@ -111,14 +113,21 @@ export function DrilldownCalendar({
   // To set initial data for first rendering of an overview.
   useEffect(() => {
     if (globalData.length > 0) {
+      const currentDatumIndex = maxIndex(
+        globalData,
+        (datum) => new Date(datum.date)
+      );
       switch (overview) {
         case 'month':
           setCurrentMonthData(
             filterMonthData(
               globalData,
-              new Date(globalData[0].date).toLocaleString(undefined, {
-                month: 'short',
-              })
+              new Date(globalData[currentDatumIndex].date).toLocaleString(
+                undefined,
+                {
+                  month: 'short',
+                }
+              )
             )
           );
           break;
@@ -126,12 +135,12 @@ export function DrilldownCalendar({
           setCurrentYearData(
             filterDataByYear(
               globalData,
-              new Date(globalData[0].date).getFullYear()
+              new Date(globalData[currentDatumIndex].date).getFullYear()
             )
           );
           break;
         case 'day':
-          setCurrentDay(globalData[0]);
+          setCurrentDay(globalData[currentDatumIndex]);
           break;
         default:
           break;
@@ -207,6 +216,7 @@ export function DrilldownCalendar({
             color={color}
             data={currentDay}
             {...rest}
+            showXAxisLabels={showDayXAxisLabels}
             fetchDayData={fetchDayData}
             response={response}
             fade={fade}
@@ -244,7 +254,7 @@ export function DrilldownCalendar({
   }
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative' }} className={rest.className}>
       <button
         style={{
           position: 'absolute',
