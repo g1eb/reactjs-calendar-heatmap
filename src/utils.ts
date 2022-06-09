@@ -111,9 +111,11 @@ export function getXScaleAndAxis({
   response,
   align,
 }: ScaleAndAxisProps): [ScaleBand<string>, D3FCAxis<string>] {
+  let range = element.clientWidth - margin.left - margin.right;
+  range = range > 0 ? range : 0;
   const xScale = scaleBand()
     .domain(labels)
-    .range([0, element.clientWidth - margin.left - margin.right])
+    .range([0, range])
     .paddingInner(paddingInner);
 
   const axisFunction = align === 'bottom' ? axisBottom : axisTop;
@@ -129,9 +131,11 @@ export function getYScaleAndAxis({
   paddingInner,
   response,
 }: ScaleAndAxisProps): [ScaleBand<string>, D3FCAxis<string>] {
+  let range = element.clientHeight - margin.top - margin.bottom;
+  range = range > 0 ? range : 0;
   const yScale = scaleBand()
     .domain(labels)
-    .range([0, element.clientHeight - margin.top - margin.bottom])
+    .range([0, range])
     .paddingInner(paddingInner);
   let yAxis = axisLeft(yScale).tickValues(labels).tickSize(0);
   yAxis = addAxisLabelResponsivness(yAxis, response);
@@ -142,16 +146,33 @@ function getHSL(val: number): string {
   return hsl(360 * val, 0.85, 0.7).formatHsl();
 }
 
+function getDrilldownBackgroundColor(): string {
+  const container = document.querySelectorAll('.dark, .light'); // Choose container with either of the 'class'
+  let initialColor = '#ffffff';
+  if (container.length > 0) {
+    /**
+     * 'getPropertyValue' returns a string containing the value of a specified CSS property.
+     * Ref: https://developer.mozilla.org/en-US/docs/Web/API/CSSStyleDeclaration/getPropertyValue
+     */
+    const backgroundColor = getComputedStyle(container[0]).getPropertyValue(
+      '--background_color'
+    );
+    initialColor = backgroundColor === '' ? initialColor : backgroundColor;
+  }
+  return initialColor;
+}
+
 export function createColorGenerator(
   minValue: number,
   maxValue: number,
   color?: string | undefined | null
 ): ScaleSequential<string> | ScaleLinear<string, string> {
   let colorGenerator: ScaleSequential<string> | ScaleLinear<string, string>;
+  const initialColor = getDrilldownBackgroundColor();
   switch (color) {
     case 'spectral':
       colorGenerator = scaleSequential()
-        .domain([minValue, maxValue])
+        .domain([maxValue, minValue])
         .interpolator(interpolateSpectral);
       break;
     case 'hsl':
@@ -159,15 +180,24 @@ export function createColorGenerator(
         .domain([minValue, maxValue])
         .interpolator(getHSL);
       break;
+    case 'hslModified':
+      colorGenerator = scaleLinear<string>()
+        .domain([minValue, (minValue + maxValue) / 2, maxValue])
+        .range([
+          hsl(180, 0.85, 0.6).formatHsl(),
+          'white',
+          hsl(0, 0.85, 0.6).formatHsl(),
+        ]);
+      break;
     case null:
     case undefined:
       colorGenerator = scaleLinear<string>()
-        .range(['#ffffff', '#ff4500'])
+        .range([initialColor, '#ff4500'])
         .domain([minValue, maxValue]);
       break;
     default:
       colorGenerator = scaleLinear<string>()
-        .range(['#ffffff', color])
+        .range([initialColor, color])
         .domain([minValue, maxValue]);
   }
   return colorGenerator;
@@ -212,4 +242,14 @@ export async function fadeAwayElements(selectorsList: string[]): Promise<void> {
     .ease(easeLinear)
     .style('opacity', 0)
     .end(); // Returns a promise when when every selected element finishes transitioning. Ref: https://github.com/d3/d3-transition#transition_end
+}
+
+export function getColor(
+  colorGenerator: ScaleSequential<string> | ScaleLinear<string, string>,
+  value: number
+): string {
+  const color = Number.isFinite(value)
+    ? colorGenerator(value)
+    : 'var(--background_color)';
+  return color;
 }

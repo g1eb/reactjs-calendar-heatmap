@@ -29,8 +29,14 @@ export const Light = Template.bind({});
 export const Dark = Template.bind({});
 Dark.args = { className: 'dark' };
 
+export const WithoutXAxisLabels = Template.bind({});
+WithoutXAxisLabels.args = { showXAxisLabels: false };
+
 export const HSL = Template.bind({});
 HSL.args = { color: 'hsl' };
+
+export const HSLModified = Template.bind({});
+HSLModified.args = { color: 'hslModified' };
 
 export const Default = Template.bind({});
 Default.args = { color: undefined };

@@ -4,6 +4,7 @@ import {
   getXScaleAndAxis,
   createColorGenerator,
   fadeAwayElements,
+  getColor,
 } from '../utils';
 import { getGlobalHeatmapCellDimensions, getGlobalData } from './utils';
 import type { Margin } from '../utils';
@@ -95,10 +96,7 @@ export function GlobalOverviewHeatMap({
           return xScale(d.year.toString()) ?? 0;
         })
         .attr('fill', (d) => {
-          const color = Number.isFinite(d.total)
-            ? colorGenerator(d.total)
-            : 'var(--background_color)';
-          return color;
+          return getColor(colorGenerator, d.total);
         })
         .attr('stroke-width', 1)
         .attr('stroke', ' var(--background_color)');

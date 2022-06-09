@@ -7,6 +7,7 @@ export interface MonthOverviewDatum {
   day: number; // Store ISO day of week, 1-7 (Mon till Sun)
   week: number; // Store ISO week of year, 1-53
   total: number;
+  date: Date;
 }
 
 interface MonthOverviewData {
@@ -65,6 +66,7 @@ export function getMonthData(data: CalendarHeatmapDatum[]): MonthOverviewData {
         day: Number.parseInt(format(date, 'i'), 10),
         week: Number.parseInt(format(date, 'I'), 10),
         total: d.total,
+        date,
       };
     });
 

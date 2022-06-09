@@ -10,6 +10,7 @@ export interface DrilldownCalendarProps
   color?: string;
   overview?: DrilldownCalendarOverview;
   response?: Response;
+  showDayXAxisLabels?: boolean;
   onTooltip?: (datum: { value: unknown }) => void;
   onHideTooltip?: () => void;
   fetchGlobalData?: () => Promise<CalendarHeatmapDatum[]>; // For fetching global data for 'global', 'year', and 'month' overview heatmap.

@@ -29,7 +29,8 @@ export function getGlobalHeatmapCellDimensions(
 ): [number, number] {
   const { clientHeight } = element;
   const width = xScale.bandwidth();
-  const height = clientHeight - margin.top - margin.bottom;
+  let height = clientHeight - margin.top - margin.bottom;
+  height = height > 0 ? height : 0;
   return [width, height];
 }
 

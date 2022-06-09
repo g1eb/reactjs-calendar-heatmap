@@ -7,7 +7,7 @@ const Meta: ComponentMeta<typeof GlobalOverviewHeatMap> = {
   title: 'GlobalOverviewHeatMap',
   component: GlobalOverviewHeatMap,
   args: {
-    data: generateStorySampleDataForHeatmap(10, 1),
+    data: generateStorySampleDataForHeatmap(2, 1),
     onTooltip: (d: { value: unknown }) => {
       console.log(d);
     },
@@ -31,6 +31,9 @@ Dark.args = { className: 'dark' };
 
 export const HSL = Template.bind({});
 HSL.args = { color: 'hsl' };
+
+export const HSLModified = Template.bind({});
+HSLModified.args = { color: 'hslModified' };
 
 export const Default = Template.bind({});
 Default.args = { color: undefined };

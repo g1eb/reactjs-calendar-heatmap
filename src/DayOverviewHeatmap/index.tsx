@@ -4,6 +4,7 @@ import {
   CalendarHeatmapDatum,
   createColorGenerator,
   fadeAwayElements,
+  getColor,
   getXScaleAndAxis,
   getYScaleAndAxis,
 } from '../utils';
@@ -27,6 +28,7 @@ export function DayOverviewHeatMap({
   onFadeComplete,
   response,
   fetchDayData,
+  showXAxisLabels,
   ...rest
 }: DayOverviewHeatmapProps): JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
@@ -74,6 +76,7 @@ export function DayOverviewHeatMap({
         paddingInner: 0,
         response,
       });
+
       // Y Scale and Y Axis
       const [yScale, yAxis] = getYScaleAndAxis({
         labels: hourLabels,
@@ -95,11 +98,14 @@ export function DayOverviewHeatMap({
         .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
       // Draw x axis
-      svg
-        .append('g')
-        .attr('transform', `translate(${margin.left}, ${margin.top})`)
-        .attr('class', 'x-axis')
-        .call(xAxis);
+      if (showXAxisLabels !== false) {
+        // Similar to year week axis
+        svg
+          .append('g')
+          .attr('transform', `translate(${margin.left}, ${margin.top})`)
+          .attr('class', 'x-axis')
+          .call(xAxis);
+      }
 
       // Draw y axis
       svg
@@ -124,10 +130,7 @@ export function DayOverviewHeatMap({
           return yScale(hourLabels[d.hour]) ?? 0;
         })
         .attr('fill', (d) => {
-          const color = Number.isFinite(d.value)
-            ? colorGenerator(d.value)
-            : 'var(--background_color)';
-          return color;
+          return getColor(colorGenerator, d.value);
         })
         .attr('stroke-width', 1)
         .attr('stroke', 'var(--background_color)');
@@ -220,9 +223,12 @@ export function DayOverviewHeatMap({
           });
 
           // Update X axis
-          select<SVGGElement, unknown>('.x-axis')
-            .call(newXAxis)
-            .attr('transform', `translate(${margin.left}, ${margin.top})`);
+          if (showXAxisLabels !== false) {
+            // Similar to year week axis
+            select<SVGGElement, unknown>('.x-axis')
+              .call(newXAxis)
+              .attr('transform', `translate(${margin.left}, ${margin.top})`);
+          }
 
           // Update Y axis
           select<SVGGElement, unknown>('.y-axis')
@@ -252,7 +258,15 @@ export function DayOverviewHeatMap({
       }
       svg?.remove();
     };
-  }, [color, dayData, onCellClick, onHideTooltip, onTooltip, response]);
+  }, [
+    color,
+    dayData,
+    onCellClick,
+    onHideTooltip,
+    onTooltip,
+    response,
+    showXAxisLabels,
+  ]);
 
   useEffect(() => {
     // Fade away heat cells, x and y axis
