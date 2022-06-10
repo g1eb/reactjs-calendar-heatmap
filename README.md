@@ -39,6 +39,8 @@ Inspired by
 yarn add @manufac/reactjs-calendar-heatmap
 ```
 
+[NPM Location](https://www.npmjs.com/package/@manufac/reactjs-calendar-heatmap)
+
 2. Import `DrilldownCalendar` in your component
 
 ```js
