@@ -6,9 +6,10 @@ This [d3.js](https://d3js.org/) heatmap representing time series data is used **
 
 Includes a global overview of multiple years and visualizations of year, month and day overviews.
 
-Inspired by 
-- [Calendar](https://observablehq.com/@d3/calendar) by [Mike Bostock](https://github.com/mbostock)
-- [ReactJS Calendar Heatmap](https://github.com/g1eb/reactjs-calendar-heatmap) by [Gleb](https://github.com/g1eb)
+Inspired by
+
+* [Calendar](https://observablehq.com/@d3/calendar) by [Mike Bostock](https://github.com/mbostock)
+* [ReactJS Calendar Heatmap](https://github.com/g1eb/reactjs-calendar-heatmap) by [Gleb](https://github.com/g1eb)
 
 ### Demo
 
@@ -41,19 +42,24 @@ yarn add @manufac/reactjs-calendar-heatmap
 2. Import `DrilldownCalendar` in your component
 
 ```js
-import { DrilldownCalendar } from '@manufac/reactjs-calendar-heatmap';
+import {
+    DrilldownCalendar
+} from '@manufac/reactjs-calendar-heatmap';
 ```
 
 3. Render `DrilldownCalendar` component
 
 ```jsx
 <DrilldownCalendar
-  data={data}
   color={color}
+  data={data}
   overview={overview}
   response={response}
+  showDayXAxisLabels={showDayXAxisLabels}
   onTooltip={show}
   onHideTooltip={hide}
+  fetchGlobalData={fetchGlobalData}
+  fetchDayData={fetchDayData}
 />
 ```
 
@@ -79,14 +85,16 @@ interface CalendarHeatmapDatum {
 ```
 
 ### Properties
-| Property      | Type                                                                                 | Usage                                                               |   Default   | Required |
-|:--------------|:-------------------------------------------------------------------------------------|:--------------------------------------------------------------------|:-----------:|:--------:|
-| data          | `CalendarHeatmapDatum[]`                                                             | Time series data spanning over 1 year or more years                 |    none     |   yes    |
-| color         | color hex code, valid css color name or color scheme names (`'spectral'`, `'hsl'`, or `'hslModified'`) | Theme color for the visual elements                                 | `'#ff4500'` |    no    |
-| overview      | `'global' \| 'year' \| 'month' \| 'week' \| 'day'`                                   | Initial overview for the map                                        |  `'year'`   |    no    |
-| response      | `'hide' \| 'rotate' \| 'offset'`                                                     | Responsiveness strategy for handling overlapping axis labels        |  `'hide'`   |    no    |
-| onTooltip     | `(datum: { value: unknown }) => void;`                                               | onTooltip function is fired on "mouseover" over a visual element    |    none     |    no    |
-| onHideTooltip | `() => void;`                                                                        | onHideTooltip function is fired on "mouseout" over a visual element |    none     |    no    |
+
+| Property           | Type                                                                                                   | Usage                                                               |   Default   | Required |
+|:-------------------|:-------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------|:-----------:|:--------:|
+| data               | `CalendarHeatmapDatum[]` | Time series data spanning over 1 year or more years                 |    none     |   yes    |
+| color              | color hex code, valid css color name or color scheme names ( `'spectral'` , `'hsl'` , or `'hslModified'` ) | Theme color for the visual elements                                 | `'#ff4500'` |    no    |
+| overview           | `'global' \| 'year' \| 'month' \| 'week' \| 'day'` | Initial overview for the map                                        | `'year'` |    no    |
+| response           | `'hide' \| 'rotate' \| 'offset'` | Responsiveness strategy for handling overlapping axis labels        | `'hide'` |    no    |
+| showDayXAxisLabels | `boolean` | To show X Axis labels for day overview heatmap                      |    none     |    no    |
+| onTooltip          | `(datum: { value: unknown }) => void;` | onTooltip function is fired on "mouseover" over a visual element    |    none     |    no    |
+| onHideTooltip      | `() => void;` | onHideTooltip function is fired on "mouseout" over a visual element |    none     |    no    |
 | fetchGlobalData | `() => Promise<CalendarHeatmapDatum[]>;` | To fetch data for 'global', 'year' or 'month' overview heatmap from a REST API | none | no
 | fetchDayData | `(dateTime: string) => Promise<CalendarHeatmapDatum['details']>;` | To fetch data for 'day' overview heatmap from a REST API | none | no
 
@@ -94,36 +102,35 @@ interface CalendarHeatmapDatum {
 
 The data contains:
 
-- Day-by-day frequency of an arbitrary event spaninng across 1 or more years
-- For each data point, the intra-day frequency is also optionally listed in `details`
+* Day-by-day frequency of an arbitrary event spaninng across 1 or more years
+* For each data point, the intra-day frequency is also optionally listed in `details`
 
 ```js
-var data = [
-  {
-    "date": "2016-01-01",
-    "total": 17164,
-    "details": [{
-      "date": "2016-01-01 12:30:45",
-      "value": 9192
+var data = [{
+        "date": "2016-01-01",
+        "total": 17164,
+        "details": [{
+                "date": "2016-01-01 12:30:45",
+                "value": 9192
+            },
+            ...{
+                "date": "2016-01-01 17:52:41",
+                "value": 1219
+            }
+        ]
     },
-    ...
     {
-      "date": "2016-01-01 17:52:41",
-      "value": 1219
-    }]
-  },
-  {
-    "date": "2016-01-02",
-    "total": 17100,
-    "details": [{
-      "date": "2016-01-02 11:30:00",
-      "value": 9132
-    },
-    ...
-    {
-      "date": "2016-01-02 15:52:00",
-      "value": 1219
-    }]
-  }
+        "date": "2016-01-02",
+        "total": 17100,
+        "details": [{
+                "date": "2016-01-02 11:30:00",
+                "value": 9132
+            },
+            ...{
+                "date": "2016-01-02 15:52:00",
+                "value": 1219
+            }
+        ]
+    }
 ]
 ```
