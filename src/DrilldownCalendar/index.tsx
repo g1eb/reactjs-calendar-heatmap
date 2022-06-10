@@ -64,6 +64,38 @@ function filterSelectedDatum(
   );
 }
 
+interface BottomLabelProps {
+  overview: DrilldownCalendarOverview;
+  currentYearDate: Date;
+  currentMonthDate: Date;
+  currentDayDate: Date;
+}
+
+function getBottomLabel({
+  overview,
+  currentYearDate,
+  currentMonthDate,
+  currentDayDate,
+}: BottomLabelProps): string {
+  let label = '';
+  switch (overview) {
+    case 'day':
+      label = currentDayDate.toLocaleString(undefined, { dateStyle: 'medium' });
+      break;
+    case 'month':
+      label = `${currentMonthDate.toLocaleDateString(undefined, {
+        month: 'short',
+      })} ${currentMonthDate.getFullYear()}`;
+      break;
+    case 'year':
+      label = currentYearDate.getFullYear().toString();
+      break;
+    default:
+      break;
+  }
+  return label;
+}
+
 /**
  * @param param0
  * @returns
@@ -262,6 +294,12 @@ export function DrilldownCalendar({
           left: 0,
           background: 'transparent',
           borderColor: 'transparent',
+          /**
+           * When wrapping this whole component , it might happen the component and
+           * its child components would be in different z level than the wrapping component.
+           * Increasing the zIndex so that the back button is accessible to the user input devices.
+           */
+          zIndex: 5,
         }}
         disabled={overviewOrder[overviewOrder.length - 1] === 'global'}
         onClick={() => {
@@ -284,6 +322,22 @@ export function DrilldownCalendar({
         </svg>
       </button>
       {getOverviewChart(overviewOrder[overviewOrder.length - 1])}
+      <span
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          textAlign: 'center',
+          cursor: 'pointer',
+        }}
+      >
+        {getBottomLabel({
+          overview: overviewOrder[overviewOrder.length - 1],
+          currentYearDate: new Date(currentYearData[0]?.date ?? ''),
+          currentMonthDate: new Date(currentMonthData[0]?.date ?? ''),
+          currentDayDate: new Date(currentDay.date),
+        })}
+      </span>
     </div>
   );
 }
