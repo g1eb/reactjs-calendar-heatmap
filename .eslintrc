@@ -1,0 +1,57 @@
+// Adopted from d3-portfoilo repo
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react-hooks/recommended",
+      "plugin:import/recommended", // Ref: https://github.com/import-js/eslint-plugin-import#typescript
+      "plugin:import/typescript"
+    ],
+  
+    "rules": {
+      // Adopted from "app" repo. Ref: https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md#importorder-enforce-a-convention-in-module-import-order
+      "import/order": [
+        "error",
+        {
+          "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive": true
+          }
+        }
+      ],
+      "import/no-unused-modules": [
+        // Ref: https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-unused-modules.md#options
+        "error",
+        {
+          "unusedExports": true
+        }
+      ]
+    },
+  
+    // Ref: https://github.com/import-js/eslint-plugin-import#typescript
+    "settings": {
+      // Ref: https://github.com/alexgorbatchev/eslint-import-resolver-typescript#configuration
+      "import/parsers": {
+        "@typescript-eslint/parser": [".ts", ".tsx"] // Ref: https://github.com/benmosher/eslint-plugin-import#importparsers
+        // Idealy the abpve shouldn't be needed because the configured parser is already @typescript-eslint/parser
+        // But adding it because otherwise, import/no-unused-modules, is not working as expected.
+      },
+      "import/resolver": {
+        "typescript": {}
+      }
+    },
+  
+    "overrides": [
+      {
+        "files": ["*.stories.tsx", "*.d.ts"],
+        "rules": {
+          "import/no-unused-modules": "off"
+        }
+      }
+    ]
+  }
+  
