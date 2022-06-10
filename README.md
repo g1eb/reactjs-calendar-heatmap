@@ -51,8 +51,8 @@ import {
 
 ```jsx
 <DrilldownCalendar
-  data={data}
   color={color}
+  data={data}
   overview={overview}
   response={response}
   showDayXAxisLabels={showDayXAxisLabels}
