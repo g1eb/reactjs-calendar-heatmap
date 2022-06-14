@@ -210,15 +210,7 @@ export function YearOverviewHeatMap({
           onHideTooltip?.();
         })
         .on('click', (_e: React.MouseEvent<SVGRectElement>, datum) => {
-          // Pass array of selectors
-          fadeAwayElements([
-            '.heat-cell',
-            '.x-axis',
-            '.y-axis',
-            '.month-boundary',
-          ]).then(() => {
-            onCellClick?.(datum);
-          });
+          onCellClick?.(datum);
         });
 
       // Add hovering effect for y axis labels
@@ -267,15 +259,7 @@ export function YearOverviewHeatMap({
         })
         .on('click', (e: React.MouseEvent<SVGTextElement>) => {
           const monthLabel: string = e.currentTarget.textContent ?? '';
-          // Pass array of selectors
-          fadeAwayElements([
-            '.heat-cell',
-            '.x-axis',
-            '.y-axis',
-            '.month-boundary',
-          ]).then(() => {
-            onMonthLabelClick?.(monthLabel);
-          });
+          onMonthLabelClick?.(monthLabel);
         });
 
       // Add resize listener
