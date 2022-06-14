@@ -127,10 +127,7 @@ export function GlobalOverviewHeatMap({
           onHideTooltip?.();
         })
         .on('click', (_e: React.MouseEvent<SVGRectElement>, datum) => {
-          // Pass array of selectors
-          fadeAwayElements(['.heat-cell', '.x-axis']).then(() => {
-            onCellClick?.(datum);
-          });
+          onCellClick?.(datum);
         });
 
       // Adding animation on mouseover to the labels

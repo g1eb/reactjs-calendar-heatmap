@@ -1,9 +1,9 @@
 import { maxIndex } from 'd3';
-import { getWeek } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 import { DayOverviewHeatMap } from '../DayOverviewHeatmap';
 import { GlobalOverviewHeatMap } from '../GlobalOverviewHeatmap';
 import { MonthOverviewHeatMap } from '../MonthOverviewHeatmap';
+import { fadeAwayElements } from '../utils';
 import { YearOverviewHeatMap } from '../YearOverviewHeatmap';
 import type { MonthOverviewDatum } from '../MonthOverviewHeatmap/utils';
 import type { CalendarHeatmapDatum } from '../utils';
@@ -54,12 +54,10 @@ function filterSelectedDatum(
   data: CalendarHeatmapDatum[],
   datum: YearOverviewDatum | MonthOverviewDatum
 ): CalendarHeatmapDatum {
+  datum.date;
   return (
     data.find((ele) => {
-      const dateObject = new Date(ele.date);
-      return (
-        getWeek(dateObject) === datum.week && dateObject.getDay() === datum.day
-      );
+      return ele.date === datum.date.toISOString();
     }) ?? { date: new Date().toISOString(), total: NaN }
   );
 }
@@ -205,18 +203,32 @@ export function DrilldownCalendar({
             onHideTooltip={onHideTooltip}
             onFadeComplete={onFadeComplete}
             onCellClick={(d) => {
-              setCurrentDay(filterSelectedDatum(currentYearData, d));
-              setOverviewOrder((prev) => [
-                ...prev,
-                'day' as DrilldownCalendarOverview,
-              ]);
+              fadeAwayElements([
+                '.heat-cell',
+                '.x-axis',
+                '.y-axis',
+                '.month-boundary',
+              ]).then(() => {
+                setCurrentDay(filterSelectedDatum(currentYearData, d));
+                setOverviewOrder((prev) => [
+                  ...prev,
+                  'day' as DrilldownCalendarOverview,
+                ]);
+              });
             }}
             onMonthLabelClick={(d) => {
-              setCurrentMonthData(filterMonthData(currentYearData, d));
-              setOverviewOrder((prev) => [
-                ...prev,
-                'month' as DrilldownCalendarOverview,
-              ]);
+              fadeAwayElements([
+                '.heat-cell',
+                '.x-axis',
+                '.y-axis',
+                '.month-boundary',
+              ]).then(() => {
+                setCurrentMonthData(filterMonthData(currentYearData, d));
+                setOverviewOrder((prev) => [
+                  ...prev,
+                  'month' as DrilldownCalendarOverview,
+                ]);
+              });
             }}
           />
         );
@@ -233,11 +245,15 @@ export function DrilldownCalendar({
             onHideTooltip={onHideTooltip}
             onFadeComplete={onFadeComplete}
             onCellClick={(d) => {
-              setCurrentDay(filterSelectedDatum(currentMonthData, d));
-              setOverviewOrder((prev) => [
-                ...prev,
-                'day' as DrilldownCalendarOverview,
-              ]);
+              fadeAwayElements(['.heat-cell', '.x-axis', '.y-axis']).then(
+                () => {
+                  setCurrentDay(filterSelectedDatum(currentMonthData, d));
+                  setOverviewOrder((prev) => [
+                    ...prev,
+                    'day' as DrilldownCalendarOverview,
+                  ]);
+                }
+              );
             }}
           />
         );
@@ -271,12 +287,14 @@ export function DrilldownCalendar({
             onHideTooltip={onHideTooltip}
             onFadeComplete={onFadeComplete}
             onCellClick={(d) => {
-              const { year } = d;
-              setCurrentYearData(filterDataByYear(globalData, year));
-              setOverviewOrder((prev) => [
-                ...prev,
-                'year' as DrilldownCalendarOverview,
-              ]);
+              fadeAwayElements(['.heat-cell', '.x-axis']).then(() => {
+                const { year } = d;
+                setCurrentYearData(filterDataByYear(globalData, year));
+                setOverviewOrder((prev) => [
+                  ...prev,
+                  'year' as DrilldownCalendarOverview,
+                ]);
+              });
             }}
           />
         );
