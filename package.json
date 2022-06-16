@@ -46,6 +46,7 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.17.10",
+    "@faker-js/faker": "^7.2.0",
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.2",
