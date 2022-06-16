@@ -1,6 +1,6 @@
-import { extent } from "d3";
-import { eachHourOfInterval, startOfDay, endOfDay } from "date-fns";
-import type { CalendarHeatmapDatum, BaseOverviewHeatmapProps } from "../utils";
+import { extent } from 'd3';
+import { eachHourOfInterval, startOfDay, endOfDay } from 'date-fns';
+import type { CalendarHeatmapDatum, BaseOverviewHeatmapProps } from '../utils';
 
 export interface DayOverviewDatum {
   date: Date;
@@ -14,10 +14,11 @@ interface DayOverviewData {
   valueExtent: [number, number];
 }
 
-export interface DayOverviewHeatmapProps extends BaseOverviewHeatmapProps<DayOverviewDatum> {
+export interface DayOverviewHeatmapProps
+  extends BaseOverviewHeatmapProps<DayOverviewDatum> {
   data: CalendarHeatmapDatum;
   showXAxisLabels?: boolean;
-  fetchDayData?: (dateTime: string) => Promise<CalendarHeatmapDatum["details"]>; // For fetching day data for 'day' overview heatmap with bin size of minutes interval.
+  fetchDayData?: (dateTime: string) => Promise<CalendarHeatmapDatum['details']>; // For fetching day data for 'day' overview heatmap with bin size of minutes interval.
 }
 
 /**
@@ -60,15 +61,16 @@ export function getDayData(data: CalendarHeatmapDatum): DayOverviewData {
 }
 
 function convertDatetoYAxisLabel(date: Date) {
-  return date.toLocaleString(undefined, { hour12: true, hour: "2-digit" });
+  return date.toLocaleString(undefined, { hour12: true, hour: '2-digit' });
 }
 
 export function generateYAxisLabels(): string[] {
   const today = new Date();
   const startOfToday = startOfDay(today);
   const endOfToday = endOfDay(today);
-  const labels = eachHourOfInterval({ start: startOfToday, end: endOfToday }).map((date) =>
-    convertDatetoYAxisLabel(date)
-  );
+  const labels = eachHourOfInterval({
+    start: startOfToday,
+    end: endOfToday,
+  }).map((date) => convertDatetoYAxisLabel(date));
   return labels;
 }
