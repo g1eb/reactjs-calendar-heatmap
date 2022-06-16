@@ -1,4 +1,5 @@
 import { extent } from 'd3';
+import { eachHourOfInterval, startOfDay, endOfDay } from 'date-fns';
 import type { CalendarHeatmapDatum, BaseOverviewHeatmapProps } from '../utils';
 
 export interface DayOverviewDatum {
@@ -57,4 +58,19 @@ export function getDayData(data: CalendarHeatmapDatum): DayOverviewData {
     dataArray,
     valueExtent: [minValue ?? NaN, maxValue ?? NaN],
   };
+}
+
+function convertDatetoYAxisLabel(date: Date) {
+  return date.toLocaleString(undefined, { hour12: true, hour: '2-digit' });
+}
+
+export function generateYAxisLabels(): string[] {
+  const today = new Date();
+  const startOfToday = startOfDay(today);
+  const endOfToday = endOfDay(today);
+  const labels = eachHourOfInterval({
+    start: startOfToday,
+    end: endOfToday,
+  }).map((date) => convertDatetoYAxisLabel(date));
+  return labels;
 }

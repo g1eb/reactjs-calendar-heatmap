@@ -8,7 +8,7 @@ import {
   getXScaleAndAxis,
   getYScaleAndAxis,
 } from '../utils';
-import { createXAxisLabel, getDayData } from './utils';
+import { createXAxisLabel, generateYAxisLabels, getDayData } from './utils';
 import type { Margin } from '../utils';
 import type { DayOverviewHeatmapProps, DayOverviewDatum } from './utils';
 import type { Selection } from 'd3';
@@ -58,7 +58,7 @@ export function DayOverviewHeatMap({
       // Create array day data and max and min value of the whole day.
       const { dataArray, valueExtent } = getDayData(dayData);
       const binCountPerHour = Math.ceil((dayData.details.length ?? 0) / 24);
-      const hourLabels = range(0, 24).map((e) => `${e}h`);
+      const hourLabels = generateYAxisLabels();
       const xAxisLabels = range(0, binCountPerHour).map((e) =>
         createXAxisLabel(e)
       );

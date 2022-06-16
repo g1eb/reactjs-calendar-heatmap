@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { timeDays, timeMinutes } from 'd3';
 import {
   endOfDay,
@@ -7,6 +8,8 @@ import {
   endOfYear,
 } from 'date-fns';
 import type { CalendarHeatmapDatum } from './utils';
+
+faker.mersenne.seed(1);
 
 // Modified it to simulate 'bin-data' rest api.
 export function generateStorySampleDataForHeatmap(
@@ -24,7 +27,7 @@ export function generateStorySampleDataForHeatmap(
       const details = timeMinutes(start, end, binStep).map((e) => {
         return {
           date: e.toISOString(),
-          value: Math.round(Math.random() * 100), // Generate value from 0-99
+          value: faker.datatype.number({ min: 0, max: 100 }), // Generate value from 0-100
         };
       });
 
