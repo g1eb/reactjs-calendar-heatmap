@@ -265,7 +265,7 @@ var CalendarHeatmap = function (_React$Component) {
       }).attr('fill', function (d) {
         var color = d3.scaleLinear().range(['#ffffff', _this2.props.color]).domain([-0.15 * max_value, max_value]);
         return color(d.total) || '#ff4500';
-      }).on('click', function (d) {
+      }).on('click', function (event, d) {
         if (_this2.in_transition) {
           return;
         }
@@ -274,10 +274,10 @@ var CalendarHeatmap = function (_React$Component) {
         _this2.in_transition = true;
 
         // Set selected date to the one clicked on
-        _this2.selected = d;
+        _this2.selected = { date: d.date
 
-        // Hide tooltip
-        _this2.hideTooltip();
+          // Hide tooltip
+        };_this2.hideTooltip();
 
         // Remove all global overview related items and labels
         _this2.removeGlobalOverview();
