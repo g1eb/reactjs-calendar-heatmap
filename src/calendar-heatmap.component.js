@@ -235,14 +235,14 @@ class CalendarHeatmap extends React.Component {
           .domain([-0.15 * max_value, max_value])
         return color(d.total) || '#ff4500'
       })
-      .on('click', d => {
+      .on('click', (event, d) => {
         if (this.in_transition) { return }
 
         // Set in_transition flag
         this.in_transition = true
 
         // Set selected date to the one clicked on
-        this.selected = d
+        this.selected = { date: d.date }
 
         // Hide tooltip
         this.hideTooltip()
