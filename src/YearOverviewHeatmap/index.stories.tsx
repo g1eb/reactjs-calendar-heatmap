@@ -13,9 +13,9 @@ function filterYearData(data: CalendarHeatmapDatum[]): CalendarHeatmapDatum[] {
     const minDate = startOfYear(selectedDate);
     const maxDate = endOfYear(selectedDate);
     // Filter data down to the selected year
-    yearData = data.filter((d) => {
-      return minDate <= new Date(d.date) && new Date(d.date) < maxDate;
-    });
+    yearData = data.filter(
+      (d) => minDate <= new Date(d.date) && new Date(d.date) < maxDate
+    );
   }
   return yearData;
 }

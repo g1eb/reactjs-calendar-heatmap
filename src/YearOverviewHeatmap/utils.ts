@@ -6,7 +6,6 @@ import {
   timeDays,
   scaleThreshold,
   scaleTime,
-  NumberValue,
 } from 'd3';
 import { endOfYear, format, startOfYear } from 'date-fns';
 import { removeLastYearWeekData, addAxisLabelResponsivness } from '../utils';
@@ -17,7 +16,7 @@ import type {
   Response,
 } from '../utils';
 import type { D3FCAxis } from '@d3fc/d3fc-axis';
-import type { ScaleBand, ScaleThreshold, ScaleTime } from 'd3';
+import type { ScaleBand, ScaleThreshold, ScaleTime, NumberValue } from 'd3';
 
 export interface YearOverviewDatum {
   day: number; // Store ISO day of week, 1-7 (Mon till Sun)
@@ -71,16 +70,17 @@ export function getYearData(data: CalendarHeatmapDatum[]): YearOverviewData {
     const consecutiveDates = timeDays(minDate, maxDate);
     const consecutiveDatesRecord = consecutiveDates.reduce<
       Record<string, CalendarHeatmapDatum>
-    >((acc, curr) => {
-      return {
+    >(
+      (acc, curr) => ({
         ...acc,
         // 'format' functions here returns ISO week number (1-53) and day (1-7) of a date. Ref: https://date-fns.org/v2.28.0/docs/format
         [`${format(curr, 'I')},${format(curr, 'i')},${monthFormat(curr)}`]: {
           date: curr.toISOString(),
           total: NaN,
         },
-      };
-    }, {});
+      }),
+      {}
+    );
     const combinedData = { ...consecutiveDatesRecord, ...dataRecord };
     dataArray = Object.entries(combinedData).map<YearOverviewDatum>((d) => {
       const [week, day, month] = d[0].split(',');
@@ -195,18 +195,16 @@ function getMonthThresholdScaleAndAxis({
   const monthScaleDomain = [...weekPositions, 53];
   let monthAxisWidth = element.clientWidth - margin.left - margin.right;
   monthAxisWidth = monthAxisWidth > 0 ? monthAxisWidth : 0;
-  const monthScaleRange = monthScaleDomain.map((ele) => {
-    return ((ele - 1) / 52) * monthAxisWidth;
-  });
+  const monthScaleRange = monthScaleDomain.map(
+    (ele) => ((ele - 1) / 52) * monthAxisWidth
+  );
   const monthScale = scaleThreshold()
     .domain(monthScaleDomain)
     .range([0, ...monthScaleRange, monthAxisWidth]);
   const monthAxis = axisTop(monthScale)
     .tickSize(0)
     .tickCenterLabel(true)
-    .tickFormat((_, i) => {
-      return monthLabels[i];
-    });
+    .tickFormat((_, i) => monthLabels[i]);
   return [monthScale, addAxisLabelResponsivness(monthAxis, response)];
 }
 

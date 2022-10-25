@@ -40,9 +40,7 @@ export function getDayData(data: CalendarHeatmapDatum): DayOverviewData {
 
   const dataArray: DayOverviewDatum[] =
     data.details
-      ?.sort((a, b) => {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      }) // Sorting 'data.details' in ascending order
+      ?.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) // Sorting 'data.details' in ascending order
       .map((e, idx) => {
         const date = new Date(e.date);
         return {

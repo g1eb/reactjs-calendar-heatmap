@@ -67,9 +67,10 @@ export function getGlobalData(
 
     // Deriving final data from merged data
     const yearTotalDataArray = Array.from(combinedData); // Using 'Array.from()' to convert keys "iterator" to "array"
-    dataArray = yearTotalDataArray.map<GlobalOverviewDatum>((ele) => {
-      return { year: ele[0], total: ele[1] };
-    });
+    dataArray = yearTotalDataArray.map<GlobalOverviewDatum>((ele) => ({
+      year: ele[0],
+      total: ele[1],
+    }));
 
     [minTotal, maxTotal] = extent(dataArray, (d) => d.total);
   }

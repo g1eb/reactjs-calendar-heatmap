@@ -1,16 +1,23 @@
-// Adopted from d3-portfoilo repo
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "jsx": true
+  },
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
     "plugin:import/recommended", // Ref: https://github.com/import-js/eslint-plugin-import#typescript
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "airbnb",
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:react/jsx-runtime", // Ref: https://github.com/jsx-eslint/eslint-plugin-react#configuration
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier"
   ],
-
   "rules": {
     // Adopted from "app" repo. Ref: https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md#importorder-enforce-a-convention-in-module-import-order
     "import/order": [
@@ -38,9 +45,41 @@
       {
         "unusedExports": true
       }
-    ]
+    ],
+    "import/extensions": [
+      "error",
+      {
+        "ts": "never",
+        "tsx": "never",
+        "json": "always"
+      }
+    ], // To allow use of extensions in import statements.
+    "react/require-default-props": "off", // This rule aims to ensure that any non-required prop types of a component has a corresponding defaultProps value.
+    "import/prefer-default-export": "off", // To turn off airbnb default export rule.
+    "react/jsx-props-no-spreading": "off",
+    "react/function-component-definition": [
+      "error",
+      {
+        "namedComponents": ["function-declaration", "arrow-function"],
+        "unnamedComponents": "arrow-function"
+      }
+    ], // Component definiton for named and unnamed components.
+    "react/jsx-no-bind": [
+      "error",
+      {
+        "allowFunctions": true,
+        "allowArrowFunctions": true
+      }
+    ],
+    "no-redeclare": "off", // Ref: https://typescript-eslint.io/rules/no-redeclare/#how-to-use
+    "@typescript-eslint/no-redeclare": [
+      "error",
+      {
+        "ignoreDeclarationMerge": true
+      }
+    ], // Ref: https://typescript-eslint.io/rules/no-redeclare/#ignoredeclarationmerge
+    "@typescript-eslint/consistent-type-imports": "error"
   },
-
   // Ref: https://github.com/import-js/eslint-plugin-import#typescript
   "settings": {
     // Ref: https://github.com/alexgorbatchev/eslint-import-resolver-typescript#configuration
@@ -53,12 +92,17 @@
       "typescript": {}
     }
   },
-
   "overrides": [
     {
-      "files": ["*.stories.tsx", "*.d.ts"],
+      "files": ["*.stories.tsx", "*.d.ts", "*.js", "index.tsx"],
       "rules": {
         "import/no-unused-modules": "off"
+      }
+    },
+    {
+      "files": ["*.stories.tsx", "dev-utils.ts"],
+      "rules": {
+        "import/no-extraneous-dependencies": "off"
       }
     }
   ]

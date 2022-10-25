@@ -32,12 +32,10 @@ export function getMonthData(data: CalendarHeatmapDatum[]): MonthOverviewData {
   if (data.length > 0) {
     // Contains date string to 'CalendarHeatmapDatum' record
     const dataRecord = data.reduce<Record<string, CalendarHeatmapDatum>>(
-      (acc, curr) => {
-        return {
-          ...acc,
-          [new Date(curr.date).getDate().toString()]: curr,
-        };
-      },
+      (acc, curr) => ({
+        ...acc,
+        [new Date(curr.date).getDate().toString()]: curr,
+      }),
       {}
     );
     // Selects an initial date for creating start and end date of that month
@@ -49,15 +47,16 @@ export function getMonthData(data: CalendarHeatmapDatum[]): MonthOverviewData {
     const consecutiveDates = timeDays(minDate, maxDate);
     const consecutiveDatesRecord = consecutiveDates.reduce<
       Record<string, CalendarHeatmapDatum>
-    >((acc, curr) => {
-      return {
+    >(
+      (acc, curr) => ({
         ...acc,
         [curr.getDate().toString()]: {
           date: curr.toISOString(),
           total: NaN,
         },
-      };
-    }, {});
+      }),
+      {}
+    );
 
     const combinedData = { ...consecutiveDatesRecord, ...dataRecord };
     dataArray = Object.values(combinedData).map<MonthOverviewDatum>((d) => {

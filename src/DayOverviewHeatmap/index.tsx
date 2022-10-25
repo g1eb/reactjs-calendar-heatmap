@@ -1,7 +1,6 @@
 import { easeLinear, range, select, selectAll } from 'd3';
 import { useEffect, useRef, useState } from 'react';
 import {
-  CalendarHeatmapDatum,
   createColorGenerator,
   fadeAwayElements,
   getColor,
@@ -9,7 +8,7 @@ import {
   getYScaleAndAxis,
 } from '../utils';
 import { createXAxisLabel, generateYAxisLabels, getDayData } from './utils';
-import type { Margin } from '../utils';
+import type { Margin, CalendarHeatmapDatum } from '../utils';
 import type { DayOverviewHeatmapProps, DayOverviewDatum } from './utils';
 import type { Selection } from 'd3';
 
@@ -37,9 +36,7 @@ export function DayOverviewHeatMap({
   useEffect(() => {
     async function fetchData() {
       const details = data.details ?? (await fetchDayData?.(data.date)) ?? [];
-      setDayData((prev) => {
-        return { ...prev, details };
-      });
+      setDayData((prev) => ({ ...prev, details }));
     }
     fetchData();
   }, [data.date, data.details, fetchDayData]);
@@ -47,9 +44,8 @@ export function DayOverviewHeatMap({
   useEffect(() => {
     const margin: Margin = { top: 50, bottom: 50, left: 50, right: 50 };
 
-    let svg: Selection<SVGSVGElement, unknown, null, undefined> | undefined =
-      undefined;
-    let resize: (() => void) | undefined = undefined;
+    let svg: Selection<SVGSVGElement, unknown, null, undefined> | undefined;
+    let resize: (() => void) | undefined;
     if (
       ref.current !== null &&
       Array.isArray(dayData.details) &&
@@ -123,15 +119,9 @@ export function DayOverviewHeatMap({
         .attr('class', 'heat-cell')
         .attr('width', xScale.bandwidth())
         .attr('height', yScale.bandwidth())
-        .attr('x', (d) => {
-          return xScale(createXAxisLabel(d.col)) ?? 0;
-        })
-        .attr('y', (d) => {
-          return yScale(hourLabels[d.hour]) ?? 0;
-        })
-        .attr('fill', (d) => {
-          return getColor(colorGenerator, d.value);
-        })
+        .attr('x', (d) => xScale(createXAxisLabel(d.col)) ?? 0)
+        .attr('y', (d) => yScale(hourLabels[d.hour]) ?? 0)
+        .attr('fill', (d) => getColor(colorGenerator, d.value))
         .attr('stroke-width', 1)
         .attr('stroke', 'var(--background_color)');
 
@@ -242,12 +232,8 @@ export function DayOverviewHeatMap({
             .ease(easeLinear)
             .attr('width', newXScale.bandwidth())
             .attr('height', newYScale.bandwidth())
-            .attr('x', (d) => {
-              return newXScale(createXAxisLabel(d.col)) ?? 0;
-            })
-            .attr('y', (d) => {
-              return newYScale(hourLabels[d.hour]) ?? 0;
-            });
+            .attr('x', (d) => newXScale(createXAxisLabel(d.col)) ?? 0)
+            .attr('y', (d) => newYScale(hourLabels[d.hour]) ?? 0);
         }
       };
       window.addEventListener('resize', resize);

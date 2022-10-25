@@ -13,9 +13,9 @@ function filterMonthData(data: CalendarHeatmapDatum[]): CalendarHeatmapDatum[] {
     const minDate = startOfMonth(selectedDate);
     const maxDate = endOfMonth(selectedDate);
     // Filter data down to the selected month
-    monthData = data.filter((d) => {
-      return minDate <= new Date(d.date) && new Date(d.date) < maxDate;
-    });
+    monthData = data.filter(
+      (d) => minDate <= new Date(d.date) && new Date(d.date) < maxDate
+    );
   }
   return monthData;
 }

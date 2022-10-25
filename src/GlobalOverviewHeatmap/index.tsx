@@ -32,9 +32,8 @@ export function GlobalOverviewHeatMap({
   useEffect(() => {
     const margin: Margin = { top: 50, bottom: 50, left: 50, right: 50 };
 
-    let svg: Selection<SVGSVGElement, unknown, null, undefined> | undefined =
-      undefined;
-    let resize: (() => void) | undefined = undefined;
+    let svg: Selection<SVGSVGElement, unknown, null, undefined> | undefined;
+    let resize: (() => void) | undefined;
     if (ref.current !== null && data.length > 0) {
       // Create array data, min and max year and min and max total of the years
       const { dataArray, yearExtent, totalExtent } = getGlobalData(data);
@@ -45,9 +44,7 @@ export function GlobalOverviewHeatMap({
       const colorGenerator = createColorGenerator(minTotal, maxTotal, color);
 
       // Define year labels
-      const yearLabels = range(startYear, endYear + 1).map((d) => {
-        return d.toString();
-      });
+      const yearLabels = range(startYear, endYear + 1).map((d) => d.toString());
 
       // X Scale and X Axis
       const [xScale, xAxis] = getXScaleAndAxis({
@@ -92,12 +89,8 @@ export function GlobalOverviewHeatMap({
         .attr('class', 'heat-cell')
         .attr('width', cellWidth)
         .attr('height', cellHeight)
-        .attr('x', (d) => {
-          return xScale(d.year.toString()) ?? 0;
-        })
-        .attr('fill', (d) => {
-          return getColor(colorGenerator, d.total);
-        })
+        .attr('x', (d) => xScale(d.year.toString()) ?? 0)
+        .attr('fill', (d) => getColor(colorGenerator, d.total))
         .attr('stroke-width', 1)
         .attr('stroke', ' var(--background_color)');
 

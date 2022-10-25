@@ -43,10 +43,9 @@ export function YearOverviewHeatMap({
 
   useEffect(() => {
     const margin: Margin = { top: 50, bottom: 50, left: 50, right: 50 };
-    let svg: Selection<SVGSVGElement, unknown, null, undefined> | undefined =
-      undefined;
+    let svg: Selection<SVGSVGElement, unknown, null, undefined> | undefined;
 
-    let resize: (() => void) | undefined = undefined;
+    let resize: (() => void) | undefined;
     if (ref.current !== null && data.length > 0) {
       const { dataArray, totalExtent } = getYearData(data);
       const [minTotal, maxTotal] = totalExtent;
@@ -153,13 +152,12 @@ export function YearOverviewHeatMap({
         .attr('height', yScale.bandwidth())
         .attr('x', (d) => xScale(weekLabels[d.week - 1]) ?? 0)
         .attr('y', (d) => yScale(dayLabels[d.day - 1]) ?? 0)
-        .attr('fill', (d) => {
-          return getColor(colorGenerator, d.total);
-        })
+        .attr('fill', (d) => getColor(colorGenerator, d.total))
         .attr('stroke-width', 0.1) // Decresed it to 0.1 to create contrast between cell borders and month before boundary paths
-        .attr('pointer-events', (d) => {
-          return d.total === 0 ? 'none' : 'visiblePainted'; // Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events#usage_notes
-        })
+        .attr(
+          'pointer-events',
+          (d) => (d.total === 0 ? 'none' : 'visiblePainted') // Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events#usage_notes
+        )
         .attr('stroke', 'var(--background_color)');
 
       const months = parent.append('g'); // 'g' tag to contain paths
@@ -178,9 +176,7 @@ export function YearOverviewHeatMap({
         .attr('fill', 'none')
         .attr('stroke', 'var(--background_color)')
         .attr('stroke-width', 3)
-        .attr('d', (d) => {
-          return getMonthBoundaryPath(d, xScale, yScale);
-        });
+        .attr('d', (d) => getMonthBoundaryPath(d, xScale, yScale));
 
       // Add text color
       selectAll('.x-axis , .y-axis')
@@ -240,9 +236,7 @@ export function YearOverviewHeatMap({
         .on('mouseover', (e: React.MouseEvent<SVGTextElement>) => {
           const monthLabel: string = e.currentTarget.textContent ?? '';
           selectAll<SVGRectElement, YearOverviewDatum>('.heat-cell')
-            .filter((d) => {
-              return d.month !== monthLabel;
-            })
+            .filter((d) => d.month !== monthLabel)
             .transition()
             .duration(500)
             .ease(easeLinear)
@@ -318,12 +312,8 @@ export function YearOverviewHeatMap({
             .ease(easeLinear)
             .attr('width', newXScale.bandwidth())
             .attr('height', newYScale.bandwidth())
-            .attr('x', (d) => {
-              return newXScale(weekLabels[d.week - 1]) ?? 0;
-            })
-            .attr('y', (d) => {
-              return newYScale(dayLabels[d.day - 1]) ?? 0;
-            });
+            .attr('x', (d) => newXScale(weekLabels[d.week - 1]) ?? 0)
+            .attr('y', (d) => newYScale(dayLabels[d.day - 1]) ?? 0);
 
           // Update month boundaries
           selectAll<SVGGElement, Date>('.month-boundary')

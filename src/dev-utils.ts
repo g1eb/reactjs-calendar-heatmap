@@ -24,16 +24,12 @@ export function generateStorySampleDataForHeatmap(
     (dateElement) => {
       const start = startOfDay(dateElement);
       const end = endOfDay(dateElement);
-      const details = timeMinutes(start, end, binStep).map((e) => {
-        return {
-          date: e.toISOString(),
-          value: faker.datatype.number({ min: 0, max: 100 }), // Generate value from 0-100
-        };
-      });
+      const details = timeMinutes(start, end, binStep).map((e) => ({
+        date: e.toISOString(),
+        value: faker.datatype.number({ min: 0, max: 100 }), // Generate value from 0-100
+      }));
 
-      const total = details.reduce((acc, e) => {
-        return acc + e.value;
-      }, 0);
+      const total = details.reduce((acc, e) => acc + e.value, 0);
 
       return {
         date: start.toISOString(),

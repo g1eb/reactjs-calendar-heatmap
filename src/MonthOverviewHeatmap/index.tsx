@@ -33,9 +33,8 @@ export function MonthOverviewHeatMap({
   useEffect(() => {
     const margin: Margin = { top: 50, bottom: 50, left: 50, right: 50 };
 
-    let svg: Selection<SVGSVGElement, unknown, null, undefined> | undefined =
-      undefined;
-    let resize: (() => void) | undefined = undefined;
+    let svg: Selection<SVGSVGElement, unknown, null, undefined> | undefined;
+    let resize: (() => void) | undefined;
     if (ref.current !== null && data.length > 0) {
       // Create array of object containing week, day and total values and min and max total values in a month
       const { dataArray, totalExtent } = getMonthData(data);
@@ -102,19 +101,14 @@ export function MonthOverviewHeatMap({
         .attr('class', 'heat-cell')
         .attr('width', xScale.bandwidth())
         .attr('height', yScale.bandwidth())
-        .attr('x', (d) => {
-          return xScale(getWeekLabel(d.week)) ?? 0;
-        })
-        .attr('y', (d) => {
-          return yScale(dayLabels[d.day - 1]) ?? 0;
-        })
-        .attr('fill', (d) => {
-          return getColor(colorGenerator, d.total);
-        })
+        .attr('x', (d) => xScale(getWeekLabel(d.week)) ?? 0)
+        .attr('y', (d) => yScale(dayLabels[d.day - 1]) ?? 0)
+        .attr('fill', (d) => getColor(colorGenerator, d.total))
         .attr('stroke-width', 1)
-        .attr('pointer-events', (d) => {
-          return d.total === 0 ? 'none' : 'visiblePainted'; // Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events#usage_notes
-        })
+        .attr(
+          'pointer-events',
+          (d) => (d.total === 0 ? 'none' : 'visiblePainted') // Ref: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events#usage_notes
+        )
         .attr('stroke', ' var(--background_color)');
 
       // Add text color
@@ -221,12 +215,8 @@ export function MonthOverviewHeatMap({
             .ease(easeLinear)
             .attr('width', newXScale.bandwidth())
             .attr('height', newYScale.bandwidth())
-            .attr('x', (d) => {
-              return newXScale(getWeekLabel(d.week)) ?? 0;
-            })
-            .attr('y', (d) => {
-              return newYScale(dayLabels[d.day - 1]) ?? 0;
-            });
+            .attr('x', (d) => newXScale(getWeekLabel(d.week)) ?? 0)
+            .attr('y', (d) => newYScale(dayLabels[d.day - 1]) ?? 0);
         }
       };
       window.addEventListener('resize', resize);

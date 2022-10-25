@@ -22,9 +22,7 @@ function filterDataByYear(
   data: CalendarHeatmapDatum[],
   year: number
 ): CalendarHeatmapDatum[] {
-  return data.filter((ele) => {
-    return new Date(ele.date).getFullYear() === year;
-  });
+  return data.filter((ele) => new Date(ele.date).getFullYear() === year);
 }
 
 /**
@@ -37,11 +35,10 @@ function filterMonthData(
   data: CalendarHeatmapDatum[],
   month: string
 ): CalendarHeatmapDatum[] {
-  return data.filter((ele) => {
-    return (
+  return data.filter(
+    (ele) =>
       new Date(ele.date).toLocaleString(undefined, { month: 'short' }) === month
-    );
-  });
+  );
 }
 
 /**
@@ -56,9 +53,10 @@ function filterSelectedDatum(
 ): CalendarHeatmapDatum {
   datum.date;
   return (
-    data.find((ele) => {
-      return ele.date === datum.date.toISOString();
-    }) ?? { date: new Date().toISOString(), total: NaN }
+    data.find((ele) => ele.date === datum.date.toISOString()) ?? {
+      date: new Date().toISOString(),
+      total: NaN,
+    }
   );
 }
 
