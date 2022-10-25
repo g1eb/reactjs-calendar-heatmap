@@ -186,9 +186,13 @@ export function GlobalOverviewHeatMap({
 
   useEffect(() => {
     if (fade === true) {
-      fadeAwayElements(['.heat-cell', '.x-axis']).then(() => {
-        onFadeComplete?.();
-      }); // Pass array of selectors
+      fadeAwayElements(['.heat-cell', '.x-axis'])
+        .then(() => {
+          onFadeComplete?.();
+        })
+        .catch((err) => {
+          throw err;
+        }); // Pass array of selectors
     }
   }, [fade, onFadeComplete]);
 

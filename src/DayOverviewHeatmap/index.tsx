@@ -38,7 +38,9 @@ export function DayOverviewHeatMap({
       const details = data.details ?? (await fetchDayData?.(data.date)) ?? [];
       setDayData((prev) => ({ ...prev, details }));
     }
-    fetchData();
+    fetchData().catch((err) => {
+      throw err;
+    });
   }, [data.date, data.details, fetchDayData]);
 
   useEffect(() => {
@@ -257,9 +259,13 @@ export function DayOverviewHeatMap({
   useEffect(() => {
     // Fade away heat cells, x and y axis
     if (fade === true) {
-      fadeAwayElements(['.heat-cell', '.x-axis', '.y-axis']).then(() => {
-        onFadeComplete?.();
-      }); // Pass array of selectors
+      fadeAwayElements(['.heat-cell', '.x-axis', '.y-axis'])
+        .then(() => {
+          onFadeComplete?.();
+        })
+        .catch((err) => {
+          throw err;
+        }); // Pass array of selectors
     }
   }, [fade, onFadeComplete]);
 

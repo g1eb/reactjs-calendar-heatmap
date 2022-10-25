@@ -51,7 +51,6 @@ function filterSelectedDatum(
   data: CalendarHeatmapDatum[],
   datum: YearOverviewDatum | MonthOverviewDatum
 ): CalendarHeatmapDatum {
-  datum.date;
   return (
     data.find((ele) => ele.date === datum.date.toISOString()) ?? {
       date: new Date().toISOString(),
@@ -135,7 +134,9 @@ export function DrilldownCalendar({
       }
       setGlobalData(fetchedData); // Storing the final data in the 'globalData' state variable for further use.
     }
-    fetchData();
+    fetchData().catch((err) => {
+      throw err;
+    });
   }, [data, fetchGlobalData]);
 
   // To set initial data for first rendering of an overview.
@@ -187,7 +188,7 @@ export function DrilldownCalendar({
   }, [setFade, setOverviewOrder]);
 
   function getOverviewChart(input?: DrilldownCalendarOverview): JSX.Element {
-    let output: JSX.Element = <></>;
+    let output: JSX.Element;
     switch (input) {
       case 'year':
         output = (
@@ -206,13 +207,17 @@ export function DrilldownCalendar({
                 '.x-axis',
                 '.y-axis',
                 '.month-boundary',
-              ]).then(() => {
-                setCurrentDay(filterSelectedDatum(currentYearData, d));
-                setOverviewOrder((prev) => [
-                  ...prev,
-                  'day' as DrilldownCalendarOverview,
-                ]);
-              });
+              ])
+                .then(() => {
+                  setCurrentDay(filterSelectedDatum(currentYearData, d));
+                  setOverviewOrder((prev) => [
+                    ...prev,
+                    'day' as DrilldownCalendarOverview,
+                  ]);
+                })
+                .catch((err) => {
+                  throw err;
+                });
             }}
             onMonthLabelClick={(d) => {
               fadeAwayElements([
@@ -220,13 +225,17 @@ export function DrilldownCalendar({
                 '.x-axis',
                 '.y-axis',
                 '.month-boundary',
-              ]).then(() => {
-                setCurrentMonthData(filterMonthData(currentYearData, d));
-                setOverviewOrder((prev) => [
-                  ...prev,
-                  'month' as DrilldownCalendarOverview,
-                ]);
-              });
+              ])
+                .then(() => {
+                  setCurrentMonthData(filterMonthData(currentYearData, d));
+                  setOverviewOrder((prev) => [
+                    ...prev,
+                    'month' as DrilldownCalendarOverview,
+                  ]);
+                })
+                .catch((err) => {
+                  throw err;
+                });
             }}
           />
         );
@@ -243,15 +252,17 @@ export function DrilldownCalendar({
             onHideTooltip={onHideTooltip}
             onFadeComplete={onFadeComplete}
             onCellClick={(d) => {
-              fadeAwayElements(['.heat-cell', '.x-axis', '.y-axis']).then(
-                () => {
+              fadeAwayElements(['.heat-cell', '.x-axis', '.y-axis'])
+                .then(() => {
                   setCurrentDay(filterSelectedDatum(currentMonthData, d));
                   setOverviewOrder((prev) => [
                     ...prev,
                     'day' as DrilldownCalendarOverview,
                   ]);
-                }
-              );
+                })
+                .catch((err) => {
+                  throw err;
+                });
             }}
           />
         );
@@ -285,14 +296,18 @@ export function DrilldownCalendar({
             onHideTooltip={onHideTooltip}
             onFadeComplete={onFadeComplete}
             onCellClick={(d) => {
-              fadeAwayElements(['.heat-cell', '.x-axis']).then(() => {
-                const { year } = d;
-                setCurrentYearData(filterDataByYear(globalData, year));
-                setOverviewOrder((prev) => [
-                  ...prev,
-                  'year' as DrilldownCalendarOverview,
-                ]);
-              });
+              fadeAwayElements(['.heat-cell', '.x-axis'])
+                .then(() => {
+                  const { year } = d;
+                  setCurrentYearData(filterDataByYear(globalData, year));
+                  setOverviewOrder((prev) => [
+                    ...prev,
+                    'year' as DrilldownCalendarOverview,
+                  ]);
+                })
+                .catch((err) => {
+                  throw err;
+                });
             }}
           />
         );
@@ -304,6 +319,7 @@ export function DrilldownCalendar({
   return (
     <div style={{ position: 'relative' }} className={rest.className}>
       <button
+        type="button"
         style={{
           position: 'absolute',
           top: 0,

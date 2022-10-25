@@ -8,9 +8,7 @@ const Meta: ComponentMeta<typeof GlobalOverviewHeatMap> = {
   component: GlobalOverviewHeatMap,
   args: {
     data: generateStorySampleDataForHeatmap(2, 1),
-    onTooltip: (d: { value: unknown }) => {
-      console.log(d);
-    },
+    onTooltip: (d: { value: unknown }) => d,
     color: 'spectral',
     className: 'light',
   },

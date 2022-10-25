@@ -8,9 +8,7 @@ const Meta: ComponentMeta<typeof DayOverviewHeatMap> = {
   component: DayOverviewHeatMap,
   args: {
     data: generateStorySampleDataForHeatmap(1, 3)[0],
-    onTooltip: (d: { value: unknown }) => {
-      console.log(d);
-    },
+    onTooltip: (d: { value: unknown }) => d,
     color: 'spectral',
     className: 'light',
   },

@@ -117,8 +117,8 @@ export function getMonthBoundaryPath(
   yScale: ScaleBand<string>
 ): string {
   // 'format' functions here returns ISO week number (1-53) and day (1-7) of a date. Ref: https://date-fns.org/v2.28.0/docs/format
-  const week = Number.parseInt(format(date, 'I')) - 1; // Substracting by 1 because axis starts from position 0
-  const day = Number.parseInt(format(date, 'i')) - 1; // Substracting by 1 because axis starts from position 0
+  const week = Number.parseInt(format(date, 'I'), 10) - 1; // Substracting by 1 because axis starts from position 0
+  const day = Number.parseInt(format(date, 'i'), 10) - 1; // Substracting by 1 because axis starts from position 0
   return `${
     day === 0
       ? /**

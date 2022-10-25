@@ -8,9 +8,7 @@ const Meta: ComponentMeta<typeof DrilldownCalendar> = {
   component: DrilldownCalendar,
   args: {
     data: generateStorySampleDataForHeatmap(2, 3),
-    onTooltip: (d: { value: unknown }) => {
-      console.log(d);
-    },
+    onTooltip: (d: { value: unknown }) => d,
     color: 'spectral',
     className: 'light',
   },

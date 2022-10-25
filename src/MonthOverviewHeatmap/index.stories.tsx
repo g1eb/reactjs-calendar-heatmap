@@ -25,9 +25,7 @@ const Meta: ComponentMeta<typeof MonthOverviewHeatMap> = {
   component: MonthOverviewHeatMap,
   args: {
     data: filterMonthData(generateStorySampleDataForHeatmap(1, 1)),
-    onTooltip: (d: { value: unknown }) => {
-      console.log(d);
-    },
+    onTooltip: (d: { value: unknown }) => d,
     color: 'spectral',
     className: 'light',
   },
